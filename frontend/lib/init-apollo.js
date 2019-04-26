@@ -1,4 +1,4 @@
-import { ApolloClient } from 'apollo-client'
+import { ApolloClient } from 'apollo-boost'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import fetch from 'isomorphic-unfetch'
@@ -10,20 +10,31 @@ if (!process.browser) {
   global.fetch = fetch
 }
 
-function create (initialState) {
+const httpApiUrl =
+  process.env.NODE_ENV !== 'production'
+    ? 'http://localhost:8080/v1alpha1/graphql'
+    : 'http://localhost:8080/v1alpha1/graphql'
+
+function create(initialState) {
   // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
+  // Create an http link
+  const httpLink = new HttpLink({
+    uri: httpApiUrl, // Server URL (must be absolute)
+    credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+    headers: {
+      'content-type': 'application/json',
+    },
+  })
+
   return new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
-    link: new HttpLink({
-      uri: 'https://api.graph.cool/simple/v1/cixmkt2ul01q00122mksg82pn', // Server URL (must be absolute)
-      credentials: 'same-origin' // Additional fetch() options like `credentials` or `headers`
-    }),
-    cache: new InMemoryCache().restore(initialState || {})
+    link: httpLink,
+    cache: new InMemoryCache().restore(initialState || {}),
   })
 }
 
-export default function initApollo (initialState) {
+export default function initApollo(initialState) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (!process.browser) {

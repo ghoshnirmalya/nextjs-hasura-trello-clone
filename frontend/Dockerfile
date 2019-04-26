@@ -1,4 +1,4 @@
-FROM mhart/alpine-node AS builder
+FROM node:10.8.0
 
 RUN mkdir /frontend-app
 

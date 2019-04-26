@@ -1,10 +1,14 @@
-module.exports = {
-  serverRuntimeConfig: {
-    // Will only be available on the server side
-    mySecret: "secret"
-  },
-  publicRuntimeConfig: {
-    // Will be available on both server and client
-    API_URL: process.env.API_URL
-  }
-};
+/* eslint-disable */
+const withCss = require('@zeit/next-css')
+const withImages = require('next-images')
+
+// fix: prevents error when .css files are required by node
+if (typeof require !== 'undefined') {
+  require.extensions['.css'] = file => {}
+}
+
+module.exports = withImages(
+  withCss({
+    target: 'serverless',
+  })
+)
