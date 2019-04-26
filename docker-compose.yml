@@ -1,9 +1,7 @@
 version: "3"
 
 services:
-  react-hasura-trello-clone.backend:
-    # build:
-    #   context: ./backend
+  trello-clone.backend:
     image: hasura/graphql-engine:v1.0.0-alpha44
     ports:
       - 8080:8080
@@ -12,11 +10,9 @@ services:
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@db:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true" # set to "false" to disable console
-      ## uncomment next line to set an admin secret
-      # HASURA_GRAPHQL_ADMIN_SECRET: myadminsecretkey
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
 
-  react-hasura-trello-clone.frontend:
+  trello-clone.frontend:
     build:
       context: ./frontend
     command: yarn dev
