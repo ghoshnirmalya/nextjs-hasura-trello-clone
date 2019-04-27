@@ -12,6 +12,7 @@
     "@zeit/next-typescript": "^1.1.1",
     "antd": "^3.16.3",
     "apollo-boost": "^0.3.1",
+    "apollo-link-ws": "^1.0.17",
     "express": "^4.16.4",
     "graphql": "^14.2.0",
     "graphql-tag": "^2.10.1",
@@ -23,14 +24,18 @@
     "prop-types": "^15.7.2",
     "react": "^16.8.6",
     "react-apollo": "^2.5.3",
-    "react-beautiful-dnd": "^10.1.1",
+    "react-beautiful-dnd": "^11.0.1",
     "react-dom": "^16.8.6",
     "styled-components": "^4.2.0",
-    "styled-jsx": "3.0.0"
+    "styled-jsx": "3.0.0",
+    "subscriptions-transport-ws": "^0.9.16"
   },
   "author": "nirmalya.email@gmail.com",
   "license": "MIT",
   "devDependencies": {
+    "@types/next": "^7.0.6",
+    "@types/react": "^16.4.16",
+    "@types/react-dom": "16.0.11",
     "autoprefixer": "^9.5.1",
     "babel-plugin-styled-components": "^1.10.0",
     "cssnano": "^4.1.10",
@@ -39,9 +44,6 @@
     "postcss-easy-import": "^3.0.0",
     "prettier": "^1.16.4",
     "tailwindcss": "^1.0.0-beta.4",
-    "@types/next": "^7.0.6",
-    "@types/react": "^16.4.16",
-    "@types/react-dom": "16.0.11",
     "typescript": "3.2.4"
   },
   "husky": {

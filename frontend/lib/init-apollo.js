@@ -2,6 +2,9 @@ import { ApolloClient } from 'apollo-boost'
 import { HttpLink } from 'apollo-link-http'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import fetch from 'isomorphic-unfetch'
+import { WebSocketLink } from 'apollo-link-ws'
+import { split } from 'apollo-link'
+import { getMainDefinition } from 'apollo-utilities'
 
 let apolloClient = null
 
@@ -25,11 +28,33 @@ function create(initialState) {
       'content-type': 'application/json',
     },
   })
+  const wsLink = process.browser
+    ? new WebSocketLink({
+        // if you instantiate in the server, the error will be thrown
+        uri: `ws://localhost:8080/v1alpha1/graphql`,
+        options: {
+          reconnect: true,
+        },
+      })
+    : null
+
+  const link = process.browser
+    ? split(
+        //only create the split in the browser
+        // split based on operation type
+        ({ query }) => {
+          const { kind, operation } = getMainDefinition(query)
+          return kind === 'OperationDefinition' && operation === 'subscription'
+        },
+        wsLink,
+        httpLink
+      )
+    : httpLink
 
   return new ApolloClient({
     connectToDevTools: process.browser,
     ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
-    link: httpLink,
+    link,
     cache: new InMemoryCache().restore(initialState || {}),
   })
 }
