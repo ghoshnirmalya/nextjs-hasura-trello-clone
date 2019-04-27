@@ -1,17 +1,15 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { Layout, Menu, Icon } from 'antd'
 import Link from 'next/link'
 
 const { Sider } = Layout
-const SubMenu = Menu.SubMenu
 
 class SiderComponent extends Component {
   state = {
     collapsed: false,
   }
 
-  onCollapse = collapsed => {
+  onCollapse = (collapsed: boolean): any => {
     this.setState({ collapsed })
   }
 
@@ -37,10 +35,6 @@ class SiderComponent extends Component {
       </Sider>
     )
   }
-}
-
-SiderComponent.propTypes = {
-  children: PropTypes.node,
 }
 
 export default SiderComponent

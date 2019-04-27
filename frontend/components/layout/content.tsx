@@ -1,8 +1,4 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Layout } from 'antd'
-
-const { Content } = Layout
 
 class ContentComponent extends Component {
   render() {
@@ -14,10 +10,6 @@ class ContentComponent extends Component {
       </div>
     )
   }
-}
-
-ContentComponent.propTypes = {
-  children: PropTypes.node,
 }
 
 export default ContentComponent

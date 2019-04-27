@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Layout, Menu, Dropdown, Icon, Avatar } from 'antd'
-import Router from 'next/router'
+import { Layout } from 'antd'
 
 const { Header } = Layout
 
@@ -13,10 +11,6 @@ class HeaderComponent extends Component {
       </Header>
     )
   }
-}
-
-HeaderComponent.propTypes = {
-  children: PropTypes.node,
 }
 
 export default HeaderComponent

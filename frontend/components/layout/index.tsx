@@ -1,12 +1,9 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import { Layout } from 'antd'
 
 import ContentComponent from './content'
 import SiderComponent from './sider'
 import HeaderComponent from './header'
-
-const { Content } = Layout
 
 class LayoutComponent extends Component {
   render() {
@@ -20,10 +17,6 @@ class LayoutComponent extends Component {
       </Layout>
     )
   }
-}
-
-LayoutComponent.propTypes = {
-  children: PropTypes.node,
 }
 
 export default LayoutComponent

@@ -4,11 +4,13 @@
   "scripts": {
     "dev": "node server.js",
     "build": "next build",
-    "start": "node server.js"
+    "start": "node server.js",
+    "type-check": "tsc"
   },
   "dependencies": {
     "@zeit/next-css": "^1.0.1",
-    "antd": "^3.15.2",
+    "@zeit/next-typescript": "^1.1.1",
+    "antd": "^3.16.3",
     "apollo-boost": "^0.3.1",
     "express": "^4.16.4",
     "graphql": "^14.2.0",
@@ -36,7 +38,11 @@
     "lint-staged": "^8.1.5",
     "postcss-easy-import": "^3.0.0",
     "prettier": "^1.16.4",
-    "tailwindcss": "^1.0.0-beta.4"
+    "tailwindcss": "^1.0.0-beta.4",
+    "@types/next": "^7.0.6",
+    "@types/react": "^16.4.16",
+    "@types/react-dom": "16.0.11",
+    "typescript": "3.2.4"
   },
   "husky": {
     "hooks": {
