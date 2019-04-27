@@ -20,6 +20,7 @@ const fetchBoardSubscription = gql`
         cards(order_by: { position: asc }) {
           id
           description
+          position
         }
       }
     }
@@ -43,6 +44,18 @@ const updateCardMutation = gql`
         id
         description
         position
+      }
+    }
+  }
+`
+const updateCardForDifferentListsMutation = gql`
+  mutation($id: uuid!, $position: Int, $listId: uuid!) {
+    update_card(
+      where: { id: { _eq: $id } }
+      _set: { list_id: $listId, position: $position }
+    ) {
+      returning {
+        id
       }
     }
   }
@@ -152,7 +165,7 @@ class BoardsShow extends Component {
         })
 
         /**
-         * Update source list
+         * Update source card
          */
         await this.props.client.mutate({
           mutation: updateCardMutation,
@@ -160,6 +173,79 @@ class BoardsShow extends Component {
             id: sourceCard.id,
             position: destination.index,
           },
+        })
+      } else {
+        /**
+         * Card has been reordered within different lists
+         */
+
+        console.log(result)
+
+        const destinationList = find(
+          lists,
+          l => l.id === destination.droppableId
+        )
+        const sourceList = find(lists, l => l.id === source.droppableId)
+        const destinationCard = destinationList.cards[destination.index]
+        const sourceCard = sourceList.cards[source.index]
+
+        /**
+         * Update source card
+         */
+
+        if (!destinationCard) {
+          /**
+           * If the card is moved to the end of the destinationList,
+           */
+
+          await this.props.client.mutate({
+            mutation: updateCardForDifferentListsMutation,
+            variables: {
+              id: sourceCard.id,
+              position: destination.index,
+              listId: destinationList.id,
+            },
+          })
+        } else {
+          await this.props.client.mutate({
+            mutation: updateCardForDifferentListsMutation,
+            variables: {
+              id: sourceCard.id,
+              position: destinationCard.position,
+              listId: destinationList.id,
+            },
+          })
+
+          /**
+           * Increase the position of all cards in destinationList
+           * whose position is >= destinationCard.position
+           */
+          destinationList.cards.map(async card => {
+            if (card.position >= destinationCard.position) {
+              await this.props.client.mutate({
+                mutation: updateCardMutation,
+                variables: {
+                  id: card.id,
+                  position: card.position + 1,
+                },
+              })
+            }
+          })
+        }
+
+        /**
+         * Decrease the position of all cards in sourceList whose position is > sourceCard.position
+         */
+        sourceList.cards.map(async card => {
+          if (card.position > sourceCard.position) {
+            await this.props.client.mutate({
+              mutation: updateCardMutation,
+              variables: {
+                id: card.id,
+                position: card.position - 1,
+              },
+            })
+          }
         })
       }
     }
