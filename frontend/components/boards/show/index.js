@@ -6,17 +6,17 @@ import styled from 'styled-components'
 import Router from 'next/router'
 import Link from 'next/link'
 
-const fetchProjectQuery = gql`
+const fetchBoardQuery = gql`
   query($id: uuid!) {
-    project_by_pk(id: $id) {
+    board_by_pk(id: $id) {
       id
       name
     }
   }
 `
-const updateProjectMutation = gql`
+const updateBoardMutation = gql`
   mutation($id: uuid!, $name: String) {
-    update_project(where: { id: { _eq: $id } }, _set: { name: $name }) {
+    update_board(where: { id: { _eq: $id } }, _set: { name: $name }) {
       returning {
         id
         name
@@ -25,19 +25,19 @@ const updateProjectMutation = gql`
   }
 `
 
-class ProjectsShow extends Component {
+class BoardsShow extends Component {
   handleSubmit = () => {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         await this.props.client.mutate({
-          mutation: updateProjectMutation,
+          mutation: updateBoardMutation,
           variables: {
             id: this.props.id,
             name: values.name,
           },
         })
 
-        Router.push('/projects')
+        Router.push('/boards')
       }
     })
   }
@@ -47,7 +47,7 @@ class ProjectsShow extends Component {
 
     return (
       <Query
-        query={fetchProjectQuery}
+        query={fetchBoardQuery}
         variables={{ id: this.props.id }}
         fetchPolicy="network-only"
       >
@@ -56,7 +56,7 @@ class ProjectsShow extends Component {
 
           if (error) return <p>Error: {error.message}</p>
 
-          const { name } = data.project_by_pk
+          const { name } = data.board_by_pk
 
           return (
             <div className="flex justify-center flex-col ml-auto mr-auto">
@@ -70,7 +70,7 @@ class ProjectsShow extends Component {
               </Form>
               <div className="flex justify-end">
                 <div className="mr-4">
-                  <Link href={`/projects`} as={`/projects`}>
+                  <Link href={`/boards`} as={`/boards`}>
                     <Button loading={loading} size="large" icon="close-circle">
                       Cancel
                     </Button>
@@ -95,4 +95,4 @@ class ProjectsShow extends Component {
   }
 }
 
-export default withApollo(Form.create()(ProjectsShow))
+export default withApollo(Form.create()(BoardsShow))

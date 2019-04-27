@@ -10,22 +10,22 @@ app
   .then(() => {
     const server = express()
 
-    server.get('/projects', (req, res) => {
-      app.render(req, res, '/projects')
+    server.get('/boards', (req, res) => {
+      app.render(req, res, '/boards')
     })
 
-    server.get('/projects/new', (req, res) => {
-      app.render(req, res, '/projects/new')
+    server.get('/boards/new', (req, res) => {
+      app.render(req, res, '/boards/new')
     })
 
-    server.get('/projects/:id/edit', (req, res) => {
-      app.render(req, res, '/projects/edit', {
+    server.get('/boards/:id/edit', (req, res) => {
+      app.render(req, res, '/boards/edit', {
         id: req.params.id,
       })
     })
 
-    server.get('/projects/:id', (req, res) => {
-      app.render(req, res, '/projects/show', {
+    server.get('/boards/:id', (req, res) => {
+      app.render(req, res, '/boards/show', {
         id: req.params.id,
       })
     })

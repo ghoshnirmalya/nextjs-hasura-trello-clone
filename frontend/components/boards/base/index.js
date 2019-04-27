@@ -4,18 +4,18 @@ import gql from 'graphql-tag'
 import { Card, Col, Row, Icon, Button, Table } from 'antd'
 import Link from 'next/link'
 
-const fetchProjectsQuery = gql`
+const fetchBoardsQuery = gql`
   query {
-    project {
+    board {
       id
       name
     }
   }
 `
 
-const deleteProjectMutation = gql`
+const deleteBoardMutation = gql`
   mutation($id: uuid!) {
-    delete_project(where: { id: { _eq: $id } }) {
+    delete_board(where: { id: { _eq: $id } }) {
       returning {
         id
       }
@@ -23,7 +23,7 @@ const deleteProjectMutation = gql`
   }
 `
 
-class ProjectsIndex extends Component {
+class BoardsIndex extends Component {
   columns = [
     {
       title: 'Name',
@@ -31,10 +31,7 @@ class ProjectsIndex extends Component {
       key: 'name',
       width: '90%',
       render: (text, record) => (
-        <Link
-          href={`/projects/show?id=${record.id}`}
-          as={`/projects/${record.id}`}
-        >
+        <Link href={`/boards/show?id=${record.id}`} as={`/boards/${record.id}`}>
           <a>{record.name}</a>
         </Link>
       ),
@@ -48,12 +45,12 @@ class ProjectsIndex extends Component {
           icon="delete"
           onClick={async () => {
             await this.props.client.mutate({
-              mutation: deleteProjectMutation,
+              mutation: deleteBoardMutation,
               variables: { id: record.id },
             })
 
             await this.props.client.query({
-              query: fetchProjectsQuery,
+              query: fetchBoardsQuery,
               fetchPolicy: 'network-only',
             })
           }}
@@ -66,7 +63,7 @@ class ProjectsIndex extends Component {
 
   render() {
     return (
-      <Query query={fetchProjectsQuery} fetchPolicy="network-only">
+      <Query query={fetchBoardsQuery} fetchPolicy="network-only">
         {({ data, error, loading }) => {
           if (loading)
             return (
@@ -77,21 +74,21 @@ class ProjectsIndex extends Component {
 
           if (error) return <p>Error: {error.message}</p>
 
-          const { project } = data
+          const { board } = data
 
           return (
             <Fragment>
               <div className="flex flex-row-reverse">
-                <Link href={`/projects/new`} as={`/projects/new`}>
+                <Link href={`/boards/new`} as={`/boards/new`}>
                   <Button type="primary" icon="plus-circle" size="large">
-                    New Project
+                    New board
                   </Button>
                 </Link>
               </div>
               <div className="mt-8">
                 <Table
                   bordered
-                  dataSource={project}
+                  dataSource={board}
                   columns={this.columns}
                   rowKey="id"
                 />
@@ -104,4 +101,4 @@ class ProjectsIndex extends Component {
   }
 }
 
-export default withApollo(ProjectsIndex)
+export default withApollo(BoardsIndex)

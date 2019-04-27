@@ -23,11 +23,11 @@ class SiderComponent extends Component {
       >
         <div className="logo h-10 bg-gray-700 m-3 rounded" />
         <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-          <Menu.Item key="projects">
+          <Menu.Item key="boards">
             <Icon type="pie-chart" />
             <span>
-              <Link href={`/projects`} as={`/projects`}>
-                <a>Projects</a>
+              <Link href={`/boards`} as={`/boards`}>
+                <a>Boards</a>
               </Link>
             </span>
           </Menu.Item>

@@ -3,11 +3,11 @@ import React, { Component } from 'react'
 
 import withApollo from '../../lib/with-apollo'
 import withLayout from '../../lib/with-layout'
-import Project from '../../components/projects/show'
+import Board from '../../components/boards/show'
 
 class Show extends Component<any, any> {
   render() {
-    return <Project id={this.props.router.query.id} />
+    return <Board id={this.props.router.query.id} />
   }
 }
 

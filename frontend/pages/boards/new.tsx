@@ -3,11 +3,11 @@ import React, { Component } from 'react'
 
 import withApollo from '../../lib/with-apollo'
 import withLayout from '../../lib/with-layout'
-import ProjectNew from '../../components/projects/new'
+import BoardNew from '../../components/boards/new'
 
 class New extends Component<any, any> {
   render() {
-    return <ProjectNew />
+    return <BoardNew />
   }
 }
 

@@ -1,17 +1,22 @@
-import React, { Component } from 'react'
-import styled from 'styled-components'
-import { DragDropContext, Droppable } from 'react-beautiful-dnd'
-import find from 'lodash/find'
-import findIndex from 'lodash/findIndex'
-import { graphql, withApollo, Mutation } from 'react-apollo'
+import React, { Component, Fragment } from 'react'
 import gql from 'graphql-tag'
+import { graphql, withApollo, Query } from 'react-apollo'
 import { Form, Button, Input } from 'antd'
+import styled from 'styled-components'
 import Router from 'next/router'
 import Link from 'next/link'
 
-const createProjectMutation = gql`
-  mutation($name: String) {
-    insert_project(objects: { name: $name }) {
+const fetchBoardQuery = gql`
+  query($id: uuid!) {
+    board_by_pk(id: $id) {
+      id
+      name
+    }
+  }
+`
+const updateBoardMutation = gql`
+  mutation($id: uuid!, $name: String) {
+    update_board(where: { id: { _eq: $id } }, _set: { name: $name }) {
       returning {
         id
         name
@@ -20,16 +25,19 @@ const createProjectMutation = gql`
   }
 `
 
-class ProjectsNew extends Component {
+class BoardsEdit extends Component {
   handleSubmit = () => {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         await this.props.client.mutate({
-          mutation: createProjectMutation,
-          variables: { name: values.name },
+          mutation: updateBoardMutation,
+          variables: {
+            id: this.props.id,
+            name: values.name,
+          },
         })
 
-        Router.push('/projects')
+        Router.push('/boards')
       }
     })
   }
@@ -38,16 +46,17 @@ class ProjectsNew extends Component {
     const { getFieldDecorator } = this.props.form
 
     return (
-      <Mutation mutation={createProjectMutation}>
-        {({ loading, error }) => {
-          if (loading)
-            return (
-              <p className="flex justify-center items-center min-h-screen">
-                Loading...
-              </p>
-            )
+      <Query
+        query={fetchBoardQuery}
+        variables={{ id: this.props.id }}
+        fetchPolicy="network-only"
+      >
+        {({ data, error, loading }) => {
+          if (loading) return <p>Loading</p>
 
           if (error) return <p>Error: {error.message}</p>
+
+          const { name } = data.board
 
           return (
             <div className="flex justify-center flex-col ml-auto mr-auto">
@@ -55,12 +64,13 @@ class ProjectsNew extends Component {
                 <Form.Item label="Name">
                   {getFieldDecorator('name', {
                     rules: [{ required: true, message: 'Please enter name!' }],
+                    initialValue: name,
                   })(<Input placeholder="Please enter name" size="large" />)}
                 </Form.Item>
               </Form>
               <div className="flex justify-end">
                 <div className="mr-4">
-                  <Link href={`/projects`} as={`/projects`}>
+                  <Link href={`/boards`} as={`/boards`}>
                     <Button loading={loading} size="large" icon="close-circle">
                       Cancel
                     </Button>
@@ -74,15 +84,15 @@ class ProjectsNew extends Component {
                   size="large"
                   icon="check-circle"
                 >
-                  Submit
+                  Update
                 </Button>
               </div>
             </div>
           )
         }}
-      </Mutation>
+      </Query>
     )
   }
 }
 
-export default withApollo(Form.create()(ProjectsNew))
+export default withApollo(Form.create()(BoardsEdit))
