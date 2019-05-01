@@ -1,13 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import gql from 'graphql-tag'
 import { graphql, withApollo, Subscription } from 'react-apollo'
-import { Row, Col } from 'antd'
-import styled from 'styled-components'
-import Router from 'next/router'
-import Link from 'next/link'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
-import { async } from 'q'
 import find from 'lodash/find'
+
+import List from './list'
 
 const fetchBoardSubscription = gql`
   subscription($id: uuid!) {
@@ -22,17 +19,6 @@ const fetchBoardSubscription = gql`
           description
           position
         }
-      }
-    }
-  }
-`
-const updateListMutation = gql`
-  mutation($id: uuid!, $position: Int) {
-    update_list(where: { id: { _eq: $id } }, _set: { position: $position }) {
-      returning {
-        id
-        name
-        position
       }
     }
   }
@@ -62,50 +48,6 @@ const updateCardForDifferentListsMutation = gql`
 `
 
 class BoardsShow extends Component {
-  getListStyle = (isDragging, draggableStyle) => ({
-    // some basic styles to make the items look a bit nicer
-    userSelect: 'none',
-    // change background colour if dragging
-    background: isDragging && 'lightgreen',
-
-    // styles we need to apply on draggables
-    ...draggableStyle,
-  })
-
-  listNode = lists => {
-    return lists.map((list, index) => (
-      <Draggable
-        key={list.id}
-        draggableId={list.id}
-        index={index}
-        className="bg-gray-100 min-h-full p-8 border border-solid border-gray-300 rounded"
-      >
-        {(provided, snapshot) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            style={this.getListStyle(
-              snapshot.isDragging,
-              provided.draggableProps.style
-            )}
-            className="bg-gray-100 p-8 border border-solid border-gray-300 rounded mr-8 w-64"
-          >
-            {list.name}
-            <Droppable droppableId={list.id} type="card">
-              {(provided, snapshot) => (
-                <div ref={provided.innerRef} className="flex flex-col">
-                  {this.cardNode(list.cards)}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </div>
-        )}
-      </Draggable>
-    ))
-  }
-
   onDragEnd = async (result, lists) => {
     const { draggableId, destination, source, type } = result
 
@@ -165,6 +107,22 @@ class BoardsShow extends Component {
         })
 
         /**
+         * Increase the position of all cards in destinationList
+         * whose position is >= destinationCard.position
+         */
+        list.cards.map(async card => {
+          if (card.position >= destinationCard.position) {
+            await this.props.client.mutate({
+              mutation: updateCardMutation,
+              variables: {
+                id: card.id,
+                position: card.position + 1,
+              },
+            })
+          }
+        })
+
+        /**
          * Update source card
          */
         await this.props.client.mutate({
@@ -178,8 +136,6 @@ class BoardsShow extends Component {
         /**
          * Card has been reordered within different lists
          */
-
-        console.log(result)
 
         const destinationList = find(
           lists,
@@ -257,7 +213,7 @@ class BoardsShow extends Component {
         key={card.id}
         draggableId={card.id}
         index={index}
-        className="bg-gray-100 min-h-full p-8 border border-solid border-gray-300 rounded"
+        className="bg-gray-100 p-8 border border-solid border-gray-300 rounded"
       >
         {(provided, snapshot) => (
           <div
@@ -298,7 +254,7 @@ class BoardsShow extends Component {
               <Droppable droppableId="board" type="list" direction="horizontal">
                 {(provided, snapshot) => (
                   <div ref={provided.innerRef} className="flex">
-                    {this.listNode(lists)}
+                    <List lists={lists} />
                     {provided.placeholder}
                   </div>
                 )}
