@@ -46,6 +46,17 @@ const updateCardForDifferentListsMutation = gql`
     }
   }
 `
+const updateListMutation = gql`
+  mutation($id: uuid!, $position: Int) {
+    update_list(where: { id: { _eq: $id } }, _set: { position: $position }) {
+      returning {
+        id
+        name
+        position
+      }
+    }
+  }
+`
 
 class BoardsShow extends Component {
   onDragEnd = async (result, lists) => {

@@ -5,25 +5,13 @@ import { Droppable, Draggable } from 'react-beautiful-dnd'
 
 import Card from './card'
 
-const updateListMutation = gql`
-  mutation($id: uuid!, $position: Int) {
-    update_list(where: { id: { _eq: $id } }, _set: { position: $position }) {
-      returning {
-        id
-        name
-        position
-      }
-    }
-  }
-`
-
 class List extends PureComponent {
   getStyle = (isDragging, draggableStyle) => ({
-    // some basic styles to make the items look a bit nicer
-    userSelect: 'none',
-    // change background colour if dragging
-    background: isDragging && 'lightgreen',
-
+    background: isDragging && '#002140',
+    color: isDragging && '#ccc',
+    boxShadow:
+      isDragging &&
+      '0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05)',
     // styles we need to apply on draggables
     ...draggableStyle,
   })

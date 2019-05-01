@@ -5,11 +5,12 @@ import isEqual from 'lodash/isEqual'
 
 class Card extends PureComponent {
   getStyle = (isDragging, draggableStyle) => ({
-    // some basic styles to make the items look a bit nicer
     userSelect: 'none',
-    // change background colour if dragging
-    background: isDragging && 'lightgreen',
-
+    background: isDragging && '#002140',
+    color: isDragging && '#ccc',
+    boxShadow:
+      isDragging &&
+      '0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05)',
     // styles we need to apply on draggables
     ...draggableStyle,
   })
@@ -31,7 +32,7 @@ class Card extends PureComponent {
               snapshot.isDragging,
               provided.draggableProps.style
             )}
-            className="bg-white p-2 border border-solid border-gray-300 rounded my-2 w-full min-h-8 shadow"
+            className="bg-white p-2 border border-solid border-gray-300 rounded my-2 w-full min-h-8"
           >
             {card.description}
           </div>
