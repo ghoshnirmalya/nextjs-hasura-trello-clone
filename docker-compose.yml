@@ -10,7 +10,7 @@ services:
     restart: always
     environment:
       HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@db:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "true"
+      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
 
   trello-clone.frontend:
     build:
