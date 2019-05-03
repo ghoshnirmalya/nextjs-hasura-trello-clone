@@ -1,10 +1,11 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import gql from 'graphql-tag'
 import { graphql, withApollo, Subscription } from 'react-apollo'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import find from 'lodash/find'
 
 import List from './list'
+import CreateListForm from './create-list-form'
 
 const fetchBoardSubscription = gql`
   subscription($id: uuid!) {
@@ -14,6 +15,7 @@ const fetchBoardSubscription = gql`
       lists(order_by: { position: asc }) {
         id
         name
+        position
         cards(order_by: { position: asc }) {
           id
           description
@@ -74,27 +76,6 @@ class BoardsShow extends Component {
     }
 
     if (type === 'list') {
-      /**
-       * Update destination list
-       */
-      await this.props.client.mutate({
-        mutation: updateListMutation,
-        variables: {
-          id: lists[source.index].id,
-          position: destination.index,
-        },
-      })
-
-      /**
-       * Update source list
-       */
-      await this.props.client.mutate({
-        mutation: updateListMutation,
-        variables: {
-          id: lists[destination.index].id,
-          position: source.index,
-        },
-      })
     }
 
     if (type === 'card') {
@@ -102,118 +83,10 @@ class BoardsShow extends Component {
        * Card has been reordered within the same list
        */
       if (destination.droppableId === source.droppableId) {
-        const list = find(lists, l => l.id === destination.droppableId)
-        const destinationCard = list.cards[destination.index]
-        const sourceCard = list.cards[source.index]
-
-        /**
-         * Update destination card
-         */
-        await this.props.client.mutate({
-          mutation: updateCardMutation,
-          variables: {
-            id: destinationCard.id,
-            position: source.index,
-          },
-        })
-
-        /**
-         * Increase the position of all cards in destinationList
-         * whose position is >= destinationCard.position
-         */
-        list.cards.map(async card => {
-          if (card.position >= destinationCard.position) {
-            await this.props.client.mutate({
-              mutation: updateCardMutation,
-              variables: {
-                id: card.id,
-                position: card.position + 1,
-              },
-            })
-          }
-        })
-
-        /**
-         * Update source card
-         */
-        await this.props.client.mutate({
-          mutation: updateCardMutation,
-          variables: {
-            id: sourceCard.id,
-            position: destination.index,
-          },
-        })
       } else {
         /**
          * Card has been reordered within different lists
          */
-
-        const destinationList = find(
-          lists,
-          l => l.id === destination.droppableId
-        )
-        const sourceList = find(lists, l => l.id === source.droppableId)
-        const destinationCard = destinationList.cards[destination.index]
-        const sourceCard = sourceList.cards[source.index]
-
-        /**
-         * Update source card
-         */
-
-        if (!destinationCard) {
-          /**
-           * If the card is moved to the end of the destinationList,
-           */
-
-          await this.props.client.mutate({
-            mutation: updateCardForDifferentListsMutation,
-            variables: {
-              id: sourceCard.id,
-              position: destination.index,
-              listId: destinationList.id,
-            },
-          })
-        } else {
-          await this.props.client.mutate({
-            mutation: updateCardForDifferentListsMutation,
-            variables: {
-              id: sourceCard.id,
-              position: destinationCard.position,
-              listId: destinationList.id,
-            },
-          })
-
-          /**
-           * Increase the position of all cards in destinationList
-           * whose position is >= destinationCard.position
-           */
-          destinationList.cards.map(async card => {
-            if (card.position >= destinationCard.position) {
-              await this.props.client.mutate({
-                mutation: updateCardMutation,
-                variables: {
-                  id: card.id,
-                  position: card.position + 1,
-                },
-              })
-            }
-          })
-        }
-
-        /**
-         * Decrease the position of all cards in sourceList whose position is > sourceCard.position
-         */
-        sourceList.cards.map(async card => {
-          if (card.position > sourceCard.position) {
-            await this.props.client.mutate({
-              mutation: updateCardMutation,
-              variables: {
-                id: card.id,
-                position: card.position - 1,
-              },
-            })
-          }
-        })
       }
     }
   }
@@ -259,18 +132,25 @@ class BoardsShow extends Component {
           const { name, lists } = data.board_by_pk
 
           return (
-            <DragDropContext
-              onDragEnd={results => this.onDragEnd(results, lists)}
-            >
-              <Droppable droppableId="board" type="list" direction="horizontal">
-                {(provided, snapshot) => (
-                  <div ref={provided.innerRef} className="flex">
-                    <List lists={lists} />
-                    {provided.placeholder}
-                  </div>
-                )}
-              </Droppable>
-            </DragDropContext>
+            <div className="flex">
+              <DragDropContext
+                onDragEnd={results => this.onDragEnd(results, lists)}
+              >
+                <Droppable
+                  droppableId="board"
+                  type="list"
+                  direction="horizontal"
+                >
+                  {(provided, snapshot) => (
+                    <div ref={provided.innerRef} className="flex">
+                      <List lists={lists} />
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+              <CreateListForm boardId={this.props.id} lists={lists} />
+            </div>
           )
         }}
       </Subscription>
