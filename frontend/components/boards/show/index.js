@@ -140,8 +140,8 @@ class BoardsShow extends Component {
 
         const destinationCard = list.cards[destination.index]
         const sourceCard = list.cards[source.index]
-        const destinationMinusOneCard = lists[destination.index - 1]
-        const destinationPlusOneCard = lists[destination.index + 1]
+        const destinationMinusOneCard = list.cards[destination.index - 1]
+        const destinationPlusOneCard = list.cards[destination.index + 1]
 
         const positionOfDestinationCard = destinationCard.position
         const positionOfSourceCard = sourceCard.position
@@ -196,6 +196,57 @@ class BoardsShow extends Component {
         /**
          * Card has been reordered within different lists
          */
+        const destinationList = find(
+          lists,
+          l => l.id === destination.droppableId
+        )
+        const sourceList = find(lists, l => l.id === source.droppableId)
+        const destinationCard = destinationList.cards[destination.index]
+        const sourceCard = sourceList.cards[source.index]
+        const destinationMinusOneCard =
+          destinationList.cards[destination.index - 1]
+        const destinationPlusOneCard =
+          destinationList.cards[destination.index + 1]
+        const lastCardFromDestinationList =
+          destinationList.cards[destinationList.cards.length - 1]
+
+        const positionOfDestinationCard =
+          destinationCard && destinationCard.position
+        const positionOfSourceCard = sourceCard.position
+        const positionOfDestinationMinusOneCard =
+          destinationMinusOneCard && destinationMinusOneCard.position
+        const positionOfDestinationPlusOneCard =
+          destinationPlusOneCard && destinationPlusOneCard.position
+        const positionOfLastCardFromDestinationList =
+          lastCardFromDestinationList && lastCardFromDestinationList.position
+
+        let updatedPositionOfSourceCard
+
+        if (!destinationCard) {
+          if (positionOfLastCardFromDestinationList) {
+            updatedPositionOfSourceCard =
+              positionOfLastCardFromDestinationList + 1024
+          } else {
+            updatedPositionOfSourceCard = 1024
+          }
+        } else if (!destinationMinusOneCard) {
+          updatedPositionOfSourceCard = positionOfDestinationCard / 2
+        } else {
+          updatedPositionOfSourceCard =
+            (positionOfDestinationCard + positionOfDestinationMinusOneCard) / 2
+        }
+
+        /**
+         * Update source card
+         */
+        await this.props.client.mutate({
+          mutation: updateCardForDifferentListsMutation,
+          variables: {
+            id: sourceCard.id,
+            position: updatedPositionOfSourceCard,
+            listId: destinationList.id,
+          },
+        })
       }
     }
   }
