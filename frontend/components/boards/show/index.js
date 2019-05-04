@@ -49,7 +49,7 @@ const updateCardForDifferentListsMutation = gql`
   }
 `
 const updateListMutation = gql`
-  mutation($id: uuid!, $position: Int) {
+  mutation($id: uuid!, $position: numeric) {
     update_list(where: { id: { _eq: $id } }, _set: { position: $position }) {
       returning {
         id
@@ -76,6 +76,59 @@ class BoardsShow extends Component {
     }
 
     if (type === 'list') {
+      const destinationList = lists[destination.index]
+      const sourceList = lists[source.index]
+      const destinationMinusOneList = lists[destination.index - 1]
+      const destinationPlusOneList = lists[destination.index + 1]
+
+      const positionOfDestinationList = destinationList.position
+      const positionOfSourceList = sourceList.position
+      const positionOfDestinationMinusOneList =
+        destinationMinusOneList && destinationMinusOneList.position
+      const positionOfDestinationPlusOneList =
+        destinationPlusOneList && destinationPlusOneList.position
+
+      if (positionOfSourceList > positionOfDestinationList) {
+        let updatedPositionOfSourceList
+
+        if (destinationMinusOneList) {
+          updatedPositionOfSourceList =
+            (positionOfDestinationList + positionOfDestinationMinusOneList) / 2
+        } else {
+          updatedPositionOfSourceList = positionOfDestinationList / 2
+        }
+
+        /**
+         * Update source list
+         */
+        await this.props.client.mutate({
+          mutation: updateListMutation,
+          variables: {
+            id: lists[source.index].id,
+            position: updatedPositionOfSourceList,
+          },
+        })
+      } else {
+        let updatedPositionOfSourceList
+
+        if (destinationPlusOneList) {
+          updatedPositionOfSourceList =
+            (positionOfDestinationList + positionOfDestinationPlusOneList) / 2
+        } else {
+          updatedPositionOfSourceList = positionOfDestinationList + 1024
+        }
+
+        /**
+         * Update source list
+         */
+        await this.props.client.mutate({
+          mutation: updateListMutation,
+          variables: {
+            id: lists[source.index].id,
+            position: updatedPositionOfSourceList,
+          },
+        })
+      }
     }
 
     if (type === 'card') {
