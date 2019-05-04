@@ -1,0 +1,6 @@
+- args:
+    sql: ALTER TABLE "public"."card" ALTER COLUMN "position" TYPE numeric;
+  type: run_sql
+- args:
+    sql: ALTER TABLE "public"."card" ADD CONSTRAINT "card_position_key" UNIQUE ("position")
+  type: run_sql
