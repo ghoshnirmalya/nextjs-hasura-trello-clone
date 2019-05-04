@@ -26,7 +26,7 @@ const fetchBoardSubscription = gql`
   }
 `
 const updateCardMutation = gql`
-  mutation($id: uuid!, $position: Int) {
+  mutation($id: uuid!, $position: numeric) {
     update_card(where: { id: { _eq: $id } }, _set: { position: $position }) {
       returning {
         id
@@ -37,7 +37,7 @@ const updateCardMutation = gql`
   }
 `
 const updateCardForDifferentListsMutation = gql`
-  mutation($id: uuid!, $position: Int, $listId: uuid!) {
+  mutation($id: uuid!, $position: numeric, $listId: uuid!) {
     update_card(
       where: { id: { _eq: $id } }
       _set: { list_id: $listId, position: $position }
@@ -136,6 +136,62 @@ class BoardsShow extends Component {
        * Card has been reordered within the same list
        */
       if (destination.droppableId === source.droppableId) {
+        const list = find(lists, l => l.id === destination.droppableId)
+
+        const destinationCard = list.cards[destination.index]
+        const sourceCard = list.cards[source.index]
+        const destinationMinusOneCard = lists[destination.index - 1]
+        const destinationPlusOneCard = lists[destination.index + 1]
+
+        const positionOfDestinationCard = destinationCard.position
+        const positionOfSourceCard = sourceCard.position
+        const positionOfDestinationMinusOneCard =
+          destinationMinusOneCard && destinationMinusOneCard.position
+        const positionOfDestinationPlusOneCard =
+          destinationPlusOneCard && destinationPlusOneCard.position
+
+        if (positionOfSourceCard > positionOfDestinationCard) {
+          let updatedPositionOfSourceCard
+
+          if (destinationMinusOneCard) {
+            updatedPositionOfSourceCard =
+              (positionOfDestinationCard + positionOfDestinationMinusOneCard) /
+              2
+          } else {
+            updatedPositionOfSourceCard = positionOfDestinationCard / 2
+          }
+
+          /**
+           * Update source card
+           */
+          await this.props.client.mutate({
+            mutation: updateCardMutation,
+            variables: {
+              id: sourceCard.id,
+              position: updatedPositionOfSourceCard,
+            },
+          })
+        } else {
+          let updatedPositionOfSourceCard
+
+          if (destinationPlusOneCard) {
+            updatedPositionOfSourceCard =
+              (positionOfDestinationCard + positionOfDestinationPlusOneCard) / 2
+          } else {
+            updatedPositionOfSourceCard = positionOfDestinationCard + 1024
+          }
+
+          /**
+           * Update source card
+           */
+          await this.props.client.mutate({
+            mutation: updateCardMutation,
+            variables: {
+              id: sourceCard.id,
+              position: updatedPositionOfSourceCard,
+            },
+          })
+        }
       } else {
         /**
          * Card has been reordered within different lists
