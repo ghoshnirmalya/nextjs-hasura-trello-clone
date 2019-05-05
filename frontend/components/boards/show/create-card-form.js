@@ -4,21 +4,25 @@ import { graphql, withApollo, Mutation } from 'react-apollo'
 import { Drawer, Form, Button, Input, Icon } from 'antd'
 import Link from 'next/link'
 
-const createListMutation = gql`
-  mutation($boardId: uuid!, $position: numeric, $name: String) {
-    insert_list(
-      objects: { board_id: $boardId, position: $position, name: $name }
+const createCardMutation = gql`
+  mutation($listId: uuid!, $position: numeric, $description: String) {
+    insert_card(
+      objects: {
+        list_id: $listId
+        position: $position
+        description: $description
+      }
     ) {
       returning {
         id
-        name
+        description
         position
       }
     }
   }
 `
 
-class CreateListForm extends Component {
+class CreateCardForm extends Component {
   state = { visible: false }
 
   showDrawer = () => {
@@ -33,23 +37,24 @@ class CreateListForm extends Component {
     })
   }
 
-  getPositionOfNewList = () => {
+  getPositionOfNewCard = () => {
     const bufferForEachPosition = 1024
-    const positionOfLastList = this.props.lists[this.props.lists.length - 1]
-      .position
+    const positionOfLastCard = !!this.props.cards.length
+      ? this.props.cards[this.props.cards.length - 1].position
+      : 0
 
-    return positionOfLastList + bufferForEachPosition
+    return positionOfLastCard + bufferForEachPosition
   }
 
   handleSubmit = () => {
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         await this.props.client.mutate({
-          mutation: createListMutation,
+          mutation: createCardMutation,
           variables: {
-            boardId: this.props.boardId,
-            position: this.getPositionOfNewList(),
-            name: values.name,
+            listId: this.props.listId,
+            position: this.getPositionOfNewCard(),
+            description: values.description,
           },
         })
 
@@ -64,16 +69,16 @@ class CreateListForm extends Component {
     return (
       <Drawer
         destroyOnClose
-        title="Create a new List"
+        title="Create a new CardList"
         width={720}
         onClose={this.handleClose}
         visible={this.state.visible}
       >
         <Form layout="vertical" onSubmit={this.handleSubmit}>
-          <Form.Item label="Name">
-            {getFieldDecorator('name', {
-              rules: [{ required: true, message: 'Please enter name!' }],
-            })(<Input placeholder="Please enter name" size="large" />)}
+          <Form.Item label="Description">
+            {getFieldDecorator('description', {
+              rules: [{ required: true, message: 'Please enter description!' }],
+            })(<Input placeholder="Please enter description" size="large" />)}
           </Form.Item>
         </Form>
         <div
@@ -104,7 +109,7 @@ class CreateListForm extends Component {
 
   render() {
     return (
-      <Mutation mutation={createListMutation}>
+      <Mutation mutation={createCardMutation}>
         {({ loading, error }) => {
           if (loading)
             return (
@@ -120,9 +125,9 @@ class CreateListForm extends Component {
               type="dashed"
               onClick={this.showDrawer}
               size="large"
-              className="mr-4"
+              className="my-2"
             >
-              <Icon type="plus" /> Create a new List
+              Create a new Card
               {this.drawerNode()}
             </Button>
           )
@@ -132,4 +137,4 @@ class CreateListForm extends Component {
   }
 }
 
-export default withApollo(Form.create()(CreateListForm))
+export default withApollo(Form.create()(CreateCardForm))

@@ -4,6 +4,7 @@ import { withApollo } from 'react-apollo'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 
 import Card from './card'
+import CreateCardForm from './create-card-form'
 
 class List extends PureComponent {
   getStyle = (isDragging, draggableStyle) => ({
@@ -39,6 +40,7 @@ class List extends PureComponent {
                   className="flex flex-col min-h-full"
                 >
                   <Card cards={list.cards} />
+                  <CreateCardForm listId={list.id} cards={list.cards} />
                   {provided.placeholder}
                 </div>
               )}
