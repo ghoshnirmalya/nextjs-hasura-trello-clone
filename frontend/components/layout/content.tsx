@@ -4,7 +4,10 @@ class ContentComponent extends Component {
   render() {
     return (
       <div className="m-8">
-        <div className="min-h-screen bg-white p-8 border border-solid border-gray-300 rounded">
+        <div
+          className="overflow-x-scroll"
+          style={{ height: 'calc(100vh - 130px)' }}
+        >
           {this.props.children}
         </div>
       </div>

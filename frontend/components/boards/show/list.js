@@ -7,11 +7,7 @@ import Card from './card'
 
 class List extends PureComponent {
   getStyle = (isDragging, draggableStyle) => ({
-    background: isDragging && '#002140',
     color: isDragging && '#ccc',
-    boxShadow:
-      isDragging &&
-      '0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05)',
     // styles we need to apply on draggables
     ...draggableStyle,
   })
@@ -33,9 +29,9 @@ class List extends PureComponent {
               snapshot.isDragging,
               provided.draggableProps.style
             )}
-            className="bg-gray-100 p-8 border border-solid border-gray-300 rounded mr-8 w-64"
+            className="mr-8 w-64"
           >
-            {list.name}
+            <div className="text-lg font-semibold">{list.name}</div>
             <Droppable droppableId={list.id} type="card">
               {(provided, snapshot) => (
                 <div

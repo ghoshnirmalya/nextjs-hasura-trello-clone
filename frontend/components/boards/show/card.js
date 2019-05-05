@@ -32,7 +32,7 @@ class Card extends PureComponent {
               snapshot.isDragging,
               provided.draggableProps.style
             )}
-            className="bg-white p-2 border border-solid border-gray-300 rounded my-2 w-full min-h-8"
+            className="bg-white p-4 border border-solid border-gray-300 rounded my-2 w-full min-h-8"
           >
             {card.description}
           </div>
