@@ -130,14 +130,16 @@ class CreateCardForm extends Component {
           if (error) return <p>Error: {error.message}</p>
 
           return (
-            <Button
-              type="dashed"
-              onClick={this.showDrawer}
-              className="w-full my-4"
-            >
-              Create a new Card
-              {this.drawerNode()}
-            </Button>
+            <div className="w-full p-4">
+              <Button
+                type="dashed"
+                onClick={this.showDrawer}
+                className="w-full"
+              >
+                Create a new Card
+                {this.drawerNode()}
+              </Button>
+            </div>
           )
         }}
       </Mutation>

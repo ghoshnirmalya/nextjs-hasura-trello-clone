@@ -36,6 +36,12 @@ app
       })
     })
 
+    server.get('/lists/:id', (req, res) => {
+      app.render(req, res, '/lists/show', {
+        id: req.params.id,
+      })
+    })
+
     server.get('*', (req, res) => {
       return handle(req, res)
     })
