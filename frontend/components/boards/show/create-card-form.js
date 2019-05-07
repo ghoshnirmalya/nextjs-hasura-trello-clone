@@ -125,7 +125,7 @@ class CreateCardForm extends Component {
               type="dashed"
               onClick={this.showDrawer}
               size="large"
-              className="my-2"
+              className="m-4"
             >
               Create a new Card
               {this.drawerNode()}

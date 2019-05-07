@@ -26,6 +26,7 @@
     "react-apollo": "^2.5.5",
     "react-beautiful-dnd": "^11.0.2",
     "react-dom": "^16.8.6",
+    "react-scrollbars-custom": "^4.0.0-alpha.13",
     "styled-components": "^4.2.0",
     "styled-jsx": "3.0.0",
     "subscriptions-transport-ws": "^0.9.16"

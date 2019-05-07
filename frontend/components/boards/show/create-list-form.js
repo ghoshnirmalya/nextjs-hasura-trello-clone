@@ -120,7 +120,8 @@ class CreateListForm extends Component {
               type="dashed"
               onClick={this.showDrawer}
               size="large"
-              className="mr-4"
+              className="m-4"
+              style={{ minWidth: '300px' }}
             >
               <Icon type="plus" /> Create a new List
               {this.drawerNode()}

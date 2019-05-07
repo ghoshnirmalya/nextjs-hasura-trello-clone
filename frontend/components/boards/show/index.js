@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import { graphql, withApollo, Subscription } from 'react-apollo'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 import find from 'lodash/find'
+import Scrollbar from 'react-scrollbars-custom'
 
 import List from './list'
 import CreateListForm from './create-list-form'
@@ -292,25 +293,27 @@ class BoardsShow extends Component {
           const { name, lists } = data.board_by_pk
 
           return (
-            <div className="flex">
-              <DragDropContext
-                onDragEnd={results => this.onDragEnd(results, lists)}
-              >
-                <Droppable
-                  droppableId="board"
-                  type="list"
-                  direction="horizontal"
+            <Scrollbar>
+              <div className="flex h-full">
+                <DragDropContext
+                  onDragEnd={results => this.onDragEnd(results, lists)}
                 >
-                  {(provided, snapshot) => (
-                    <div ref={provided.innerRef} className="flex">
-                      <List lists={lists} />
-                      {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
-              <CreateListForm boardId={this.props.id} lists={lists} />
-            </div>
+                  <Droppable
+                    droppableId="board"
+                    type="list"
+                    direction="horizontal"
+                  >
+                    {(provided, snapshot) => (
+                      <div ref={provided.innerRef} className="flex">
+                        <List lists={lists} />
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+                <CreateListForm boardId={this.props.id} lists={lists} />
+              </div>
+            </Scrollbar>
           )
         }}
       </Subscription>
