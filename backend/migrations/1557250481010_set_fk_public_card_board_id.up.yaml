@@ -1,0 +1,5 @@
+- args:
+    sql: alter table "public"."card" add constraint "card_board_id_fkey" foreign key
+      ("board_id") references "public"."board"("id") on update restrict on delete
+      restrict;
+  type: run_sql

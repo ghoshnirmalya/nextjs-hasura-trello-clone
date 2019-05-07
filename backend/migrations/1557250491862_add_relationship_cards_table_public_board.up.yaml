@@ -1,0 +1,12 @@
+- args:
+    name: cards
+    table:
+      name: board
+      schema: public
+    using:
+      foreign_key_constraint_on:
+        column: board_id
+        table:
+          name: card
+          schema: public
+  type: create_array_relationship
