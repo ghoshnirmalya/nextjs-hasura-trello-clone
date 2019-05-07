@@ -46,7 +46,9 @@ class CreateCardForm extends Component {
     return positionOfLastCard + bufferForEachPosition
   }
 
-  handleSubmit = () => {
+  handleSubmit = e => {
+    e.preventDefault()
+
     this.props.form.validateFields(async (err, values) => {
       if (!err) {
         await this.props.client.mutate({
