@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 import { withApollo } from 'react-apollo'
 import { Droppable, Draggable } from 'react-beautiful-dnd'
 import Scrollbar from 'react-scrollbars-custom'
+import { Badge } from 'antd'
 
 import Card from './card'
 import CreateCardForm from './create-card-form'
@@ -31,10 +32,22 @@ class List extends PureComponent {
               snapshot.isDragging,
               provided.draggableProps.style
             )}
-            className="mr-8 bg-gray-300 border border-solid border-gray-300 rounded"
+            className="mr-8"
             style={{ width: '300px', height: 'calc(100vh - 170px)' }}
           >
-            <div className="text-lg font-semibold m-4">{list.name}</div>
+            <div className="text-base m-4 flex items-center">
+              <div>{list.name}</div>
+              <div className="ml-2 flex">
+                <Badge
+                  count={list.cards.length}
+                  style={{
+                    backgroundColor: '#fff',
+                    color: '#999',
+                    boxShadow: '0 0 0 1px #d9d9d9 inset',
+                  }}
+                />
+              </div>
+            </div>
             <Droppable droppableId={list.id} type="card">
               {(provided, snapshot) => (
                 <div ref={provided.innerRef} className="flex flex-col">
@@ -44,7 +57,11 @@ class List extends PureComponent {
                     }}
                   >
                     <Card cards={list.cards} />
-                    <CreateCardForm listId={list.id} cards={list.cards} />
+                    <CreateCardForm
+                      listId={list.id}
+                      cards={list.cards}
+                      boardId={list.board_id}
+                    />
                   </Scrollbar>
                   {provided.placeholder}
                 </div>

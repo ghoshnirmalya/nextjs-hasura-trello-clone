@@ -30,6 +30,12 @@ app
       })
     })
 
+    server.get('/cards/:id', (req, res) => {
+      app.render(req, res, '/cards/show', {
+        id: req.params.id,
+      })
+    })
+
     server.get('*', (req, res) => {
       return handle(req, res)
     })

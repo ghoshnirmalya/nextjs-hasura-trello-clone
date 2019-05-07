@@ -5,12 +5,18 @@ import { Drawer, Form, Button, Input, Icon } from 'antd'
 import Link from 'next/link'
 
 const createCardMutation = gql`
-  mutation($listId: uuid!, $position: numeric, $description: String) {
+  mutation(
+    $listId: uuid!
+    $position: numeric
+    $description: String
+    $boardId: uuid!
+  ) {
     insert_card(
       objects: {
         list_id: $listId
         position: $position
         description: $description
+        board_id: $boardId
       }
     ) {
       returning {
@@ -57,6 +63,7 @@ class CreateCardForm extends Component {
             listId: this.props.listId,
             position: this.getPositionOfNewCard(),
             description: values.description,
+            boardId: this.props.boardId,
           },
         })
 
@@ -126,8 +133,7 @@ class CreateCardForm extends Component {
             <Button
               type="dashed"
               onClick={this.showDrawer}
-              size="large"
-              className="m-4"
+              className="w-full my-4"
             >
               Create a new Card
               {this.drawerNode()}

@@ -17,6 +17,7 @@ const fetchBoardSubscription = gql`
         id
         name
         position
+        board_id
         cards(order_by: { position: asc }) {
           id
           description
