@@ -44,9 +44,11 @@ class List extends PureComponent {
               provided.draggableProps.style
             )}
             className="mr-8"
-            style={{ width: '300px', height: 'calc(100vh - 170px)' }}
           >
-            <div className="text-base m-4 flex justify-between">
+            <div
+              className="text-base m-4 flex justify-between"
+              style={{ width: '300px' }}
+            >
               <div className="flex items-center">
                 <div>{list.name}</div>
                 <div className="ml-2 flex">
