@@ -52,8 +52,8 @@ class BoardsIndex extends Component {
                 <Row gutter={16}>
                   {board.map(board => {
                     return (
-                      <Col className="gutter-row" span={4} key={board.id}>
-                        <div className="gutter-box">
+                      <Col key={board.id} sm={24} md={12} lg={8} xl={4}>
+                        <div className="mb-4">
                           <Link
                             href={`/boards/show?id=${board.id}`}
                             as={`/boards/${board.id}`}
