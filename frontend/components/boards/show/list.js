@@ -46,7 +46,7 @@ class List extends PureComponent {
             className="mr-8"
           >
             <div
-              className="text-base m-4 flex justify-between"
+              className="text-base m-4 ml-0 flex justify-between"
               style={{ width: '300px' }}
             >
               <div className="flex items-center">
@@ -100,7 +100,7 @@ class List extends PureComponent {
                 <div ref={provided.innerRef} className="flex flex-col">
                   <Scrollbar
                     style={{
-                      minHeight: 'calc(100vh - 240px)',
+                      minHeight: 'calc(100vh - 300px)',
                     }}
                   >
                     <Card cards={list.cards} />

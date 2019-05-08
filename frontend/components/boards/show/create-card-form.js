@@ -130,7 +130,7 @@ class CreateCardForm extends Component {
           if (error) return <p>Error: {error.message}</p>
 
           return (
-            <div className="w-full p-4">
+            <div className="w-full p-4 pl-0 py-0">
               <Button
                 type="dashed"
                 onClick={this.showDrawer}

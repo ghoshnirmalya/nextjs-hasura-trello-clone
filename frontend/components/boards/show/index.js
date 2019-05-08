@@ -13,6 +13,9 @@ const fetchBoardSubscription = gql`
     board_by_pk(id: $id) {
       id
       name
+      cards {
+        id
+      }
       lists(order_by: { position: asc }) {
         id
         name
@@ -291,30 +294,37 @@ class BoardsShow extends Component {
 
           if (error) return <p>Error: {error.message}</p>
 
-          const { name, lists } = data.board_by_pk
+          const { name, lists, cards } = data.board_by_pk
 
           return (
-            <Scrollbar>
-              <div className="flex h-full">
-                <DragDropContext
-                  onDragEnd={results => this.onDragEnd(results, lists)}
-                >
-                  <Droppable
-                    droppableId="board"
-                    type="list"
-                    direction="horizontal"
-                  >
-                    {(provided, snapshot) => (
-                      <div ref={provided.innerRef} className="flex">
-                        <List lists={lists} />
-                        {provided.placeholder}
-                      </div>
-                    )}
-                  </Droppable>
-                </DragDropContext>
-                <CreateListForm boardId={this.props.id} lists={lists} />
+            <div>
+              <div className="flex justify-between items-center">
+                <h2>{name}</h2>
               </div>
-            </Scrollbar>
+              <div style={{ height: 'calc(100vh - 200px)' }}>
+                <Scrollbar noScrollY>
+                  <div className="flex h-full">
+                    <DragDropContext
+                      onDragEnd={results => this.onDragEnd(results, lists)}
+                    >
+                      <Droppable
+                        droppableId="board"
+                        type="list"
+                        direction="horizontal"
+                      >
+                        {(provided, snapshot) => (
+                          <div ref={provided.innerRef} className="flex">
+                            <List lists={lists} />
+                            {provided.placeholder}
+                          </div>
+                        )}
+                      </Droppable>
+                    </DragDropContext>
+                    <CreateListForm boardId={this.props.id} lists={lists} />
+                  </div>
+                </Scrollbar>
+              </div>
+            </div>
           )
         }}
       </Subscription>

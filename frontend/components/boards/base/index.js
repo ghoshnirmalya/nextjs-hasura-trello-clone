@@ -59,7 +59,27 @@ class BoardsIndex extends Component {
                             as={`/boards/${board.id}`}
                           >
                             <a>
-                              <Card hoverable>{board.name}</Card>
+                              <Card
+                                hoverable
+                                extra={
+                                  <Button
+                                    type="danger"
+                                    onClick={async () => {
+                                      await this.props.client.mutate({
+                                        mutation: deleteBoardMutation,
+                                        variables: {
+                                          id: board.id,
+                                        },
+                                      })
+                                    }}
+                                  >
+                                    <Icon type="delete" />
+                                    Delete
+                                  </Button>
+                                }
+                              >
+                                {board.name}
+                              </Card>
                             </a>
                           </Link>
                         </div>

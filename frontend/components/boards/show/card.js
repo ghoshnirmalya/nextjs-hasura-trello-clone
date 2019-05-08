@@ -36,7 +36,7 @@ class _Card extends PureComponent {
                   snapshot.isDragging,
                   provided.draggableProps.style
                 )}
-                className="m-4"
+                className="m-4 ml-0 mt-0"
               >
                 <Card hoverable>
                   {card.description}
