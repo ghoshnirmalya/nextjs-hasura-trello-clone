@@ -3,8 +3,9 @@ import { Draggable } from 'react-beautiful-dnd'
 import difference from 'lodash/difference'
 import isEqual from 'lodash/isEqual'
 import Link from 'next/link'
+import { Card } from 'antd'
 
-class Card extends PureComponent {
+class _Card extends PureComponent {
   getStyle = (isDragging, draggableStyle) => ({
     userSelect: 'none',
     background: isDragging && '#002140',
@@ -12,6 +13,7 @@ class Card extends PureComponent {
     boxShadow:
       isDragging &&
       '0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05)',
+    borderRadius: '2px',
     // styles we need to apply on draggables
     ...draggableStyle,
   })
@@ -24,11 +26,7 @@ class Card extends PureComponent {
         key={card.id}
       >
         <a>
-          <Draggable
-            draggableId={card.id}
-            index={index}
-            className="bg-gray-100 p-8 border border-solid border-gray-300 rounded"
-          >
+          <Draggable draggableId={card.id} index={index}>
             {(provided, snapshot) => (
               <div
                 ref={provided.innerRef}
@@ -38,10 +36,12 @@ class Card extends PureComponent {
                   snapshot.isDragging,
                   provided.draggableProps.style
                 )}
-                className="bg-white p-4 border border-solid border-gray-300 rounded m-4 min-h-8 shadow-md text-gray-700"
+                className="m-4"
               >
-                {card.description}
-                <div className="text-gray-500 text-xs">Nirmalya Ghosh</div>
+                <Card hoverable>
+                  {card.description}
+                  <div className="text-gray-500 text-xs">Nirmalya Ghosh</div>
+                </Card>
               </div>
             )}
           </Draggable>
@@ -51,4 +51,4 @@ class Card extends PureComponent {
   }
 }
 
-export default Card
+export default _Card
