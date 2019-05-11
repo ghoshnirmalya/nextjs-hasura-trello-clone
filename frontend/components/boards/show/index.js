@@ -256,32 +256,6 @@ class BoardsShow extends Component {
     }
   }
 
-  cardNode = cards => {
-    return cards.map((card, index) => (
-      <Draggable
-        key={card.id}
-        draggableId={card.id}
-        index={index}
-        className="bg-gray-100 p-8 border border-solid border-gray-300 rounded"
-      >
-        {(provided, snapshot) => (
-          <div
-            ref={provided.innerRef}
-            {...provided.draggableProps}
-            {...provided.dragHandleProps}
-            style={this.getListStyle(
-              snapshot.isDragging,
-              provided.draggableProps.style
-            )}
-            className="bg-white p-2 border border-solid border-gray-300 rounded my-2 w-full min-h-8 shadow"
-          >
-            {card.description}
-          </div>
-        )}
-      </Draggable>
-    ))
-  }
-
   render() {
     return (
       <Subscription
