@@ -1,26 +1,56 @@
 # authentication
 
-a [Sails v1](https://sailsjs.com) application
+> 
 
+## About
 
-### Links
+This project uses [Feathers](http://feathersjs.com). An open source web framework for building modern real-time applications.
 
-+ [Sails framework documentation](https://sailsjs.com/get-started)
-+ [Version notes / upgrading](https://sailsjs.com/documentation/upgrading)
-+ [Deployment tips](https://sailsjs.com/documentation/concepts/deployment)
-+ [Community support options](https://sailsjs.com/support)
-+ [Professional / enterprise options](https://sailsjs.com/enterprise)
+## Getting Started
 
+Getting up and running is as easy as 1, 2, 3.
 
-### Version info
+1. Make sure you have [NodeJS](https://nodejs.org/) and [npm](https://www.npmjs.com/) installed.
+2. Install your dependencies
 
-This app was originally generated on Sun May 12 2019 17:48:47 GMT+0530 (India Standard Time) using Sails v1.2.1.
+    ```
+    cd path/to/authentication; npm install
+    ```
 
-<!-- Internally, Sails used [`sails-generate@1.16.8`](https://github.com/balderdashy/sails-generate/tree/v1.16.8/lib/core-generators/new). -->
+3. Start your app
 
+    ```
+    npm start
+    ```
 
+## Testing
 
-<!--
-Note:  Generators are usually run using the globally-installed `sails` CLI (command-line interface).  This CLI version is _environment-specific_ rather than app-specific, thus over time, as a project's dependencies are upgraded or the project is worked on by different developers on different computers using different versions of Node.js, the Sails dependency in its package.json file may differ from the globally-installed Sails CLI release it was originally generated with.  (Be sure to always check out the relevant [upgrading guides](https://sailsjs.com/upgrading) before upgrading the version of Sails used by your app.  If you're stuck, [get help here](https://sailsjs.com/support).)
--->
+Simply run `npm test` and all your tests in the `test/` directory will be run.
 
+## Scaffolding
+
+Feathers has a powerful command line interface. Here are a few things it can do:
+
+```
+$ npm install -g @feathersjs/cli          # Install Feathers CLI
+
+$ feathers generate service               # Generate a new Service
+$ feathers generate hook                  # Generate a new Hook
+$ feathers help                           # Show all commands
+```
+
+## Help
+
+For more information on all the things you can do with Feathers visit [docs.feathersjs.com](http://docs.feathersjs.com).
+
+## Changelog
+
+__0.1.0__
+
+- Initial release
+
+## License
+
+Copyright (c) 2018
+
+Licensed under the [MIT license](LICENSE).

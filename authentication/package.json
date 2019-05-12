@@ -1,38 +1,51 @@
 {
   "name": "authentication",
-  "private": true,
+  "description": "",
   "version": "0.0.0",
-  "description": "a Sails application",
-  "keywords": [],
-  "dependencies": {
-    "@sailshq/lodash": "^3.10.3",
-    "bcrypt": "^3.0.6",
-    "es6-promise": "^4.2.6",
-    "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.11",
-    "sails": "^1.2.1",
-    "sails-hook-autoreload": "^1.1.0",
-    "sails-hook-orm": "^2.1.1",
-    "sails-hook-sockets": "^1.5.5"
+  "homepage": "",
+  "main": "src",
+  "keywords": [
+    "feathers"
+  ],
+  "author": {
+    "name": "Nirmalya Ghosh",
+    "email": "nirmalya.email@gmail.com"
   },
-  "devDependencies": {
-    "@sailshq/eslint": "^4.19.3"
+  "contributors": [],
+  "bugs": {},
+  "directories": {
+    "lib": "src",
+    "test": "test/",
+    "config": "config/"
+  },
+  "engines": {
+    "node": "^11.0.0",
+    "yarn": ">= 0.18.0"
   },
   "scripts": {
-    "start": "NODE_ENV=production node app.js",
-    "test": "npm run lint && npm run custom-tests && echo 'Done.'",
-    "lint": "eslint . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
-    "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
-    "dev": "sails lift"
+    "test": "yarn run eslint && NODE_ENV= yarn run jest",
+    "eslint": "eslint src/. test/. --config .eslintrc.json",
+    "dev": "nodemon src/",
+    "start": "node src/",
+    "jest": "jest"
   },
-  "main": "app.js",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/nirmalya/authentication.git"
+  "dependencies": {
+    "@feathersjs/configuration": "^2.0.4",
+    "@feathersjs/errors": "^3.3.4",
+    "@feathersjs/express": "^1.2.7",
+    "@feathersjs/feathers": "^3.2.3",
+    "@feathersjs/socketio": "^3.2.7",
+    "compression": "^1.7.3",
+    "cors": "^2.8.5",
+    "helmet": "^3.15.0",
+    "serve-favicon": "^2.5.0",
+    "winston": "^3.0.0"
   },
-  "author": "nirmalya",
-  "license": "",
-  "engines": {
-    "node": "^11.1"
+  "devDependencies": {
+    "eslint": "^5.9.0",
+    "jest": "^24.8.0",
+    "nodemon": "^1.18.7",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.2"
   }
 }

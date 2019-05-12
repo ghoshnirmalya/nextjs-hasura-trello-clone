@@ -27,16 +27,13 @@ services:
     build:
       context: ./authentication
     ports:
-      - 1337:1337
-    depends_on:
-      - db
+      - "3030:3030"
     volumes:
       - ./authentication:/authentication-app
-      - ./authentication/package.json:/authentication-app/package.json
-      - ./authentication/yarn.lock:/authentication-app/yarn.lock
+    command: yarn start
 
   db:
-    image: postgres
+    image: postgres:10.8
     restart: always
     volumes:
       - db_data:/var/lib/postgresql/data

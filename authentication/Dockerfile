@@ -6,8 +6,6 @@ WORKDIR /authentication-app
 
 ENV PATH /authentication-app/node_modules/.bin:$PATH
 
-COPY package.json /authentication-app/package.json
+RUN npm install -g @feathersjs/cli
 
-RUN yarn install
-
-CMD ["yarn", "dev"]
+EXPOSE 3030
