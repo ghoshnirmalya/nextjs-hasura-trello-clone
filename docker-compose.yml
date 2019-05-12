@@ -23,6 +23,18 @@ services:
     ports:
       - "3000:3000"
 
+  trello-clone.authentication:
+    build:
+      context: ./authentication
+    ports:
+      - 1337:1337
+    depends_on:
+      - db
+    volumes:
+      - ./authentication:/authentication-app
+      - ./authentication/package.json:/authentication-app/package.json
+      - ./authentication/yarn.lock:/authentication-app/yarn.lock
+
   db:
     image: postgres
     restart: always

@@ -1,0 +1,38 @@
+{
+  "name": "authentication",
+  "private": true,
+  "version": "0.0.0",
+  "description": "a Sails application",
+  "keywords": [],
+  "dependencies": {
+    "@sailshq/lodash": "^3.10.3",
+    "bcrypt": "^3.0.6",
+    "es6-promise": "^4.2.6",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.11",
+    "sails": "^1.2.1",
+    "sails-hook-autoreload": "^1.1.0",
+    "sails-hook-orm": "^2.1.1",
+    "sails-hook-sockets": "^1.5.5"
+  },
+  "devDependencies": {
+    "@sailshq/eslint": "^4.19.3"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production node app.js",
+    "test": "npm run lint && npm run custom-tests && echo 'Done.'",
+    "lint": "eslint . --max-warnings=0 --report-unused-disable-directives && echo '✔  Your .js files look good.'",
+    "custom-tests": "echo \"(No other custom tests yet.)\" && echo",
+    "dev": "sails lift"
+  },
+  "main": "app.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nirmalya/authentication.git"
+  },
+  "author": "nirmalya",
+  "license": "",
+  "engines": {
+    "node": "^11.1"
+  }
+}
