@@ -6,6 +6,8 @@ WORKDIR /authentication-app
 
 ENV PATH /authentication-app/node_modules/.bin:$PATH
 
-RUN npm install -g @feathersjs/cli
+COPY package.json /authentication-app/package.json
 
-EXPOSE 3030
+RUN npm install -g @feathersjs/cli && yarn global add nodemon && yarn install
+
+CMD ["yarn", "dev"]

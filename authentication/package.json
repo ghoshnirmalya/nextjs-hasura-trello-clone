@@ -30,28 +30,28 @@
     "jest": "jest"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^2.1.13",
-    "@feathersjs/authentication-jwt": "^2.0.7",
-    "@feathersjs/authentication-local": "^1.2.7",
-    "@feathersjs/configuration": "^2.0.4",
-    "@feathersjs/errors": "^3.3.4",
-    "@feathersjs/express": "^1.2.7",
-    "@feathersjs/feathers": "^3.2.3",
-    "@feathersjs/socketio": "^3.2.7",
-    "compression": "^1.7.3",
+    "@feathersjs/authentication": "^2.1.16",
+    "@feathersjs/authentication-jwt": "^2.0.10",
+    "@feathersjs/authentication-local": "^1.2.9",
+    "@feathersjs/configuration": "^2.0.6",
+    "@feathersjs/errors": "^3.3.6",
+    "@feathersjs/express": "^1.3.1",
+    "@feathersjs/feathers": "^3.3.1",
+    "@feathersjs/socketio": "^3.2.9",
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "feathers-sequelize": "^4.0.0",
-    "helmet": "^3.15.0",
+    "feathers-sequelize": "^5.1.3",
+    "helmet": "^3.18.0",
     "pg": "^7.11.0",
-    "sequelize": "^4.41.2",
+    "sequelize": "^5.8.6",
     "serve-favicon": "^2.5.0",
-    "winston": "^3.0.0"
+    "winston": "^3.2.1"
   },
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^5.16.0",
     "jest": "^24.8.0",
-    "nodemon": "^1.18.7",
+    "nodemon": "^1.19.0",
     "request": "^2.88.0",
-    "request-promise": "^4.2.2"
+    "request-promise": "^4.2.4"
   }
 }
