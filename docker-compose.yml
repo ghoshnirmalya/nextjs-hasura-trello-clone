@@ -30,7 +30,7 @@ services:
       - "3030:3030"
     volumes:
       - ./authentication:/authentication-app
-    command: yarn start
+    command: yarn dev
 
   db:
     image: postgres:10.8
