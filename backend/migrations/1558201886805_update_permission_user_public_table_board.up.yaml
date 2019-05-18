@@ -1,0 +1,8 @@
+- args:
+    permission:
+      filter: {}
+    role: user
+    table:
+      name: board
+      schema: public
+  type: create_delete_permission

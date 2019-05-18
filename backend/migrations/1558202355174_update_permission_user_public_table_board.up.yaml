@@ -1,0 +1,22 @@
+- args:
+    role: user
+    table:
+      name: board
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      check: {}
+      columns:
+      - admin_id
+      - id
+      - name
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: board
+      schema: public
+  type: create_insert_permission

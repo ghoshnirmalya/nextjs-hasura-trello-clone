@@ -1,0 +1,24 @@
+- args:
+    role: user
+    table:
+      name: board
+      schema: public
+  type: drop_delete_permission
+- args:
+    role: user
+    table:
+      name: board
+      schema: public
+  type: drop_update_permission
+- args:
+    role: user
+    table:
+      name: board
+      schema: public
+  type: drop_select_permission
+- args:
+    role: user
+    table:
+      name: board
+      schema: public
+  type: drop_insert_permission

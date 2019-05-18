@@ -1,0 +1,19 @@
+- args:
+    role: user
+    table:
+      name: board
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - admin_id
+      - id
+      - name
+      filter: {}
+    role: user
+    table:
+      name: board
+      schema: public
+  type: create_select_permission
