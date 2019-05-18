@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import withApollo from '../../lib/with-apollo'
 import withLayout from '../../lib/with-layout'
 import BoardNew from '../../components/boards/new'
+import { withAuthentication } from '../../lib/with-authentication'
 
 class New extends Component<any, any> {
   render() {
@@ -11,4 +12,4 @@ class New extends Component<any, any> {
   }
 }
 
-export default withRouter(withApollo(withLayout(New)))
+export default withAuthentication(withRouter(withApollo(withLayout(New))))

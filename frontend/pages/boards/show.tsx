@@ -4,6 +4,7 @@ import { withRouter } from 'next/router'
 import withApollo from '../../lib/with-apollo'
 import withLayout from '../../lib/with-layout'
 import Board from '../../components/boards/show'
+import { withAuthentication } from '../../lib/with-authentication'
 
 class Show extends Component<any, any> {
   render() {
@@ -11,4 +12,4 @@ class Show extends Component<any, any> {
   }
 }
 
-export default withRouter(withApollo(withLayout(Show)))
+export default withAuthentication(withRouter(withApollo(withLayout(Show))))

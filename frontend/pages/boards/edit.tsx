@@ -4,6 +4,7 @@ import React, { Component } from 'react'
 import withApollo from '../../lib/with-apollo'
 import withLayout from '../../lib/with-layout'
 import Board from '../../components/boards/edit'
+import { withAuthentication } from '../../lib/with-authentication'
 
 class Edit extends Component<any, any> {
   render() {
@@ -11,4 +12,4 @@ class Edit extends Component<any, any> {
   }
 }
 
-export default withRouter(withApollo(withLayout(Edit)))
+export default withAuthentication(withRouter(withApollo(withLayout(Edit))))
