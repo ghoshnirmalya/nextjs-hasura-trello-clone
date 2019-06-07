@@ -1,0 +1,8 @@
+- args:
+    name: admin
+    table:
+      name: board
+      schema: public
+    using:
+      foreign_key_constraint_on: admin_id
+  type: create_object_relationship

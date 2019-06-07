@@ -1,0 +1,13 @@
+- args:
+    name: admin
+    table:
+      name: board
+      schema: public
+    using:
+      manual_configuration:
+        column_mapping:
+          admin_id: id
+        remote_table:
+          name: user
+          schema: public
+  type: create_object_relationship
