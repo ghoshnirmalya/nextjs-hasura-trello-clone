@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ApolloProvider, getDataFromTree } from 'react-apollo'
 import Head from 'next/head'
+import cookies from 'next-cookies'
 
 import initApollo from './init-apollo'
 
@@ -21,6 +22,8 @@ export default ComposedComponent => {
     }
 
     static async getInitialProps(ctx) {
+      const { token } = cookies(ctx)
+
       // Initial serverState with apollo (empty)
       let serverState = {
         apollo: {
@@ -38,7 +41,7 @@ export default ComposedComponent => {
       // Run all GraphQL queries in the component tree
       // and extract the resulting data
       if (!process.browser) {
-        const apollo = initApollo()
+        const apollo = initApollo({ token })
 
         try {
           // Run all GraphQL queries
@@ -68,6 +71,7 @@ export default ComposedComponent => {
           apollo: {
             data: apollo.cache.extract(),
           },
+          token,
         }
       }
 
@@ -80,7 +84,10 @@ export default ComposedComponent => {
     constructor(props) {
       super(props)
 
-      this.apollo = initApollo(this.props.serverState.apollo.data)
+      this.apollo = initApollo({
+        token: this.props.serverState.token,
+        ...this.props.serverState.apollo.data,
+      })
     }
 
     render() {

@@ -18,14 +18,14 @@ const httpApiUrl =
     ? 'http://localhost:8080/v1alpha1/graphql'
     : 'http://localhost:8080/v1alpha1/graphql'
 
-function create(initialState) {
+function create({ token, ...rest }) {
   // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
   // Create an http link
   const httpLink = new HttpLink({
     uri: httpApiUrl, // Server URL (must be absolute)
-    credentials: 'same-origin', // Additional fetch() options like `credentials` or `headers`
+    credentials: 'include', // Additional fetch() options like `credentials` or `headers`
     headers: {
-      'content-type': 'application/json',
+      Authorization: `Bearer ${token}`,
     },
   })
   const wsLink = process.browser
@@ -34,6 +34,9 @@ function create(initialState) {
         uri: `ws://localhost:8080/v1alpha1/graphql`,
         options: {
           reconnect: true,
+        },
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
       })
     : null
@@ -55,20 +58,20 @@ function create(initialState) {
     connectToDevTools: process.browser,
     ssrMode: !process.browser, // Disables forceFetch on the server (so queries are only run once)
     link,
-    cache: new InMemoryCache().restore(initialState || {}),
+    cache: new InMemoryCache().restore(rest || {}),
   })
 }
 
-export default function initApollo(initialState) {
+export default function initApollo({ token, ...rest }) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (!process.browser) {
-    return create(initialState)
+    return create({ token, ...rest })
   }
 
   // Reuse client on the client-side
   if (!apolloClient) {
-    apolloClient = create(initialState)
+    apolloClient = create({ token, ...rest })
   }
 
   return apolloClient

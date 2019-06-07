@@ -35,8 +35,9 @@ class CreateListForm extends Component {
 
   getPositionOfNewList = () => {
     const bufferForEachPosition = 1024
-    const positionOfLastList = this.props.lists[this.props.lists.length - 1]
-      .position
+    let positionOfLastList = this.props.lists[this.props.lists.length - 1]
+      ? this.props.lists[this.props.lists.length - 1].position
+      : 1
 
     return positionOfLastList + bufferForEachPosition
   }
