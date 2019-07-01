@@ -5,6 +5,7 @@ import Router from 'next/router'
 import { Drawer, Form, Button, Input } from 'antd'
 
 import Board from '../../boards/show'
+import Loader from '../../common/loader'
 
 const fetchListSubscription = gql`
   subscription($id: uuid!) {
@@ -57,7 +58,7 @@ class ListsShow extends Component {
         fetchPolicy="network-only"
       >
         {({ data, error, loading }) => {
-          if (loading) return <p>Loading</p>
+          if (loading) return <Loader />
 
           if (error) return <p>Error: {error.message}</p>
 

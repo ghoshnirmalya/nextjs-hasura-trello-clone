@@ -4,6 +4,8 @@ import gql from 'graphql-tag'
 import { Card, Col, Row, Icon, Button } from 'antd'
 import Link from 'next/link'
 
+import Loader from '../../common/loader'
+
 const fetchBoardsQuery = gql`
   query {
     board {
@@ -28,12 +30,7 @@ class BoardsIndex extends Component {
     return (
       <Query query={fetchBoardsQuery} fetchPolicy="network-only">
         {({ data, error, loading }) => {
-          if (loading)
-            return (
-              <p className="flex justify-center items-center min-h-screen">
-                Loading...
-              </p>
-            )
+          if (loading) return <Loader />
 
           if (error) return <p>Error: {error.message}</p>
 

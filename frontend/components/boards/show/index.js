@@ -7,6 +7,7 @@ import Scrollbar from 'react-scrollbars-custom'
 
 import List from './list'
 import CreateListForm from './create-list-form'
+import Loader from '../../common/loader'
 
 const fetchBoardSubscription = gql`
   subscription($id: uuid!) {
@@ -264,7 +265,7 @@ class BoardsShow extends Component {
         fetchPolicy="network-only"
       >
         {({ data, error, loading }) => {
-          if (loading) return <p>Loading</p>
+          if (loading) return <Loader />
 
           if (error) return <p>Error: {error.message}</p>
 

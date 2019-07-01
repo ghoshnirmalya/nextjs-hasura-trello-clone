@@ -6,6 +6,8 @@ import styled from 'styled-components'
 import Router from 'next/router'
 import Link from 'next/link'
 
+import Loader from '../../common/loader'
+
 const fetchBoardQuery = gql`
   query($id: uuid!) {
     board_by_pk(id: $id) {
@@ -52,7 +54,7 @@ class BoardsEdit extends Component {
         fetchPolicy="network-only"
       >
         {({ data, error, loading }) => {
-          if (loading) return <p>Loading</p>
+          if (loading) return <Loader />
 
           if (error) return <p>Error: {error.message}</p>
 

@@ -5,6 +5,7 @@ import Router from 'next/router'
 import { Drawer, Button } from 'antd'
 
 import Board from '../../boards/show'
+import Loader from '../../common/loader'
 
 const fetchCardSubscription = gql`
   subscription($id: uuid!) {
@@ -39,7 +40,7 @@ class CardsShow extends Component {
         fetchPolicy="network-only"
       >
         {({ data, error, loading }) => {
-          if (loading) return <p>Loading</p>
+          if (loading) return <Loader />
 
           if (error) return <p>Error: {error.message}</p>
 
