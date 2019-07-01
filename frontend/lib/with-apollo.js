@@ -29,6 +29,9 @@ export default ComposedComponent => {
         apollo: {
           data: {},
         },
+        token,
+        userRole: cookies(ctx)['x-hasura-role'],
+        userId: cookies(ctx)['x-hasura-user-id'],
       }
 
       // Evaluate the composed component's getInitialProps()
@@ -41,13 +44,20 @@ export default ComposedComponent => {
       // Run all GraphQL queries in the component tree
       // and extract the resulting data
       if (!process.browser) {
-        const apollo = initApollo({ token })
+        const apollo = initApollo({
+          token,
+          userRole: cookies(ctx)['x-hasura-role'],
+          userId: cookies(ctx)['x-hasura-user-id'],
+        })
 
         try {
           // Run all GraphQL queries
           await getDataFromTree(
             <ApolloProvider client={apollo}>
-              <ComposedComponent {...composedInitialProps} />
+              <ComposedComponent
+                serverState={serverState}
+                {...composedInitialProps}
+              />
             </ApolloProvider>,
             {
               router: {
@@ -72,6 +82,8 @@ export default ComposedComponent => {
             data: apollo.cache.extract(),
           },
           token,
+          userRole: cookies(ctx)['x-hasura-role'],
+          userId: cookies(ctx)['x-hasura-user-id'],
         }
       }
 
@@ -86,6 +98,8 @@ export default ComposedComponent => {
 
       this.apollo = initApollo({
         token: this.props.serverState.token,
+        userRole: this.props.serverState.userRole,
+        userId: this.props.serverState.userId,
         ...this.props.serverState.apollo.data,
       })
     }

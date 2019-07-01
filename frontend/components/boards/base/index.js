@@ -1,13 +1,13 @@
 import React, { Component, Fragment } from 'react'
-import { graphql, withApollo, Query } from 'react-apollo'
+import { graphql, withApollo, Subscription } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Card, Col, Row, Icon, Button } from 'antd'
 import Link from 'next/link'
 
 import Loader from '../../common/loader'
 
-const fetchBoardsQuery = gql`
-  query {
+const fetchBoardsSubscription = gql`
+  subscription {
     board {
       id
       name
@@ -28,7 +28,10 @@ const deleteBoardMutation = gql`
 class BoardsIndex extends Component {
   render() {
     return (
-      <Query query={fetchBoardsQuery} fetchPolicy="network-only">
+      <Subscription
+        subscription={fetchBoardsSubscription}
+        fetchPolicy="network-only"
+      >
         {({ data, error, loading }) => {
           if (loading) return <Loader />
 
@@ -49,36 +52,34 @@ class BoardsIndex extends Component {
                 <Row gutter={16}>
                   {board.map(board => {
                     return (
-                      <Col key={board.id} sm={24} md={12} lg={8} xl={4}>
+                      <Col key={board.id} sm={24} md={12} lg={8}>
                         <div className="mb-4">
-                          <Link
-                            href={`/boards/show?id=${board.id}`}
-                            as={`/boards/${board.id}`}
-                          >
-                            <a>
-                              <Card
-                                hoverable
-                                extra={
-                                  <Button
-                                    type="danger"
-                                    onClick={async () => {
-                                      await this.props.client.mutate({
-                                        mutation: deleteBoardMutation,
-                                        variables: {
-                                          id: board.id,
-                                        },
-                                      })
-                                    }}
-                                  >
-                                    <Icon type="delete" />
-                                    Delete
-                                  </Button>
-                                }
+                          <Card
+                            hoverable
+                            extra={
+                              <Button
+                                type="danger"
+                                onClick={async () => {
+                                  await this.props.client.mutate({
+                                    mutation: deleteBoardMutation,
+                                    variables: {
+                                      id: board.id,
+                                    },
+                                  })
+                                }}
                               >
-                                {board.name}
-                              </Card>
-                            </a>
-                          </Link>
+                                <Icon type="delete" />
+                                Delete
+                              </Button>
+                            }
+                          >
+                            <Link
+                              href={`/boards/show?id=${board.id}`}
+                              as={`/boards/${board.id}`}
+                            >
+                              <a>{board.name}</a>
+                            </Link>
+                          </Card>
                         </div>
                       </Col>
                     )
@@ -88,7 +89,7 @@ class BoardsIndex extends Component {
             </Fragment>
           )
         }}
-      </Query>
+      </Subscription>
     )
   }
 }

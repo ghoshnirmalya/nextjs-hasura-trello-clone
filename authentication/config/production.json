@@ -1,4 +1,31 @@
 {
-  "host": "authentication-app.feathersjs.com",
-  "port": "PORT"
+  "host": "https://authentication-7oi9.onrender.com",
+  "port": 80,
+  "public": "../public/",
+  "paginate": {
+    "default": 10,
+    "max": 50
+  },
+  "postgres": "postgres://admin:B8HkeRUi9M@dpg-bk294gdovq8urt8mqmt0/hub",
+  "authentication": {
+    "secret": "a9f5cc2ffaad77b5287d12460c3e6edfab781f32fc7a6d4d6b343fb669f9a4fe682d0560df8e4d2b2ea43e040145eaf078ccd859e073b172633166ab2e938c94f5cbbf40e08c1c1c72560175a1dc14d6963e10e3eab9d40d79fc30fa17ce459ba75416509bfbcaee50778aec303ba60e5a6557308af79f256dc5eefde6ab021cef646ed8209b5e8402501792db9c2c7415eea21ce85e6dacfe84b6a04e1ee4bd7d7ade60d53481bfceba1183863e8712220912d294290c5a87786091a0fe2550af8bf922badb5e3739b668690eff1bfad1fee1d0510b354527ae1f79906d9bc468fe97906e4d7a4c5e90778970ae54e7cb153871f841501fb9825de27c6716c1",
+    "strategies": ["jwt", "local"],
+    "path": "/authentication",
+    "service": "user",
+    "jwt": {
+      "header": {
+        "typ": "access"
+      },
+      "audience": "https://yourdomain.com",
+      "subject": "anonymous",
+      "issuer": "feathers",
+      "algorithm": "HS256",
+      "expiresIn": "1d"
+    },
+    "local": {
+      "entity": "user",
+      "usernameField": "email",
+      "passwordField": "password"
+    }
+  }
 }

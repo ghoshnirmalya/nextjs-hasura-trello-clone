@@ -4,6 +4,8 @@ import { graphql, withApollo, Mutation } from 'react-apollo'
 import { Drawer, Form, Button, Input, Icon } from 'antd'
 import Link from 'next/link'
 
+import Loader from '../../common/loader'
+
 const createListMutation = gql`
   mutation($boardId: uuid!, $position: numeric, $name: String) {
     insert_list(
@@ -109,12 +111,7 @@ class CreateListForm extends Component {
     return (
       <Mutation mutation={createListMutation}>
         {({ loading, error }) => {
-          if (loading)
-            return (
-              <p className="flex justify-center items-center min-h-screen">
-                Loading...
-              </p>
-            )
+          if (loading) return <Loader />
 
           if (error) return <p>Error: {error.message}</p>
 
@@ -123,7 +120,7 @@ class CreateListForm extends Component {
               type="dashed"
               onClick={this.showDrawer}
               size="large"
-              className="m-4"
+              className="my-4"
               style={{ minWidth: '300px' }}
             >
               <Icon type="plus" /> Create a new List

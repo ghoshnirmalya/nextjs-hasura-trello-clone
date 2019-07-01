@@ -7,7 +7,7 @@ export const auth = ctx => {
 
   if (ctx.req && !token) {
     const currentUrl = ctx.res.writeHead(302, {
-      Location: `/authentication/sign-in`,
+      Location: `/authentication`,
     })
 
     ctx.res.end()
@@ -16,7 +16,7 @@ export const auth = ctx => {
   }
 
   if (!token) {
-    Router.push(`/authentication/sign-in`)
+    Router.push(`/authentication`)
   }
 
   return token
@@ -32,13 +32,11 @@ export const withAuthentication = WrappedComponent =>
     )})`
 
     static async getInitialProps(ctx) {
-      const token = auth(ctx)
-
       const componentProps =
         WrappedComponent.getInitialProps &&
         (await WrappedComponent.getInitialProps(ctx))
 
-      return { ...componentProps, token }
+      return { ...componentProps }
     }
 
     render() {

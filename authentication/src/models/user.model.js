@@ -20,6 +20,14 @@ module.exports = function(app) {
       role: {
         type: DataTypes.STRING,
         allowNull: false
+      },
+      createdAt: {
+        field: 'created_at',
+        type: DataTypes.DATE
+      },
+      updatedAt: {
+        field: 'updated_at',
+        type: DataTypes.DATE
       }
     },
     {
@@ -27,7 +35,9 @@ module.exports = function(app) {
         beforeCount(options) {
           options.raw = true;
         }
-      }
+      },
+      timestamps: true,
+      underscored: true
     }
   );
 

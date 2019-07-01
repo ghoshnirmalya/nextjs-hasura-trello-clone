@@ -2,14 +2,16 @@ version: "3"
 
 services:
   trello-clone.backend:
+    build:
+      context: ./backend
     depends_on:
       - db
-    environment:
-      HASURA_GRAPHQL_DATABASE_URL: postgres://postgres:@db:5432/postgres
-      HASURA_GRAPHQL_ENABLE_CONSOLE: "false"
-    image: hasura/graphql-engine:v1.0.0-alpha44
+    env_file: ./backend/.env
     ports:
       - 8080:8080
+    restart: always
+    volumes:
+      - ./backend:/backend-app
 
   trello-clone.frontend:
     build:
@@ -26,6 +28,8 @@ services:
     build:
       context: ./authentication
     command: yarn dev
+    depends_on:
+      - db
     ports:
       - "3030:3030"
     volumes:
@@ -34,7 +38,7 @@ services:
       - ./authentication/yarn.lock:/authentication-app/yarn.lock
 
   db:
-    image: postgres:10.8
+    image: postgres:11.3-alpine
     restart: always
     volumes:
       - db_data:/var/lib/postgresql/data

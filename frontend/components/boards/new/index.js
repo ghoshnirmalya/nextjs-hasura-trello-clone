@@ -9,9 +9,11 @@ import { Form, Button, Input } from 'antd'
 import Router from 'next/router'
 import Link from 'next/link'
 
+import Loader from '../../common/loader'
+
 const createBoardMutation = gql`
-  mutation($name: String) {
-    insert_board(objects: { name: $name }) {
+  mutation($name: String, $user_id: uuid) {
+    insert_board(objects: { name: $name, admin_id: $user_id }) {
       returning {
         id
         name
@@ -26,7 +28,10 @@ class BoardsNew extends Component {
       if (!err) {
         await this.props.client.mutate({
           mutation: createBoardMutation,
-          variables: { name: values.name },
+          variables: {
+            name: values.name,
+            user_id: this.props.serverState.userId,
+          },
         })
 
         Router.push('/boards')
@@ -40,12 +45,7 @@ class BoardsNew extends Component {
     return (
       <Mutation mutation={createBoardMutation}>
         {({ loading, error }) => {
-          if (loading)
-            return (
-              <p className="flex justify-center items-center min-h-screen">
-                Loading...
-              </p>
-            )
+          if (loading) return <Loader />
 
           if (error) return <p>Error: {error.message}</p>
 

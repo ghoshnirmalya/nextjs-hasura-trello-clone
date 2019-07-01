@@ -8,7 +8,7 @@ import { withAuthentication } from '../../lib/with-authentication'
 
 class New extends Component<any, any> {
   render() {
-    return <BoardNew />
+    return <BoardNew {...this.props} />
   }
 }
 

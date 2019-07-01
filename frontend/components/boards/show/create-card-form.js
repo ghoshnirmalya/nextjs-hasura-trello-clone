@@ -4,6 +4,8 @@ import { graphql, withApollo, Mutation } from 'react-apollo'
 import { Drawer, Form, Button, Input, Icon } from 'antd'
 import Link from 'next/link'
 
+import Loader from '../../common/loader'
+
 const createCardMutation = gql`
   mutation(
     $listId: uuid!
@@ -45,7 +47,7 @@ class CreateCardForm extends Component {
 
   getPositionOfNewCard = () => {
     const bufferForEachPosition = 1024
-    const positionOfLastCard = !!this.props.cards.length
+    const positionOfLastCard = this.props.cards.length
       ? this.props.cards[this.props.cards.length - 1].position
       : 0
 
@@ -120,12 +122,7 @@ class CreateCardForm extends Component {
     return (
       <Mutation mutation={createCardMutation}>
         {({ loading, error }) => {
-          if (loading)
-            return (
-              <p className="flex justify-center items-center min-h-screen">
-                Loading...
-              </p>
-            )
+          if (loading) return <Loader />
 
           if (error) return <p>Error: {error.message}</p>
 

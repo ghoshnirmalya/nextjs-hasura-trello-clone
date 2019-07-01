@@ -13,12 +13,10 @@ if (!process.browser) {
   global.fetch = fetch
 }
 
-const httpApiUrl =
-  process.env.NODE_ENV !== 'production'
-    ? 'http://localhost:8080/v1alpha1/graphql'
-    : 'http://localhost:8080/v1alpha1/graphql'
+const httpApiUrl = process.env.API_URL
+const wsApiUrl = process.env.WS_URL
 
-function create({ token, ...rest }) {
+function create({ token, userRole, userId, ...rest }) {
   // Check out https://github.com/zeit/next.js/pull/4611 if you want to use the AWSAppSyncClient
   // Create an http link
   const httpLink = new HttpLink({
@@ -28,22 +26,31 @@ function create({ token, ...rest }) {
       Authorization: `Bearer ${token}`,
     },
   })
+
   const wsLink = process.browser
     ? new WebSocketLink({
         // if you instantiate in the server, the error will be thrown
-        uri: `ws://localhost:8080/v1alpha1/graphql`,
+        uri: wsApiUrl,
+        credentials: 'include', // Additional fetch() options like `credentials` or `headers`
         options: {
+          lazy: true,
           reconnect: true,
-        },
-        headers: {
-          Authorization: `Bearer ${token}`,
+          connectionParams: async () => {
+            return {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                'x-hasura-role': userRole,
+                'x-hasura-user-id': userId,
+              },
+            }
+          },
         },
       })
     : null
 
   const link = process.browser
     ? split(
-        //only create the split in the browser
+        // only create the split in the browser
         // split based on operation type
         ({ query }) => {
           const { kind, operation } = getMainDefinition(query)
@@ -62,16 +69,16 @@ function create({ token, ...rest }) {
   })
 }
 
-export default function initApollo({ token, ...rest }) {
+export default function initApollo({ token, userRole, userId, ...rest }) {
   // Make sure to create a new client for every server-side request so that data
   // isn't shared between connections (which would be bad)
   if (!process.browser) {
-    return create({ token, ...rest })
+    return create({ token, userRole, userId, ...rest })
   }
 
   // Reuse client on the client-side
   if (!apolloClient) {
-    apolloClient = create({ token, ...rest })
+    apolloClient = create({ token, userRole, userId, ...rest })
   }
 
   return apolloClient

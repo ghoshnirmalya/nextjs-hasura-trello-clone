@@ -1,0 +1,13 @@
+- args:
+    permission:
+      columns: []
+      filter: {}
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: card
+      schema: public
+  type: create_update_permission

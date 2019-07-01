@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
+
 import { Form, Button, Input, Card } from 'antd'
 import Router from 'next/router'
-import nextCookie from 'next-cookies'
 
-class SignUp extends Component {
-  fetchToken = async values => {
+const SignUp = props => {
+  const [isLoading, setIsLoading] = useState(false)
+  const { getFieldDecorator } = props.form
+  const fetchToken = async values => {
     try {
-      const response = await fetch('http://localhost:3030/authentication', {
+      const response = await fetch(`${process.env.AUTH_URL}/authentication`, {
         method: 'post',
         headers: {
           Accept: 'application/json',
@@ -23,16 +25,22 @@ class SignUp extends Component {
       document.cookie = `token=${data.accessToken};path=/`
 
       Router.push('/boards')
+
+      setIsLoading(false)
     } catch (error) {
+      setIsLoading(false)
+
       console.error(error)
     }
   }
 
-  handleSubmit = () => {
-    this.props.form.validateFields(async (err, values) => {
+  const handleSubmit = () => {
+    props.form.validateFields(async (err, values) => {
       if (!err) {
+        setIsLoading(true)
+
         try {
-          const response = await fetch('http://localhost:3030/user', {
+          const response = await fetch(`${process.env.AUTH_URL}/user`, {
             method: 'post',
             headers: {
               Accept: 'application/json',
@@ -52,66 +60,64 @@ class SignUp extends Component {
             data['x-hasura-user-id']
           };path=/`
 
-          await this.fetchToken(values)
+          if ([200, 201].indexOf(response.status) > -1) {
+            await fetchToken(values)
+          } else {
+            setIsLoading(false)
+          }
         } catch (error) {
+          setIsLoading(false)
+
           console.error(error)
         }
       }
     })
   }
 
-  render() {
-    const { getFieldDecorator } = this.props.form
-
-    return (
-      <div className="w-1/3">
-        <Card>
-          <Form layout="vertical" onSubmit={this.handleSubmit}>
-            <Form.Item label="Email">
-              {getFieldDecorator('email', {
-                rules: [
-                  {
-                    required: true,
-                    message: 'Please enter email!',
-                  },
-                ],
-                initialValue: 'admin@admin.com',
-              })(
-                <Input
-                  placeholder="Please enter email"
-                  size="large"
-                  type="email"
-                />
-              )}
-            </Form.Item>
-            <Form.Item label="Password">
-              {getFieldDecorator('password', {
-                rules: [{ required: true, message: 'Please enter password!' }],
-                initialValue: 'password',
-              })(
-                <Input
-                  placeholder="Please enter password"
-                  size="large"
-                  type="password"
-                />
-              )}
-            </Form.Item>
-          </Form>
-          <div className="flex justify-end">
-            <Button
-              type="primary"
-              htmlType="submit"
-              onClick={this.handleSubmit}
+  return (
+    <div className="w-full">
+      <Form layout="vertical" onSubmit={handleSubmit}>
+        <Form.Item label="Email">
+          {getFieldDecorator('email', {
+            rules: [
+              {
+                required: true,
+                message: 'Please enter email!',
+              },
+            ],
+            initialValue: 'admin@admin.com',
+          })(
+            <Input placeholder="Please enter email" size="large" type="email" />
+          )}
+        </Form.Item>
+        <Form.Item label="Password">
+          {getFieldDecorator('password', {
+            rules: [{ required: true, message: 'Please enter password!' }],
+            initialValue: 'password',
+          })(
+            <Input
+              placeholder="Please enter password"
               size="large"
-              icon="check-circle"
-            >
-              Sign Up
-            </Button>
-          </div>
-        </Card>
+              type="password"
+            />
+          )}
+        </Form.Item>
+      </Form>
+      <div className="flex justify-end mt-12">
+        <Button
+          type="primary"
+          htmlType="submit"
+          onClick={handleSubmit}
+          size="large"
+          icon="check-circle"
+          block
+          loading={isLoading}
+        >
+          Sign Up
+        </Button>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 export default Form.create()(SignUp)

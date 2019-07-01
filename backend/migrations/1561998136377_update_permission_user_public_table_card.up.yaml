@@ -1,0 +1,11 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns: []
+      filter: {}
+      limit: null
+    role: user
+    table:
+      name: card
+      schema: public
+  type: create_select_permission

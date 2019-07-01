@@ -1,0 +1,15 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - position
+      - name
+      - id
+      - board_id
+      filter: {}
+      limit: null
+    role: user
+    table:
+      name: list
+      schema: public
+  type: create_select_permission
