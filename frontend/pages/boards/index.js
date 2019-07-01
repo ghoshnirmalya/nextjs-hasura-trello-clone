@@ -11,7 +11,6 @@ class Index extends Component {
     // We use `nextCookie` to get the cookie and pass the token to the
     // frontend in the `props`.
     const { token } = nextCookie(ctx)
-    console.log(token)
   }
 
   render() {

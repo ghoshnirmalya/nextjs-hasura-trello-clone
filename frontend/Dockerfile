@@ -6,7 +6,7 @@ WORKDIR /frontend-app
 
 ENV PATH /frontend-app/node_modules/.bin:$PATH
 
-COPY package.json /frontend-app/package.json
+COPY . /frontend-app/
 
 RUN yarn install
 
