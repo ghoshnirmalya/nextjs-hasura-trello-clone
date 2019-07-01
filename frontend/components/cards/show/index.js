@@ -28,7 +28,7 @@ const updateCardMutation = gql`
 
 class CardsShow extends Component {
   onClose = boardId => {
-    Router.push(`/boards/${boardId}`)
+    Router.push(`/boards/show?id=${boardId}`, `/boards/${boardId}`)
   }
 
   render() {

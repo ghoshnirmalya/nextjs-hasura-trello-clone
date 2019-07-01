@@ -28,7 +28,7 @@ const updateListMutation = gql`
 `
 class ListsShow extends Component {
   onClose = boardId => {
-    Router.push(`/boards/${boardId}`)
+    Router.push(`/boards/show?id=${boardId}`, `/boards/${boardId}`)
   }
 
   handleSubmit = boardId => {
@@ -42,7 +42,7 @@ class ListsShow extends Component {
           },
         })
 
-        Router.push(`/boards/${boardId}`)
+        Router.push(`/boards/show?id=${boardId}`, `/boards/${boardId}`)
       }
     })
   }

@@ -7,7 +7,7 @@ export const auth = ctx => {
 
   if (ctx.req && !token) {
     const currentUrl = ctx.res.writeHead(302, {
-      Location: `/authentication/sign-in?referrer=${ctx.res.req.originalUrl}`,
+      Location: `/authentication/sign-in`,
     })
 
     ctx.res.end()
@@ -16,7 +16,7 @@ export const auth = ctx => {
   }
 
   if (!token) {
-    Router.push(`/authentication/sign-in?referrer=${ctx.res.req.originalUrl}`)
+    Router.push(`/authentication/sign-in`)
   }
 
   return token

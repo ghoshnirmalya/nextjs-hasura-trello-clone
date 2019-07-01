@@ -68,7 +68,12 @@ class List extends PureComponent {
                     <Menu>
                       <Menu.Item
                         key="edit"
-                        onClick={() => Router.push(`/lists/${list.id}`)}
+                        onClick={() =>
+                          Router.push(
+                            `/lists/show?id=${list.id}`,
+                            `/lists/${list.id}`
+                          )
+                        }
                       >
                         <Icon type="edit" />
                         Edit
