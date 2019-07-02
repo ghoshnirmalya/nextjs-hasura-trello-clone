@@ -1,21 +1,21 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import { Layout, Menu, Dropdown, Icon, Avatar, Button } from 'antd'
-import Router from 'next/router'
-import Link from 'next/link'
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { Layout, Menu, Dropdown, Icon, Avatar, Button } from "antd";
+import Router from "next/router";
+import Link from "next/link";
 
-import Logo from '../../../static/images/logo.svg'
+import Logo from "../../../static/images/logo.svg";
 
-const { Header } = Layout
+const { Header } = Layout;
 
 class HeaderComponent extends Component {
   render() {
     return (
-      <Header style={{ background: '#fff', padding: 0 }}>
+      <Header style={{ background: "#fff", padding: 0 }}>
         <div className="flex justify-between h-full px-4">
           <div className="mx-4 flex">
             <div className="px-4">
-              <Link href={`/dashboard`} as={`/dashboard`}>
+              <Link href={`/boards`} as={`/boards`}>
                 <a>
                   <img
                     src={Logo}
@@ -46,8 +46,8 @@ class HeaderComponent extends Component {
           </div>
         </div>
       </Header>
-    )
+    );
   }
 }
 
-export default HeaderComponent
+export default HeaderComponent;

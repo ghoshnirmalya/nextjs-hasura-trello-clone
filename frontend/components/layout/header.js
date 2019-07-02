@@ -20,7 +20,7 @@ const HeaderComponent = props => {
       <div className="flex justify-between h-full px-4 border border-solid border-gray-300">
         <div className="mx-4 flex">
           <div className="px-4">
-            <Link href={`/dashboard`} as={`/dashboard`}>
+            <Link href={`/boards`} as={`/boards`}>
               <a>
                 <img
                   src={Logo}
