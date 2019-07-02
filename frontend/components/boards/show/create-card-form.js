@@ -58,16 +58,13 @@ const CreateCardForm = props => {
       }
     });
   };
-
   const drawerNode = () => {
-    console.log(visible);
-
     const { getFieldDecorator } = props.form;
 
     return (
       <Drawer
         destroyOnClose
-        title="Create a new CardList"
+        title="Create a new Card"
         width={720}
         onClose={() => setVisiblity(false)}
         visible={visible}
