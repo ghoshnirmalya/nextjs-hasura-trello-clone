@@ -1,11 +1,11 @@
-import React, { Component, Fragment } from 'react'
-import gql from 'graphql-tag'
-import { graphql, withApollo, Subscription } from 'react-apollo'
-import Router from 'next/router'
-import { Drawer, Form, Button, Input } from 'antd'
+import React, { Component, Fragment } from "react";
+import gql from "graphql-tag";
+import { graphql, withApollo, Subscription } from "react-apollo";
+import Router from "next/router";
+import { Drawer, Form, Button, Input } from "antd";
 
-import Board from '../../boards/show'
-import Loader from '../../common/loader'
+import Board from "../../boards/show";
+import Loader from "../../common/loader";
 
 const fetchListSubscription = gql`
   subscription($id: uuid!) {
@@ -15,7 +15,7 @@ const fetchListSubscription = gql`
       board_id
     }
   }
-`
+`;
 const updateListMutation = gql`
   mutation($id: uuid!, $name: String) {
     update_list(where: { id: { _eq: $id } }, _set: { name: $name }) {
@@ -26,88 +26,79 @@ const updateListMutation = gql`
       }
     }
   }
-`
-class ListsShow extends Component {
-  onClose = boardId => {
-    Router.push(`/boards/show?id=${boardId}`, `/boards/${boardId}`)
-  }
+`;
+const ListsShow = props => {
+  const onClose = boardId => {
+    Router.push(`/boards/show?id=${boardId}`, `/boards/${boardId}`);
+  };
 
-  handleSubmit = boardId => {
-    this.props.form.validateFields(async (err, values) => {
+  const handleSubmit = boardId => {
+    props.form.validateFields(async (err, values) => {
       if (!err) {
-        await this.props.client.mutate({
+        await props.client.mutate({
           mutation: updateListMutation,
           variables: {
-            id: this.props.id,
-            name: values.name,
-          },
-        })
+            id: props.id,
+            name: values.name
+          }
+        });
 
-        Router.push(`/boards/show?id=${boardId}`, `/boards/${boardId}`)
+        Router.push(`/boards/show?id=${boardId}`, `/boards/${boardId}`);
       }
-    })
-  }
+    });
+  };
 
-  render() {
-    const { getFieldDecorator } = this.props.form
+  return (
+    <Subscription
+      subscription={fetchListSubscription}
+      variables={{ id: props.id }}
+      fetchPolicy="network-only"
+    >
+      {({ data, error, loading }) => {
+        if (loading) return <Loader />;
 
-    return (
-      <Subscription
-        subscription={fetchListSubscription}
-        variables={{ id: this.props.id }}
-        fetchPolicy="network-only"
-      >
-        {({ data, error, loading }) => {
-          if (loading) return <Loader />
+        if (error) return <p>Error: {error.message}</p>;
 
-          if (error) return <p>Error: {error.message}</p>
+        const { name, board_id } = data.list_by_pk;
 
-          const { name, board_id } = data.list_by_pk
-
-          return (
-            <Fragment>
-              <Board id={board_id} />
-              <Drawer
-                title={name}
-                placement="right"
-                closable={false}
-                onClose={() => this.onClose(board_id)}
-                visible
-                width="50vw"
-                destroyOnClose
-              >
-                <Form
-                  layout="vertical"
-                  onSubmit={() => this.handleSubmit(board_id)}
+        return (
+          <Fragment>
+            <Board id={board_id} />
+            <Drawer
+              title={name}
+              placement="right"
+              closable={false}
+              onClose={() => onClose(board_id)}
+              visible
+              width="50vw"
+              destroyOnClose
+            >
+              <Form layout="vertical" onSubmit={() => handleSubmit(board_id)}>
+                <Form.Item label="Name">
+                  {props.form.getFieldDecorator("name", {
+                    rules: [{ required: true, message: "Please enter name!" }],
+                    initialValue: name
+                  })(<Input placeholder="Please enter name" size="large" />)}
+                </Form.Item>
+              </Form>
+              <div className="flex justify-end">
+                <Button
+                  type="primary"
+                  htmlType="submit"
+                  onClick={() => handleSubmit(board_id)}
+                  loading={loading}
+                  size="large"
+                  icon="check-circle"
                 >
-                  <Form.Item label="Name">
-                    {getFieldDecorator('name', {
-                      rules: [
-                        { required: true, message: 'Please enter name!' },
-                      ],
-                      initialValue: name,
-                    })(<Input placeholder="Please enter name" size="large" />)}
-                  </Form.Item>
-                </Form>
-                <div className="flex justify-end">
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    onClick={() => this.handleSubmit(board_id)}
-                    loading={loading}
-                    size="large"
-                    icon="check-circle"
-                  >
-                    Update
-                  </Button>
-                </div>
-              </Drawer>
-            </Fragment>
-          )
-        }}
-      </Subscription>
-    )
-  }
-}
+                  Update
+                </Button>
+              </div>
+            </Drawer>
+          </Fragment>
+        );
+      }}
+    </Subscription>
+  );
+};
 
-export default withApollo(Form.create()(ListsShow))
+export default withApollo(Form.create()(ListsShow));

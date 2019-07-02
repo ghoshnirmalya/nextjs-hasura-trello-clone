@@ -1,18 +1,16 @@
-import React, { Component } from 'react'
-import { Layout } from 'antd'
+import React, { Component } from "react";
+import { Layout } from "antd";
 
-import ContentComponent from './content'
+import ContentComponent from "./content";
 
-class LayoutComponent extends Component {
-  render() {
-    return (
+const LayoutComponent = props => {
+  return (
+    <Layout>
       <Layout>
-        <Layout>
-          <ContentComponent>{this.props.children}</ContentComponent>
-        </Layout>
+        <ContentComponent>{props.children}</ContentComponent>
       </Layout>
-    )
-  }
-}
+    </Layout>
+  );
+};
 
-export default LayoutComponent
+export default LayoutComponent;

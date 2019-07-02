@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import gql from 'graphql-tag'
-import { graphql, withApollo, Mutation } from 'react-apollo'
-import { Drawer, Form, Button, Input, Icon } from 'antd'
-import Link from 'next/link'
+import React, { Component, useState } from "react";
+import gql from "graphql-tag";
+import { graphql, withApollo, Mutation } from "react-apollo";
+import { Drawer, Form, Button, Input, Icon } from "antd";
+import Link from "next/link";
 
-import Loader from '../../common/loader'
+import Loader from "../../common/loader";
 
 const createListMutation = gql`
   mutation($boardId: uuid!, $position: numeric, $name: String) {
@@ -18,85 +18,69 @@ const createListMutation = gql`
       }
     }
   }
-`
+`;
+const CreateListForm = props => {
+  const [visible, setVisibility] = useState(false);
+  const getPositionOfNewList = () => {
+    const bufferForEachPosition = 1024;
+    let positionOfLastList = props.lists[props.lists.length - 1]
+      ? props.lists[props.lists.length - 1].position
+      : 1;
 
-class CreateListForm extends Component {
-  state = { visible: false }
+    return positionOfLastList + bufferForEachPosition;
+  };
+  const handleSubmit = e => {
+    e.preventDefault();
 
-  showDrawer = () => {
-    this.setState({
-      visible: true,
-    })
-  }
-
-  handleClose = () => {
-    this.setState({
-      visible: false,
-    })
-  }
-
-  getPositionOfNewList = () => {
-    const bufferForEachPosition = 1024
-    let positionOfLastList = this.props.lists[this.props.lists.length - 1]
-      ? this.props.lists[this.props.lists.length - 1].position
-      : 1
-
-    return positionOfLastList + bufferForEachPosition
-  }
-
-  handleSubmit = e => {
-    e.preventDefault()
-
-    this.props.form.validateFields(async (err, values) => {
+    props.form.validateFields(async (err, values) => {
       if (!err) {
-        await this.props.client.mutate({
+        await props.client.mutate({
           mutation: createListMutation,
           variables: {
-            boardId: this.props.boardId,
-            position: this.getPositionOfNewList(),
-            name: values.name,
-          },
-        })
+            boardId: props.boardId,
+            position: getPositionOfNewList(),
+            name: values.name
+          }
+        });
 
-        this.handleClose()
+        setVisibility(false);
       }
-    })
-  }
-
-  drawerNode = () => {
-    const { getFieldDecorator } = this.props.form
+    });
+  };
+  const drawerNode = () => {
+    const { getFieldDecorator } = props.form;
 
     return (
       <Drawer
         destroyOnClose
         title="Create a new List"
         width={720}
-        onClose={this.handleClose}
-        visible={this.state.visible}
+        onClose={() => setVisibility(false)}
+        visible={visible}
       >
-        <Form layout="vertical" onSubmit={this.handleSubmit}>
+        <Form layout="vertical" onSubmit={handleSubmit}>
           <Form.Item label="Name">
-            {getFieldDecorator('name', {
-              rules: [{ required: true, message: 'Please enter name!' }],
+            {getFieldDecorator("name", {
+              rules: [{ required: true, message: "Please enter name!" }]
             })(<Input placeholder="Please enter name" size="large" />)}
           </Form.Item>
         </Form>
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: 0,
             bottom: 0,
-            width: '100%',
-            borderTop: '1px solid #e9e9e9',
-            padding: '10px 16px',
-            background: '#fff',
-            textAlign: 'right',
+            width: "100%",
+            borderTop: "1px solid #e9e9e9",
+            padding: "10px 16px",
+            background: "#fff",
+            textAlign: "right"
           }}
         >
           <Button
             type="primary"
             htmlType="submit"
-            onClick={this.handleSubmit}
+            onClick={handleSubmit}
             size="large"
             icon="check-circle"
           >
@@ -104,33 +88,31 @@ class CreateListForm extends Component {
           </Button>
         </div>
       </Drawer>
-    )
-  }
+    );
+  };
 
-  render() {
-    return (
-      <Mutation mutation={createListMutation}>
-        {({ loading, error }) => {
-          if (loading) return <Loader />
+  return (
+    <Mutation mutation={createListMutation}>
+      {({ loading, error }) => {
+        if (loading) return <Loader />;
 
-          if (error) return <p>Error: {error.message}</p>
+        if (error) return <p>Error: {error.message}</p>;
 
-          return (
-            <Button
-              type="dashed"
-              onClick={this.showDrawer}
-              size="large"
-              className="my-4"
-              style={{ minWidth: '300px' }}
-            >
-              <Icon type="plus" /> Create a new List
-              {this.drawerNode()}
-            </Button>
-          )
-        }}
-      </Mutation>
-    )
-  }
-}
+        return (
+          <Button
+            type="dashed"
+            onClick={() => setVisibility(true)}
+            size="large"
+            className="my-4"
+            style={{ minWidth: "300px" }}
+          >
+            <Icon type="plus" /> Create a new List
+            {drawerNode()}
+          </Button>
+        );
+      }}
+    </Mutation>
+  );
+};
 
-export default withApollo(Form.create()(CreateListForm))
+export default withApollo(Form.create()(CreateListForm));

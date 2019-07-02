@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import gql from 'graphql-tag'
-import { graphql, withApollo, Mutation } from 'react-apollo'
-import { Drawer, Form, Button, Input, Icon } from 'antd'
-import Link from 'next/link'
+import React, { Component, useState } from "react";
+import gql from "graphql-tag";
+import { graphql, withApollo, Mutation } from "react-apollo";
+import { Drawer, Form, Button, Input, Icon } from "antd";
+import Link from "next/link";
 
-import Loader from '../../common/loader'
+import Loader from "../../common/loader";
 
 const createCardMutation = gql`
   mutation(
@@ -28,86 +28,71 @@ const createCardMutation = gql`
       }
     }
   }
-`
+`;
+const CreateCardForm = props => {
+  const [visible, setVisiblity] = useState(false);
+  const getPositionOfNewCard = () => {
+    const bufferForEachPosition = 1024;
+    const positionOfLastCard = props.cards.length
+      ? props.cards[props.cards.length - 1].position
+      : 0;
 
-class CreateCardForm extends Component {
-  state = { visible: false }
+    return positionOfLastCard + bufferForEachPosition;
+  };
+  const handleSubmit = e => {
+    e.preventDefault();
 
-  showDrawer = () => {
-    this.setState({
-      visible: true,
-    })
-  }
-
-  handleClose = () => {
-    this.setState({
-      visible: false,
-    })
-  }
-
-  getPositionOfNewCard = () => {
-    const bufferForEachPosition = 1024
-    const positionOfLastCard = this.props.cards.length
-      ? this.props.cards[this.props.cards.length - 1].position
-      : 0
-
-    return positionOfLastCard + bufferForEachPosition
-  }
-
-  handleSubmit = e => {
-    e.preventDefault()
-
-    this.props.form.validateFields(async (err, values) => {
+    props.form.validateFields(async (err, values) => {
       if (!err) {
-        await this.props.client.mutate({
+        await props.client.mutate({
           mutation: createCardMutation,
           variables: {
-            listId: this.props.listId,
-            position: this.getPositionOfNewCard(),
+            listId: props.listId,
+            position: getPositionOfNewCard(),
             description: values.description,
-            boardId: this.props.boardId,
-          },
-        })
+            boardId: props.boardId
+          }
+        });
 
-        this.handleClose()
+        setVisiblity(false);
       }
-    })
-  }
+    });
+  };
 
-  drawerNode = () => {
-    const { getFieldDecorator } = this.props.form
+  const drawerNode = () => {
+    const { getFieldDecorator } = props.form;
 
     return (
       <Drawer
         destroyOnClose
         title="Create a new CardList"
         width={720}
-        onClose={this.handleClose}
-        visible={this.state.visible}
+        onClose={setVisiblity(false)}
+        visible={visible}
       >
-        <Form layout="vertical" onSubmit={this.handleSubmit}>
+        <Form layout="vertical" onSubmit={handleSubmit}>
           <Form.Item label="Description">
-            {getFieldDecorator('description', {
-              rules: [{ required: true, message: 'Please enter description!' }],
+            {getFieldDecorator("description", {
+              rules: [{ required: true, message: "Please enter description!" }]
             })(<Input placeholder="Please enter description" size="large" />)}
           </Form.Item>
         </Form>
         <div
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: 0,
             bottom: 0,
-            width: '100%',
-            borderTop: '1px solid #e9e9e9',
-            padding: '10px 16px',
-            background: '#fff',
-            textAlign: 'right',
+            width: "100%",
+            borderTop: "1px solid #e9e9e9",
+            padding: "10px 16px",
+            background: "#fff",
+            textAlign: "right"
           }}
         >
           <Button
             type="primary"
             htmlType="submit"
-            onClick={this.handleSubmit}
+            onClick={handleSubmit}
             size="large"
             icon="check-circle"
           >
@@ -115,33 +100,31 @@ class CreateCardForm extends Component {
           </Button>
         </div>
       </Drawer>
-    )
-  }
+    );
+  };
 
-  render() {
-    return (
-      <Mutation mutation={createCardMutation}>
-        {({ loading, error }) => {
-          if (loading) return <Loader />
+  return (
+    <Mutation mutation={createCardMutation}>
+      {({ loading, error }) => {
+        if (loading) return <Loader />;
 
-          if (error) return <p>Error: {error.message}</p>
+        if (error) return <p>Error: {error.message}</p>;
 
-          return (
-            <div className="w-full p-4 pl-0 py-0">
-              <Button
-                type="dashed"
-                onClick={this.showDrawer}
-                className="w-full"
-              >
-                Create a new Card
-                {this.drawerNode()}
-              </Button>
-            </div>
-          )
-        }}
-      </Mutation>
-    )
-  }
-}
+        return (
+          <div className="w-full p-4 pl-0 py-0">
+            <Button
+              type="dashed"
+              onClick={() => setVisiblity(true)}
+              className="w-full"
+            >
+              Create a new Card
+              {drawerNode()}
+            </Button>
+          </div>
+        );
+      }}
+    </Mutation>
+  );
+};
 
-export default withApollo(Form.create()(CreateCardForm))
+export default withApollo(Form.create()(CreateCardForm));
