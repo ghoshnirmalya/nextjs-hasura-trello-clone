@@ -60,6 +60,8 @@ const CreateCardForm = props => {
   };
 
   const drawerNode = () => {
+    console.log(visible);
+
     const { getFieldDecorator } = props.form;
 
     return (
@@ -67,7 +69,7 @@ const CreateCardForm = props => {
         destroyOnClose
         title="Create a new CardList"
         width={720}
-        onClose={setVisiblity(false)}
+        onClose={() => setVisiblity(false)}
         visible={visible}
       >
         <Form layout="vertical" onSubmit={handleSubmit}>
