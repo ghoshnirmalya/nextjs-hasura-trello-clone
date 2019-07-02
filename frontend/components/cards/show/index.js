@@ -2,7 +2,8 @@ import React, { Component, Fragment } from "react";
 import gql from "graphql-tag";
 import { graphql, withApollo, Query } from "react-apollo";
 import Router from "next/router";
-import { Drawer, Form, Button, Input, Icon, Select } from "antd";
+import { Drawer, Form, Button, Input, Icon, Select, DatePicker } from "antd";
+import moment from "moment";
 
 import Board from "../../boards/show";
 import Loader from "../../common/loader";
@@ -14,6 +15,7 @@ const fetchCardQuery = gql`
       description
       board_id
       labels
+      due_date
     }
 
     label {
@@ -23,10 +25,15 @@ const fetchCardQuery = gql`
   }
 `;
 const updateCardMutation = gql`
-  mutation($id: uuid!, $description: String, $labels: json) {
+  mutation(
+    $id: uuid!
+    $description: String
+    $labels: json
+    $dueDate: timestamptz
+  ) {
     update_card(
       where: { id: { _eq: $id } }
-      _set: { description: $description, labels: $labels }
+      _set: { description: $description, labels: $labels, due_date: $dueDate }
     ) {
       returning {
         id
@@ -49,7 +56,8 @@ const CardsShow = props => {
           variables: {
             id: props.id,
             description: values.description,
-            labels: values.labels
+            labels: values.labels,
+            dueDate: values.dueDate._d
           }
         });
 
@@ -69,7 +77,7 @@ const CardsShow = props => {
 
         if (error) return <p>Error: {error.message}</p>;
 
-        const { description, board_id, labels } = data.card_by_pk;
+        const { description, board_id, labels, due_date } = data.card_by_pk;
         const { getFieldDecorator } = props.form;
 
         return (
@@ -99,9 +107,9 @@ const CardsShow = props => {
                 <Form.Item label="Labels">
                   {getFieldDecorator("labels", {
                     rules: [
-                      { required: true, message: "Please enter description!" }
+                      { required: false, message: "Please add a label!" }
                     ],
-                    initialValue: labels
+                    initialValue: !!labels ? labels : []
                   })(
                     <Select size="large" mode="multiple">
                       {data.label.map(label => {
@@ -113,6 +121,14 @@ const CardsShow = props => {
                       })}
                     </Select>
                   )}
+                </Form.Item>
+                <Form.Item label="Due date">
+                  {getFieldDecorator("dueDate", {
+                    rules: [
+                      { required: false, message: "Please add a due date!" }
+                    ],
+                    initialValue: !!due_date ? moment(due_date) : null
+                  })(<DatePicker size="large" />)}
                 </Form.Item>
               </Form>
               <div
