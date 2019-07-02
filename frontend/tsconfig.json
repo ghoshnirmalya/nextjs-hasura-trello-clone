@@ -17,7 +17,7 @@
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true
