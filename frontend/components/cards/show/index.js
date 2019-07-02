@@ -1,26 +1,32 @@
 import React, { Component, Fragment } from "react";
 import gql from "graphql-tag";
-import { graphql, withApollo, Subscription } from "react-apollo";
+import { graphql, withApollo, Query } from "react-apollo";
 import Router from "next/router";
-import { Drawer, Form, Button, Input, Icon } from "antd";
+import { Drawer, Form, Button, Input, Icon, Select } from "antd";
 
 import Board from "../../boards/show";
 import Loader from "../../common/loader";
 
-const fetchCardSubscription = gql`
-  subscription($id: uuid!) {
+const fetchCardQuery = gql`
+  query($id: uuid!) {
     card_by_pk(id: $id) {
       id
       description
       board_id
+      labels
+    }
+
+    label {
+      id
+      name
     }
   }
 `;
 const updateCardMutation = gql`
-  mutation($id: uuid!, $description: String) {
+  mutation($id: uuid!, $description: String, $labels: json) {
     update_card(
       where: { id: { _eq: $id } }
-      _set: { description: $description }
+      _set: { description: $description, labels: $labels }
     ) {
       returning {
         id
@@ -42,7 +48,8 @@ const CardsShow = props => {
           mutation: updateCardMutation,
           variables: {
             id: props.id,
-            description: values.description
+            description: values.description,
+            labels: values.labels
           }
         });
 
@@ -52,8 +59,8 @@ const CardsShow = props => {
   };
 
   return (
-    <Subscription
-      subscription={fetchCardSubscription}
+    <Query
+      query={fetchCardQuery}
       variables={{ id: props.id }}
       fetchPolicy="network-only"
     >
@@ -62,7 +69,7 @@ const CardsShow = props => {
 
         if (error) return <p>Error: {error.message}</p>;
 
-        const { description, board_id } = data.card_by_pk;
+        const { description, board_id, labels } = data.card_by_pk;
         const { getFieldDecorator } = props.form;
 
         return (
@@ -87,6 +94,24 @@ const CardsShow = props => {
                       placeholder="Please enter description"
                       size="large"
                     />
+                  )}
+                </Form.Item>
+                <Form.Item label="Labels">
+                  {getFieldDecorator("labels", {
+                    rules: [
+                      { required: true, message: "Please enter description!" }
+                    ],
+                    initialValue: labels
+                  })(
+                    <Select size="large" mode="multiple">
+                      {data.label.map(label => {
+                        return (
+                          <Select.Option key={label.id} value={label.name}>
+                            {label.name}
+                          </Select.Option>
+                        );
+                      })}
+                    </Select>
                   )}
                 </Form.Item>
               </Form>
@@ -116,7 +141,7 @@ const CardsShow = props => {
           </Fragment>
         );
       }}
-    </Subscription>
+    </Query>
   );
 };
 
