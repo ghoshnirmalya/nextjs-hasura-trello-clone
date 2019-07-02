@@ -8,9 +8,7 @@ class ContentComponent extends Component {
   render() {
     return (
       <div className="m-8">
-        <div className="p-8 max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-4xl xl:max-w-6xl my-0 mx-auto">
-          {this.props.children}
-        </div>
+        <div className="p-8 my-0 mx-auto">{this.props.children}</div>
       </div>
     )
   }

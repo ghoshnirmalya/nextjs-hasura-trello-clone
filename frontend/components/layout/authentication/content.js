@@ -12,9 +12,6 @@ class ContentComponent extends Component {
           <Card className="h-screen">
             <div className="flex justify-center mt-16">
               <div className="w-2/3">
-                <div className="text-sm text-gray-700 mb-16">
-                  Monitor the performance of your application
-                </div>
                 <Tabs
                   defaultActiveKey="signIn"
                   onChange={key => console.log(key)}
