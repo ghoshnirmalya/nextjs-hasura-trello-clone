@@ -1,30 +1,28 @@
-import React, { Component } from 'react'
-import nextCookie from 'next-cookies'
+import React, { Component } from "react";
+import nextCookie from "next-cookies";
 
-import 'antd/dist/antd.css'
-
-import Layout from '../components/layout'
+import Layout from "../components/layout";
 
 export default App => {
   return class extends Component {
     static async getInitialProps(ctx) {
-      let appProps = {}
+      let appProps = {};
 
-      const { token, userId, userRole } = nextCookie(ctx)
+      const { token, userId, userRole } = nextCookie(ctx);
 
       if (!token) {
         ctx.res.writeHead(302, {
-          Location: `/authentication`,
-        })
+          Location: `/authentication`
+        });
 
-        ctx.res.end()
+        ctx.res.end();
       }
 
-      if (typeof App.getInitialProps === 'function') {
-        appProps = await App.getInitialProps(ctx)
+      if (typeof App.getInitialProps === "function") {
+        appProps = await App.getInitialProps(ctx);
       }
 
-      return { ...appProps, userId, userRole }
+      return { ...appProps, userId, userRole };
     }
 
     render() {
@@ -32,7 +30,7 @@ export default App => {
         <Layout>
           <App {...this.props} />
         </Layout>
-      )
+      );
     }
-  }
-}
+  };
+};

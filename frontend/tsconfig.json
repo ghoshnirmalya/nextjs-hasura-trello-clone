@@ -17,10 +17,13 @@
     "skipLibCheck": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "isolatedModules": false,
+    "isolatedModules": true,
     "removeComments": false,
     "preserveConstEnums": true,
-    "sourceMap": true
+    "sourceMap": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
   },
-  "exclude": ["dist", ".next", "out", "next.config.js", "node_modules"]
+  "exclude": ["dist", ".next", "out", "next.config.js", "node_modules"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }

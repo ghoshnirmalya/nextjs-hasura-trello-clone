@@ -1,20 +1,18 @@
-import React, { Component } from 'react'
-import nextCookie from 'next-cookies'
+import React, { Component } from "react";
+import nextCookie from "next-cookies";
 
-import 'antd/dist/antd.css'
-
-import Layout from '../components/layout/static/layout'
+import Layout from "../components/layout/static/layout";
 
 export default App => {
   return class extends Component {
     static async getInitialProps(ctx) {
-      let appProps = {}
+      let appProps = {};
 
-      if (typeof App.getInitialProps === 'function') {
-        appProps = await App.getInitialProps(ctx)
+      if (typeof App.getInitialProps === "function") {
+        appProps = await App.getInitialProps(ctx);
       }
 
-      return { ...appProps }
+      return { ...appProps };
     }
 
     render() {
@@ -22,7 +20,7 @@ export default App => {
         <Layout>
           <App {...this.props} />
         </Layout>
-      )
+      );
     }
-  }
-}
+  };
+};
