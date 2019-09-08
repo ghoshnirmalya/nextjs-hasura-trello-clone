@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import nextCookie from "next-cookies";
 import Router from "next/router";
 
-import Layout from "../components/layout/authenticated";
+import Layout from "../components/layout/non-authenticated";
 
 export default App => {
   return class extends Component {
@@ -13,7 +13,7 @@ export default App => {
 
       if (ctx.req && token) {
         ctx.res.writeHead(302, {
-          Location: `/boards`
+          Location: `/sites`
         });
 
         ctx.res.end();
@@ -22,7 +22,7 @@ export default App => {
       }
 
       if (token) {
-        Router.push(`/boards`);
+        Router.push(`/sites`);
       }
 
       if (typeof App.getInitialProps === "function") {

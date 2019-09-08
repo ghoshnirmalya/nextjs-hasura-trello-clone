@@ -9,6 +9,7 @@ services:
     env_file: ./backend/.env
     ports:
       - 8080:8080
+    restart: on-failure
     volumes:
       - ./backend:/backend-app
 
@@ -21,6 +22,7 @@ services:
       - v1.authentication
     ports:
       - "3000:3000"
+    restart: on-failure
     volumes:
       - ./frontend:/frontend-app
       - ./frontend/package.json:/frontend-app/package.json
@@ -30,11 +32,12 @@ services:
     build:
       context: ./authentication
     command: yarn dev
-    env_file: ./authentication/.env
     depends_on:
       - v1.db
+    env_file: ./authentication/.env
     ports:
       - "3030:3030"
+    restart: on-failure
     volumes:
       - ./authentication:/authentication-app
       - ./authentication/package.json:/authentication-app/package.json
