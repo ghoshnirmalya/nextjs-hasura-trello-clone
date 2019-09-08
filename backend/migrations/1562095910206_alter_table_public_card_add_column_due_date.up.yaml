@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."card" ADD COLUMN "due_date" timestamptz NULL
-  type: run_sql

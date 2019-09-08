@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE ONLY "public"."user" ALTER COLUMN "id" SET DEFAULT gen_random_uuid();
-  type: run_sql

@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."card" ADD CONSTRAINT "card_position_key" UNIQUE ("position")
-  type: run_sql

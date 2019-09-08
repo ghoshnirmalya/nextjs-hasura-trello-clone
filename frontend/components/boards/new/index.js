@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import styled from "styled-components";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import find from "lodash/find";
 import findIndex from "lodash/findIndex";
@@ -39,7 +38,7 @@ const BoardsNew = props => {
           mutation: createBoardMutation,
           variables: {
             name: values.name,
-            user_id: props.serverState.userId
+            user_id: props.userId
           }
         });
 

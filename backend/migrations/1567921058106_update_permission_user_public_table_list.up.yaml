@@ -1,0 +1,14 @@
+- args:
+    role: user
+    table:
+      name: list
+      schema: public
+  type: drop_delete_permission
+- args:
+    permission:
+      filter: {}
+    role: user
+    table:
+      name: list
+      schema: public
+  type: create_delete_permission

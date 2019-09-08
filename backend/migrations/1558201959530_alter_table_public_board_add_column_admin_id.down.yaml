@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."board" DROP COLUMN "admin_id"
-  type: run_sql

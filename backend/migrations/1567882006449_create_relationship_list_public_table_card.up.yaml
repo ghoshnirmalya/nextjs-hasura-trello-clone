@@ -1,0 +1,13 @@
+- args:
+    name: list
+    table:
+      name: card
+      schema: public
+    using:
+      manual_configuration:
+        column_mapping:
+          list_id: id
+        remote_table:
+          name: list
+          schema: public
+  type: create_object_relationship

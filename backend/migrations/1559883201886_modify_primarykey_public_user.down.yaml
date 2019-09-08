@@ -1,7 +1,0 @@
-- args:
-    sql: "\n          alter table \"public\".\"user\" drop constraint \"user_pkey\";\n
-      \       "
-  type: run_sql
-- sql: "\n          alter table \"public\".\"user\"\n          add constraint \"user_pkey\"
-    primary key ( _id );\n        "
-  type: run_sql

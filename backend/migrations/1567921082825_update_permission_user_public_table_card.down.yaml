@@ -1,0 +1,25 @@
+- args:
+    role: user
+    table:
+      name: card
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - labels
+      - position
+      - description
+      - due_date
+      - board_id
+      - id
+      - list_id
+      filter:
+        id:
+          _eq: x-hasura-user-id
+    role: user
+    table:
+      name: card
+      schema: public
+  type: create_select_permission

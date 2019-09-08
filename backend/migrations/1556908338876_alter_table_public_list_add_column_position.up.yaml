@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."list" ADD COLUMN "position" numeric NULL UNIQUE
-  type: run_sql

@@ -1,0 +1,17 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - position
+      - name
+      - board_id
+      - id
+      filter:
+        id:
+          _eq: x-hasura-user-id
+      limit: null
+    role: user
+    table:
+      name: list
+      schema: public
+  type: create_select_permission

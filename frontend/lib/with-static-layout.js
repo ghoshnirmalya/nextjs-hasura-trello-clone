@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import nextCookie from "next-cookies";
 
-import Layout from "../components/layout/static/layout";
+import Layout from "../components/layout/static";
 
 export default App => {
   return class extends Component {

@@ -1,54 +1,50 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { ApolloProvider, getDataFromTree } from 'react-apollo'
-import Head from 'next/head'
-import cookies from 'next-cookies'
+import React from "react";
+import PropTypes from "prop-types";
+import { ApolloProvider, getDataFromTree } from "react-apollo";
+import Head from "next/head";
+import cookies from "next-cookies";
 
-import initApollo from './init-apollo'
+import initApollo from "./init-apollo";
 
 // Gets the display name of a JSX component for dev tools
 const getComponentDisplayName = Component => {
-  return Component.displayName || Component.name || 'Unknown'
-}
+  return Component.displayName || Component.name || "Unknown";
+};
 
 export default ComposedComponent => {
   return class WithApollo extends React.Component {
     static displayName = `WithApollo(${getComponentDisplayName(
       ComposedComponent
-    )})`
+    )})`;
 
     static propTypes = {
-      serverState: PropTypes.object.isRequired,
-    }
+      serverState: PropTypes.object.isRequired
+    };
 
     static async getInitialProps(ctx) {
-      const { token } = cookies(ctx)
+      const { token } = cookies(ctx);
 
       // Initial serverState with apollo (empty)
       let serverState = {
         apollo: {
-          data: {},
+          data: {}
         },
-        token,
-        userRole: cookies(ctx)['x-hasura-role'],
-        userId: cookies(ctx)['x-hasura-user-id'],
-      }
+        token
+      };
 
       // Evaluate the composed component's getInitialProps()
-      let composedInitialProps = {}
+      let composedInitialProps = {};
 
       if (ComposedComponent.getInitialProps) {
-        composedInitialProps = await ComposedComponent.getInitialProps(ctx)
+        composedInitialProps = await ComposedComponent.getInitialProps(ctx);
       }
 
       // Run all GraphQL queries in the component tree
       // and extract the resulting data
       if (!process.browser) {
         const apollo = initApollo({
-          token,
-          userRole: cookies(ctx)['x-hasura-role'],
-          userId: cookies(ctx)['x-hasura-user-id'],
-        })
+          token
+        });
 
         try {
           // Run all GraphQL queries
@@ -63,10 +59,10 @@ export default ComposedComponent => {
               router: {
                 asPath: ctx.asPath,
                 pathname: ctx.pathname,
-                query: ctx.query,
-              },
+                query: ctx.query
+              }
             }
-          )
+          );
         } catch (error) {
           // Prevent Apollo Client GraphQL errors from crashing SSR.
           // Handle them in components via the data.error prop:
@@ -74,34 +70,30 @@ export default ComposedComponent => {
         }
         // getDataFromTree does not call componentWillUnmount
         // head side effect therefore need to be cleared manually
-        Head.rewind()
+        Head.rewind();
 
         // Extract query data from the Apollo store
         serverState = {
           apollo: {
-            data: apollo.cache.extract(),
+            data: apollo.cache.extract()
           },
-          token,
-          userRole: cookies(ctx)['x-hasura-role'],
-          userId: cookies(ctx)['x-hasura-user-id'],
-        }
+          token
+        };
       }
 
       return {
         serverState,
-        ...composedInitialProps,
-      }
+        ...composedInitialProps
+      };
     }
 
     constructor(props) {
-      super(props)
+      super(props);
 
       this.apollo = initApollo({
         token: this.props.serverState.token,
-        userRole: this.props.serverState.userRole,
-        userId: this.props.serverState.userId,
-        ...this.props.serverState.apollo.data,
-      })
+        ...this.props.serverState.apollo.data
+      });
     }
 
     render() {
@@ -109,7 +101,7 @@ export default ComposedComponent => {
         <ApolloProvider client={this.apollo}>
           <ComposedComponent {...this.props} />
         </ApolloProvider>
-      )
+      );
     }
-  }
-}
+  };
+};

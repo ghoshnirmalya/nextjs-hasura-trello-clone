@@ -1,3 +1,0 @@
-- args:
-    sql: alter table "public"."user" rename column "_id" to "id";
-  type: run_sql

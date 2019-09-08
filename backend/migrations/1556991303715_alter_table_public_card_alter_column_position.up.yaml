@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."card" DROP CONSTRAINT "card_position_key"
-  type: run_sql

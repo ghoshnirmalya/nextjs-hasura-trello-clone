@@ -12,7 +12,6 @@ import {
   Col,
   Tabs
 } from "antd";
-import styled from "styled-components";
 import Router from "next/router";
 import Link from "next/link";
 

@@ -1,0 +1,6 @@
+- args:
+    sql: ALTER TABLE "public"."list" ADD CONSTRAINT "list_board_id_key" UNIQUE ("board_id")
+  type: run_sql
+- args:
+    sql: COMMENT ON COLUMN "public"."list"."board_id" IS E'null'
+  type: run_sql

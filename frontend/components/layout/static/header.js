@@ -8,7 +8,7 @@ import Logo from "../../../static/images/logo.svg";
 
 const { Header } = Layout;
 
-class HeaderComponent extends Component {
+class StaticLayoutHeader extends Component {
   render() {
     return (
       <Header style={{ background: "#fff", padding: 0 }}>
@@ -50,4 +50,4 @@ class HeaderComponent extends Component {
   }
 }
 
-export default HeaderComponent;
+export default StaticLayoutHeader;

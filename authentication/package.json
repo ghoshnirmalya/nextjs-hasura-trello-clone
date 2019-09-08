@@ -1,57 +1,47 @@
 {
   "name": "authentication",
-  "description": "",
-  "version": "0.0.0",
-  "homepage": "",
-  "main": "src",
-  "keywords": [
-    "feathers"
-  ],
-  "author": {
-    "name": "Nirmalya Ghosh",
-    "email": "nirmalya.email@gmail.com"
-  },
-  "contributors": [],
-  "bugs": {},
-  "directories": {
-    "lib": "src",
-    "test": "test/",
-    "config": "config/"
-  },
-  "engines": {
-    "node": "^11.0.0",
-    "yarn": ">= 0.18.0"
-  },
+  "version": "0.0.1",
+  "author": "nirmalya.email@gmail.com",
+  "license": "MIT",
   "scripts": {
-    "test": "yarn run eslint && NODE_ENV= yarn run jest",
-    "eslint": "eslint src/. test/. --config .eslintrc.json",
-    "dev": "nodemon src/",
-    "start": "node src/",
-    "jest": "jest"
+    "dev": "nodemon app.js",
+    "start": "node app.js"
   },
   "dependencies": {
-    "@feathersjs/authentication": "^2.1.16",
-    "@feathersjs/authentication-jwt": "^2.0.10",
-    "@feathersjs/authentication-local": "^1.2.9",
-    "@feathersjs/configuration": "^2.0.6",
-    "@feathersjs/errors": "^3.3.6",
-    "@feathersjs/express": "^1.3.1",
-    "@feathersjs/feathers": "^3.3.1",
-    "@feathersjs/socketio": "^3.2.9",
-    "compression": "^1.7.4",
+    "@sendgrid/mail": "^6.4.0",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.3",
     "cors": "^2.8.5",
-    "feathers-sequelize": "^5.1.3",
-    "helmet": "^3.18.0",
-    "pg": "^7.11.0",
-    "sequelize": "^5.8.6",
-    "serve-favicon": "^2.5.0",
-    "winston": "^3.2.1"
+    "dotenv": "^8.1.0",
+    "express": "^4.16.3",
+    "express-validator": "^5.3.0",
+    "fnv-plus": "^1.2.12",
+    "jsonwebtoken": "^8.4.0",
+    "knex": "^0.19.3",
+    "objection": "^1.2.6",
+    "objection-db-errors": "^1.0.0",
+    "passport": "^0.4.0",
+    "passport-http-bearer": "^1.0.1",
+    "passport-local": "^1.0.0",
+    "pg": "^7.4.3",
+    "rasha": "^1.2.1",
+    "util": "^0.12.1"
   },
   "devDependencies": {
-    "eslint": "^5.16.0",
-    "jest": "^24.8.0",
-    "nodemon": "^1.19.0",
-    "request": "^2.88.0",
-    "request-promise": "^4.2.4"
+    "husky": "^3.0.5",
+    "lint-staged": "^9.2.5",
+    "nodemon": "^1.19.1",
+    "prettier": "^1.18.2"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.{js,json,css,md}": [
+      "prettier --write",
+      "git add"
+    ]
   }
 }

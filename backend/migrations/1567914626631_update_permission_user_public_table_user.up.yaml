@@ -1,0 +1,20 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - active
+      - email
+      - password
+      - created_at
+      - updated_at
+      - board_id
+      - id
+      filter:
+        id:
+          _eq: x-hasura-user-id
+      limit: null
+    role: user
+    table:
+      name: user
+      schema: public
+  type: create_select_permission

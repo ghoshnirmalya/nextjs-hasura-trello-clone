@@ -1,0 +1,19 @@
+- args:
+    permission:
+      columns:
+      - position
+      - name
+      - board_id
+      - id
+      filter:
+        id:
+          _eq: x-hasura-user-id
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: list
+      schema: public
+  type: create_update_permission

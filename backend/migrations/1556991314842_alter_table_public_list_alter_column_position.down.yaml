@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."list" ADD CONSTRAINT "list_position_key" UNIQUE ("position")
-  type: run_sql

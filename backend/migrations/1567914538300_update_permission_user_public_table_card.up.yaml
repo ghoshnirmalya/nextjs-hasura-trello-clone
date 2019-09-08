@@ -1,0 +1,23 @@
+- args:
+    permission:
+      allow_upsert: true
+      check:
+        id:
+          _eq: x-hasura-user-id
+      columns:
+      - id
+      - description
+      - list_id
+      - position
+      - board_id
+      - labels
+      - due_date
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: card
+      schema: public
+  type: create_insert_permission

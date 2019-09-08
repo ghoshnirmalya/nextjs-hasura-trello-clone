@@ -1,22 +1,24 @@
 version: "3"
 
 services:
-  trello-clone.backend:
+  v1.backend:
     build:
       context: ./backend
     depends_on:
-      - db
+      - v1.db
     env_file: ./backend/.env
     ports:
       - 8080:8080
-    restart: always
     volumes:
       - ./backend:/backend-app
 
-  trello-clone.frontend:
+  v1.frontend:
     build:
       context: ./frontend
     command: yarn dev
+    depends_on:
+      - v1.backend
+      - v1.authentication
     ports:
       - "3000:3000"
     volumes:
@@ -24,12 +26,13 @@ services:
       - ./frontend/package.json:/frontend-app/package.json
       - ./frontend/yarn.lock:/frontend-app/yarn.lock
 
-  trello-clone.authentication:
+  v1.authentication:
     build:
       context: ./authentication
     command: yarn dev
+    env_file: ./authentication/.env
     depends_on:
-      - db
+      - v1.db
     ports:
       - "3030:3030"
     volumes:
@@ -37,7 +40,7 @@ services:
       - ./authentication/package.json:/authentication-app/package.json
       - ./authentication/yarn.lock:/authentication-app/yarn.lock
 
-  db:
+  v1.db:
     image: postgres:11.3-alpine
     restart: always
     volumes:

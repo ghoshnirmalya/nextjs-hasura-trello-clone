@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import nextCookie from "next-cookies";
 import Router from "next/router";
 
-import Layout from "../components/layout/authentication/layout";
+import Layout from "../components/layout/authenticated";
 
 export default App => {
   return class extends Component {

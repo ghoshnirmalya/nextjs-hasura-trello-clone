@@ -1,0 +1,16 @@
+- args:
+    role: user
+    table:
+      name: card
+      schema: public
+  type: drop_delete_permission
+- args:
+    permission:
+      filter:
+        id:
+          _eq: x-hasura-user-id
+    role: user
+    table:
+      name: card
+      schema: public
+  type: create_delete_permission

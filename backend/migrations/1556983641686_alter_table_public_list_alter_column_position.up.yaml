@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."list" ALTER COLUMN "position" SET NOT NULL;
-  type: run_sql

@@ -4,11 +4,14 @@ RUN mkdir /authentication-app
 
 WORKDIR /authentication-app
 
+RUN apk upgrade --update-cache --available && \
+  apk add openssl && \
+  rm -rf /var/cache/apk/*
+
 ENV PATH /authentication-app/node_modules/.bin:$PATH
-ENV NODE_ENV=production
 
-COPY . /authentication-app/
+COPY . /authentication-app
 
-RUN npm install -g @feathersjs/cli && yarn global add nodemon && yarn install
+RUN yarn install
 
 CMD ["yarn", "start"]

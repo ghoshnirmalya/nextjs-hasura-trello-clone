@@ -1,45 +1,45 @@
-import React, { Component } from 'react'
-import Router from 'next/router'
-import nextCookie from 'next-cookies'
+import React, { Component } from "react";
+import Router from "next/router";
+import nextCookie from "next-cookies";
 
 export const auth = ctx => {
-  const { token } = nextCookie(ctx)
+  const { token } = nextCookie(ctx);
 
   if (ctx.req && !token) {
     const currentUrl = ctx.res.writeHead(302, {
-      Location: `/authentication`,
-    })
+      Location: `/authentication`
+    });
 
-    ctx.res.end()
+    ctx.res.end();
 
-    return false
+    return false;
   }
 
   if (!token) {
-    Router.push(`/authentication`)
+    Router.push(`/authentication`);
   }
 
-  return token
-}
+  return token;
+};
 
 const getDisplayName = Component =>
-  Component.displayName || Component.name || 'Component'
+  Component.displayName || Component.name || "Component";
 
 export const withAuthentication = WrappedComponent =>
   class extends Component {
     static displayName = `withAuthentication(${getDisplayName(
       WrappedComponent
-    )})`
+    )})`;
 
     static async getInitialProps(ctx) {
       const componentProps =
         WrappedComponent.getInitialProps &&
-        (await WrappedComponent.getInitialProps(ctx))
+        (await WrappedComponent.getInitialProps(ctx));
 
-      return { ...componentProps }
+      return { ...componentProps };
     }
 
     render() {
-      return <WrappedComponent {...this.props} />
+      return <WrappedComponent {...this.props} />;
     }
-  }
+  };

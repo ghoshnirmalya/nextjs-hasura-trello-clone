@@ -1,0 +1,13 @@
+- args:
+    name: role
+    table:
+      name: user_role
+      schema: public
+    using:
+      manual_configuration:
+        column_mapping:
+          role_id: id
+        remote_table:
+          name: role
+          schema: public
+  type: create_object_relationship

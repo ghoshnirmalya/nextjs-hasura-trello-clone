@@ -1,3 +1,0 @@
-- args:
-    sql: ALTER TABLE "public"."list" DROP COLUMN "position"
-  type: run_sql

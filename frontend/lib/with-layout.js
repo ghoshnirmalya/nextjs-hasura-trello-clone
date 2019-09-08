@@ -1,14 +1,14 @@
 import React, { Component } from "react";
 import nextCookie from "next-cookies";
 
-import Layout from "../components/layout";
+import Layout from "../components/layout/authenticated";
 
 export default App => {
   return class extends Component {
     static async getInitialProps(ctx) {
       let appProps = {};
 
-      const { token, userId, userRole } = nextCookie(ctx);
+      const { token, userId, email } = nextCookie(ctx);
 
       if (!token) {
         ctx.res.writeHead(302, {
@@ -22,12 +22,12 @@ export default App => {
         appProps = await App.getInitialProps(ctx);
       }
 
-      return { ...appProps, userId, userRole };
+      return { ...appProps, userId, email };
     }
 
     render() {
       return (
-        <Layout>
+        <Layout email={this.props.email}>
           <App {...this.props} />
         </Layout>
       );
