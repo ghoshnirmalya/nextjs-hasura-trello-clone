@@ -1,0 +1,5 @@
+- args:
+    cascade: false
+    read_only: false
+    sql: ALTER TABLE "public"."card" ADD COLUMN "position" numeric NOT NULL;
+  type: run_sql

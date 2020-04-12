@@ -1,0 +1,7 @@
+- args:
+    cascade: false
+    read_only: false
+    sql: |-
+      DROP TRIGGER IF EXISTS "set_public_label_updated_at" ON "public"."label";
+      ALTER TABLE "public"."label" DROP COLUMN "updated_at";
+  type: run_sql

@@ -1,0 +1,19 @@
+- args:
+    permission:
+      columns:
+      - position
+      - name
+      - created_at
+      - updated_at
+      - board_id
+      - id
+      filter: {}
+      localPresets:
+      - key: ""
+        value: ""
+      set: {}
+    role: user
+    table:
+      name: list
+      schema: public
+  type: create_update_permission

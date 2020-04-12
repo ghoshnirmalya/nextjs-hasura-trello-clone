@@ -79,6 +79,11 @@ const Navbar: NextComponentType = () => {
                   </Link>
                 </Box>
               ) : null}
+              <Box>
+                <Link href="/boards">
+                  <_Link>Boards</_Link>
+                </Link>
+              </Box>
             </Stack>
           </Box>
           <Box>

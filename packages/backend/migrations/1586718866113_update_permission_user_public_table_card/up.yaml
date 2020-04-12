@@ -1,0 +1,20 @@
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - position
+      - description
+      - due_date
+      - created_at
+      - updated_at
+      - board_id
+      - id
+      - list_id
+      computed_fields: []
+      filter: {}
+      limit: null
+    role: user
+    table:
+      name: card
+      schema: public
+  type: create_select_permission
