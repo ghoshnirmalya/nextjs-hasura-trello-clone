@@ -150,7 +150,15 @@ const Boards: NextPage = () => {
     <Stack spacing={8}>
       {headingNode()}
       {drawerNode()}
-      <Grid templateColumns="repeat(3, 1fr)" gap={4}>
+      <Grid
+        templateColumns={[
+          "repeat(1, 1fr)",
+          "repeat(1, 1fr)",
+          "repeat(2, 1fr)",
+          "repeat(3, 1fr)",
+        ]}
+        gap={4}
+      >
         {data.board.map((board: { id: number; name: string }) => {
           return (
             <Link

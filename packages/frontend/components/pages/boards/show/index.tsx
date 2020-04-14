@@ -294,7 +294,7 @@ const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
               <Droppable droppableId="board" type="list" direction="horizontal">
                 {(provided: any) => (
                   <Box ref={provided.innerRef}>
-                    <List lists={lists} />
+                    <List lists={lists} boardId={currentBoardId} />
                     {provided.placeholder}
                   </Box>
                 )}

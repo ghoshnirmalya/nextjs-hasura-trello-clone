@@ -23,7 +23,6 @@ class App extends NextApp {
             templateColumns="repeat(1, 1fr)"
             bg="gray.50"
             minH="calc(100vh - 73px)"
-            maxW="6xl"
             w="full"
             mx="auto"
             py={8}

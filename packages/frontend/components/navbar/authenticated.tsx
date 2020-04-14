@@ -50,7 +50,6 @@ const Navbar: NextComponentType = () => {
   return (
     <Box borderBottomWidth={1} bg="white">
       <Box
-        maxW="6xl"
         w="full"
         mx="auto"
         d="flex"
