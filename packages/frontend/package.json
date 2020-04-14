@@ -33,7 +33,9 @@
     "nookies": "^2.2.2",
     "react": "^16.13.1",
     "react-apollo": "^3.1.3",
+    "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.13.1",
+    "react-scrollbars-custom": "^4.0.21",
     "subscriptions-transport-ws": "^0.9.16",
     "use-http": "^0.4.4"
   },
@@ -42,6 +44,7 @@
     "@types/next": "^9.0.0",
     "@types/node": "^13.9.8",
     "@types/react": "^16.9.31",
+    "@types/react-beautiful-dnd": "^12.1.2",
     "@types/react-dom": "^16.9.6",
     "babel-plugin-module-resolver": "^4.0.0",
     "cross-env": "^7.0.2",

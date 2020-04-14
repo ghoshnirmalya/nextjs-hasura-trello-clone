@@ -22,7 +22,7 @@ class App extends NextApp {
           <Grid
             templateColumns="repeat(1, 1fr)"
             bg="gray.50"
-            minH="100vh"
+            minH="calc(100vh - 73px)"
             maxW="6xl"
             w="full"
             mx="auto"
