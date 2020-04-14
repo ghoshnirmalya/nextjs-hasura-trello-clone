@@ -1,6 +1,6 @@
 import React from "react";
 import Head from "next/head";
-import Page from "components/pages/sign-in";
+import Page from "components/pages/sign-in/index";
 import withAuthentication from "lib/with-authentication";
 
 const SignInPage = () => {

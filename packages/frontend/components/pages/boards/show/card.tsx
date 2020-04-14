@@ -21,9 +21,9 @@ const _Card = ({ cards }: { cards: any }) => {
         return (
           <Box>
             <Link
-              href={`/cards/show?id=${card.id}`}
-              as={`/cards/${card.id}`}
               key={card.id}
+              href={`/cards/[cardId]?cardId=${card.id}`}
+              as={`/cards/${card.id}`}
             >
               <a>
                 <Draggable draggableId={card.id} index={index}>
@@ -47,7 +47,6 @@ const _Card = ({ cards }: { cards: any }) => {
                         <Heading as="h4" size="xs">
                           {card.description}
                         </Heading>
-                        <Box>Nirmalya Ghosh</Box>
                       </Box>
                     </Box>
                   )}

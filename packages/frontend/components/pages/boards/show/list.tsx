@@ -2,7 +2,7 @@ import React from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Scrollbar from "react-scrollbars-custom";
 import { Box, Stack, Heading, Badge } from "@chakra-ui/core";
-import Card from "components/pages/boards/card";
+import Card from "components/pages/boards/show/card";
 
 const List = ({ lists }: { lists: any }) => {
   const getStyle = (isDragging: any, draggableStyle: any) => ({

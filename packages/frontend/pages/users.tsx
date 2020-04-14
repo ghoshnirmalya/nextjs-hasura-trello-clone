@@ -1,6 +1,6 @@
 import React from "react";
 import Head from "next/head";
-import Page from "components/pages/users";
+import Page from "components/pages/users/index";
 import withAuthentication from "lib/with-authentication";
 import withApollo from "lib/with-apollo";
 

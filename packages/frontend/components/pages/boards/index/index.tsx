@@ -158,14 +158,16 @@ const Boards: NextPage = () => {
               href={`/boards/[boardId]?boardId=${board.id}`}
               as={`/boards/${board.id}`}
             >
-              <Box as="a" p={8} bg="white" rounded="md" borderWidth={1}>
-                <Heading as="h4" size="md">
-                  {board.name}
-                </Heading>
-                <Text fontSize="sm" color="gray.700">
-                  {board.id}
-                </Text>
-              </Box>
+              <a>
+                <Box p={8} bg="white" rounded="md" borderWidth={1}>
+                  <Heading as="h4" size="md">
+                    {board.name}
+                  </Heading>
+                  <Text fontSize="sm" color="gray.700">
+                    {board.id}
+                  </Text>
+                </Box>
+              </a>
             </Link>
           );
         })}

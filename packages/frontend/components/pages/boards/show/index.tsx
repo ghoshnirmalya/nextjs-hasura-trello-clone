@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import find from "lodash/find";
 import Scrollbar from "react-scrollbars-custom";
-import List from "components/pages/boards/list";
+import List from "components/pages/boards/show/list";
 
 const FETCH_BOARD_SUBSCRIPTION = gql`
   subscription fetchBoard($id: uuid!) {
@@ -71,11 +71,11 @@ const UPDATE_LIST_MUTATION = gql`
   }
 `;
 
-const Board: NextPage = () => {
+const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
   const router = useRouter();
+  const currentBoardId = boardId || router.query.boardId;
   const { data, loading, error } = useSubscription(FETCH_BOARD_SUBSCRIPTION, {
-    variables: { id: router.query.boardId },
-    fetchPolicy: "network-only",
+    variables: { id: currentBoardId },
   });
   const [updateCard] = useMutation(UPDATE_CARD_MUTATION);
   const [updateCardForDifferentLists] = useMutation(

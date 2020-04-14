@@ -1,18 +1,18 @@
 import React from "react";
 import Head from "next/head";
-import Page from "components/pages/my-profile/index";
+import Page from "components/pages/cards/show";
 import withAuthentication from "lib/with-authentication";
 import withApollo from "lib/with-apollo";
 
-const MyProfilePage = () => {
+const ShowPage = () => {
   return (
     <>
       <Head>
-        <title>My Profile Page</title>
+        <title>Boards Page</title>
       </Head>
       <Page />
     </>
   );
 };
 
-export default withApollo(withAuthentication(MyProfilePage));
+export default withApollo(withAuthentication(ShowPage));
