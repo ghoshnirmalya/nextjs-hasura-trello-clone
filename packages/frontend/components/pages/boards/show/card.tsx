@@ -6,9 +6,9 @@ import { Box, Heading, Stack } from "@chakra-ui/core";
 const _Card = ({ cards }: { cards: any }) => {
   return (
     <Stack spacing={4}>
-      {cards.map((card: any, index: any) => {
+      {cards.map((card: any, index: number) => {
         return (
-          <Box>
+          <Box key={index}>
             <Link
               key={card.id}
               href={`/cards/[cardId]?cardId=${card.id}`}

@@ -115,7 +115,7 @@ const Boards: NextPage = () => {
                 type="name"
                 id="name"
                 aria-describedby="name"
-                placeholder="Card One"
+                placeholder="TODO"
                 value={name}
                 onChange={(e: FormEvent<HTMLInputElement>) =>
                   setName(e.currentTarget.value)

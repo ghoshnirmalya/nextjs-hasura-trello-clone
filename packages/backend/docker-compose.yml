@@ -2,7 +2,8 @@ version: "3"
 
 services:
   backend:
-    container_name: trello_backend
+    container_name: trello-backend
+    image: trello-backend
     build:
       context: .
     depends_on:
@@ -14,7 +15,7 @@ services:
       - .:/usr/src/app
 
   db:
-    container_name: trello_db
+    container_name: trello-db
     image: postgres:11.3-alpine
     ports:
       - "5432:5432"

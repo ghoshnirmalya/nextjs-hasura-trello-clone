@@ -1,4 +1,4 @@
-FROM hasura/graphql-engine:v1.1.0
+FROM hasura/graphql-engine:v1.2.0
 
 # Set working directory
 RUN mkdir -p /usr/src/app

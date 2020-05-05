@@ -194,8 +194,8 @@ const List = ({
 
   return (
     <Stack spacing={8} isInline d="inline-flex">
-      {lists.map((list: any, index: any) => (
-        <Box w="300px" bg="gray.100" py={4} rounded="md">
+      {lists.map((list: any, index: number) => (
+        <Box w="300px" bg="gray.100" py={4} rounded="md" key={index}>
           <Draggable key={list.id} draggableId={list.id} index={index}>
             {(provided, snapshot) => (
               <Box
