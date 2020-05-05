@@ -4,17 +4,6 @@ import Link from "next/link";
 import { Box, Heading, Stack } from "@chakra-ui/core";
 
 const _Card = ({ cards }: { cards: any }) => {
-  const getStyle = (isDragging: any, draggableStyle: any) => ({
-    userSelect: "none",
-    background: isDragging && "#002140",
-    color: isDragging && "#ccc",
-    boxShadow:
-      isDragging &&
-      "0 10px 15px -3px rgba(0, 0, 0, .1), 0 4px 6px -2px rgba(0, 0, 0, .05)",
-    borderRadius: "2px",
-    ...draggableStyle,
-  });
-
   return (
     <Stack spacing={4}>
       {cards.map((card: any, index: any) => {
@@ -32,10 +21,8 @@ const _Card = ({ cards }: { cards: any }) => {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}
-                      style={getStyle(
-                        snapshot.isDragging,
-                        provided.draggableProps.style
-                      )}
+                      bg={snapshot.isDragging ? "grey.400" : "transparent"}
+                      color={snapshot.isDragging ? "grey.400" : "black"}
                     >
                       <Box
                         borderWidth="1px"

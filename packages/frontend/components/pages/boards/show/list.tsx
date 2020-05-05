@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import React, { useState, FormEvent, KeyboardEvent } from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import Scrollbar from "react-scrollbars-custom";
 import find from "lodash/find";
@@ -51,6 +51,20 @@ const CREATE_CARD_MUTATION = gql`
   }
 `;
 
+const CREATE_LIST_MUTATION = gql`
+  mutation createList($boardId: uuid!, $position: numeric, $name: String) {
+    insert_list(
+      objects: { board_id: $boardId, position: $position, name: $name }
+    ) {
+      returning {
+        id
+        name
+        position
+      }
+    }
+  }
+`;
+
 const List = ({
   lists,
   boardId,
@@ -60,11 +74,16 @@ const List = ({
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [description, setDescription] = useState("");
+  const [name, setName] = useState("");
   const [listId, setListId] = useState("");
   const [
     createCard,
-    { loading: mutationLoading, error: mutationError },
+    { loading: createCardMutationLoading, error: createCardMutationError },
   ] = useMutation(CREATE_CARD_MUTATION);
+  const [
+    createList,
+    { loading: createListMutationLoading, error: createListMutationError },
+  ] = useMutation(CREATE_LIST_MUTATION);
 
   const getPositionOfNewCard = () => {
     const bufferForEachPosition = 1024;
@@ -88,10 +107,37 @@ const List = ({
       },
     });
 
-    if (!mutationError) {
+    if (!createCardMutationError) {
       onClose();
       setDescription("");
       setListId("");
+    }
+  };
+
+  const handleAddNewList = async (e: KeyboardEvent) => {
+    const getPositionOfNewList = () => {
+      const bufferForEachPosition = 1024;
+      let positionOfLastList = lists[lists.length - 1]
+        ? lists[lists.length - 1].position
+        : 1;
+
+      return positionOfLastList + bufferForEachPosition;
+    };
+
+    if (e.key == "Enter") {
+      e.preventDefault();
+
+      await createList({
+        variables: {
+          boardId,
+          position: getPositionOfNewList(),
+          name,
+        },
+      });
+
+      if (!createListMutationError) {
+        setName("");
+      }
     }
   };
 
@@ -103,7 +149,7 @@ const List = ({
           <DrawerCloseButton />
           <DrawerHeader>Create Board</DrawerHeader>
           <DrawerBody>
-            {mutationError ? (
+            {createCardMutationError ? (
               <Alert status="error" variant="left-accent">
                 <AlertIcon />
                 There was an error processing your request. Please try again!
@@ -131,7 +177,7 @@ const List = ({
                 mr={4}
                 loadingText="Saving..."
                 onClick={handleSubmit}
-                isLoading={mutationLoading}
+                isLoading={createCardMutationLoading}
                 isDisabled={!description.trim()}
               >
                 Save
@@ -146,11 +192,6 @@ const List = ({
     );
   };
 
-  const getStyle = (isDragging: any, draggableStyle: any) => ({
-    color: isDragging && "#ccc",
-    ...draggableStyle,
-  });
-
   return (
     <Stack spacing={8} isInline d="inline-flex">
       {lists.map((list: any, index: any) => (
@@ -158,13 +199,10 @@ const List = ({
           <Draggable key={list.id} draggableId={list.id} index={index}>
             {(provided, snapshot) => (
               <Box
+                bg="gray.100"
                 ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
-                style={getStyle(
-                  snapshot.isDragging,
-                  provided.draggableProps.style
-                )}
               >
                 <Stack
                   spacing={8}
@@ -180,8 +218,14 @@ const List = ({
                   <Badge>{list.cards.length}</Badge>
                 </Stack>
                 <Droppable droppableId={list.id} type="card">
-                  {(provided) => (
-                    <Box ref={provided.innerRef}>
+                  {(provided, snapshot) => (
+                    <Box
+                      ref={provided.innerRef}
+                      bg={
+                        snapshot.isDraggingOver ? "purple.100" : "transparent"
+                      }
+                      {...provided.droppableProps}
+                    >
                       <Scrollbar
                         style={{
                           minHeight: "calc(100vh - 300px)",
@@ -216,6 +260,19 @@ const List = ({
         </Box>
       ))}
       {drawerNode()}
+      <Box w="300px">
+        <Box bg="gray.100" p={4} rounded="md">
+          <Input
+            placeholder="Add a new List"
+            value={name}
+            onChange={(e: FormEvent<HTMLInputElement>) => {
+              setName(e.currentTarget.value);
+            }}
+            onKeyDown={handleAddNewList}
+            isDisabled={createListMutationLoading}
+          />
+        </Box>
+      </Box>
     </Stack>
   );
 };
