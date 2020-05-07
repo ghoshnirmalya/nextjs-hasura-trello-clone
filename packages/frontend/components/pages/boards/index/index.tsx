@@ -1,7 +1,7 @@
 import React, { useState, FormEvent } from "react";
 import {
   Box,
-  Grid,
+  PseudoBox,
   Link as _Link,
   Heading,
   Text,
@@ -85,12 +85,30 @@ const Boards: NextPage = () => {
   const headingNode = () => {
     return (
       <Box d="flex" justifyContent="space-between" alignItems="center">
-        <Heading as="h2" size="lg">
-          Boards
-        </Heading>
-        <Button variantColor="gray" onClick={onOpen}>
-          Add New Board
-        </Button>
+        <Box>
+          <Heading as="h2" size="lg" fontWeight="bold">
+            Boards
+          </Heading>
+        </Box>
+        <Stack spacing={4} isInline>
+          <Box>
+            <Input
+              type="name"
+              id="name"
+              aria-describedby="name"
+              placeholder="Search for a card"
+              value={name}
+              onChange={(e: FormEvent<HTMLInputElement>) =>
+                console.log(e.currentTarget.value)
+              }
+            />
+          </Box>
+          <Box>
+            <Button variantColor="purple" onClick={onOpen}>
+              Add new board
+            </Button>
+          </Box>
+        </Stack>
       </Box>
     );
   };
@@ -150,36 +168,36 @@ const Boards: NextPage = () => {
     <Stack spacing={8}>
       {headingNode()}
       {drawerNode()}
-      <Grid
-        templateColumns={[
-          "repeat(1, 1fr)",
-          "repeat(1, 1fr)",
-          "repeat(2, 1fr)",
-          "repeat(3, 1fr)",
-        ]}
-        gap={4}
-      >
+      <Stack spacing={8}>
         {data.board.map((board: { id: number; name: string }) => {
           return (
-            <Link
-              key={board.id}
-              href={`/boards/[boardId]?boardId=${board.id}`}
-              as={`/boards/${board.id}`}
-            >
-              <a>
-                <Box p={8} bg="white" rounded="md" borderWidth={1}>
-                  <Heading as="h4" size="md">
-                    {board.name}
-                  </Heading>
-                  <Text fontSize="sm" color="gray.700">
-                    {board.id}
-                  </Text>
-                </Box>
-              </a>
-            </Link>
+            <Box>
+              <Link
+                key={board.id}
+                href={`/boards/[boardId]?boardId=${board.id}`}
+                as={`/boards/${board.id}`}
+              >
+                <a>
+                  <PseudoBox
+                    p={8}
+                    bg="white"
+                    rounded="md"
+                    borderWidth={1}
+                    _hover={{ shadow: "md" }}
+                  >
+                    <Heading as="h4" size="md">
+                      {board.name}
+                    </Heading>
+                    <Text fontSize="sm" color="gray.700">
+                      {board.id}
+                    </Text>
+                  </PseudoBox>
+                </a>
+              </Link>
+            </Box>
           );
         })}
-      </Grid>
+      </Stack>
     </Stack>
   );
 };

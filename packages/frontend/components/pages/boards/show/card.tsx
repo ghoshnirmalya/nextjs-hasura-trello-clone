@@ -1,7 +1,7 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import Link from "next/link";
-import { Box, Heading, Stack } from "@chakra-ui/core";
+import { PseudoBox, Box, Heading, Stack } from "@chakra-ui/core";
 
 const _Card = ({ cards }: { cards: any }) => {
   return (
@@ -24,17 +24,17 @@ const _Card = ({ cards }: { cards: any }) => {
                       bg={snapshot.isDragging ? "grey.400" : "transparent"}
                       color={snapshot.isDragging ? "grey.400" : "black"}
                     >
-                      <Box
+                      <PseudoBox
                         borderWidth="1px"
                         rounded="md"
                         bg="white"
                         p={4}
-                        boxShadow="sm"
+                        _hover={{ shadow: "md" }}
                       >
                         <Heading as="h4" size="xs">
                           {card.description}
                         </Heading>
-                      </Box>
+                      </PseudoBox>
                     </Box>
                   )}
                 </Draggable>

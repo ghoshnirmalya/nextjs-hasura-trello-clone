@@ -3,6 +3,7 @@ import Head from "next/head";
 import Page from "components/pages/boards/index";
 import withAuthentication from "lib/with-authentication";
 import withApollo from "lib/with-apollo";
+import { Box } from "@chakra-ui/core";
 
 const IndexPage = () => {
   return (
@@ -10,7 +11,9 @@ const IndexPage = () => {
       <Head>
         <title>Boards Page</title>
       </Head>
-      <Page />
+      <Box mx="auto" maxW="4xl" w="full">
+        <Page />
+      </Box>
     </>
   );
 };

@@ -195,28 +195,34 @@ const List = ({
   return (
     <Stack spacing={8} isInline d="inline-flex">
       {lists.map((list: any, index: number) => (
-        <Box w="300px" bg="gray.100" py={4} rounded="md" key={index}>
+        <Box key={index} w="300px">
           <Draggable key={list.id} draggableId={list.id} index={index}>
             {(provided, snapshot) => (
               <Box
-                bg="gray.100"
                 ref={provided.innerRef}
                 {...provided.draggableProps}
                 {...provided.dragHandleProps}
               >
-                <Stack
-                  spacing={8}
-                  isInline
-                  align="center"
-                  justifyContent="space-between"
-                  mb={4}
-                  px={4}
+                <Box
+                  py={4}
+                  borderBottomWidth={1}
+                  borderTopWidth={4}
+                  borderTopColor="purple"
+                  bg="gray.100"
                 >
-                  <Heading as="h4" size="sm">
-                    {list.name}
-                  </Heading>
-                  <Badge>{list.cards.length}</Badge>
-                </Stack>
+                  <Stack
+                    spacing={8}
+                    isInline
+                    align="center"
+                    justifyContent="space-between"
+                    px={4}
+                  >
+                    <Heading as="h4" size="sm">
+                      {list.name}
+                    </Heading>
+                    <Badge>{list.cards.length}</Badge>
+                  </Stack>
+                </Box>
                 <Droppable droppableId={list.id} type="card">
                   {(provided, snapshot) => (
                     <Box
@@ -231,18 +237,20 @@ const List = ({
                           minHeight: "calc(100vh - 300px)",
                         }}
                       >
-                        <Box px={4}>
+                        <Box p={4} bg="gray.100">
                           <Stack spacing={4}>
                             <Box>
                               <Card cards={list.cards} />
                             </Box>
                             <Box>
                               <Button
-                                variant="link"
+                                variant="ghost"
                                 onClick={() => {
                                   onOpen();
                                   setListId(list.id);
                                 }}
+                                py={2}
+                                w="full"
                               >
                                 Add a new Card
                               </Button>
