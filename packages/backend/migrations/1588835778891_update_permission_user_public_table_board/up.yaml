@@ -1,0 +1,24 @@
+- args:
+    role: user
+    table:
+      name: board
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - name
+      - created_at
+      - updated_at
+      - admin_id
+      - id
+      computed_fields: []
+      filter:
+        admin_id:
+          _eq: X-Hasura-User-Id
+    role: user
+    table:
+      name: board
+      schema: public
+  type: create_select_permission
