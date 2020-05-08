@@ -16,6 +16,7 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
+  useColorMode,
 } from "@chakra-ui/core";
 import { NextPage } from "next";
 import gql from "graphql-tag";
@@ -49,6 +50,9 @@ const UPDATE_CARD_MUTATION = gql`
 `;
 
 const MyProfile: NextPage = () => {
+  const { colorMode } = useColorMode();
+  const bgColor = { light: "white", dark: "gray.800" };
+  const color = { light: "gray.900", dark: "gray.100" };
   const router = useRouter();
   const [description, setDescription] = useState("");
   const currentCardId = router.query.cardId;
@@ -107,7 +111,7 @@ const MyProfile: NextPage = () => {
         }
       >
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent bg={bgColor[colorMode]} color={color[colorMode]}>
           <DrawerCloseButton />
           <DrawerHeader>Update Card</DrawerHeader>
           <DrawerBody>
@@ -150,7 +154,7 @@ const MyProfile: NextPage = () => {
                 Cancel
               </Button>
               <Button
-                variantColor="purple"
+                variantColor="cyan"
                 loadingText="Saving..."
                 onClick={handleSubmit}
                 isLoading={mutationLoading}

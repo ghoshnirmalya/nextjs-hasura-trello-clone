@@ -10,6 +10,7 @@ import {
   Grid,
   Link as _Link,
   Stack,
+  useColorMode,
 } from "@chakra-ui/core";
 import { NextPage } from "next";
 import gql from "graphql-tag";
@@ -50,6 +51,10 @@ const UPDATE_USER_MUTATION = gql`
 `;
 
 const MyProfile: NextPage = () => {
+  const { colorMode } = useColorMode();
+  const bgColor = { light: "white", dark: "gray.800" };
+  const borderColor = { light: "gray.300", dark: "gray.700" };
+  const color = { light: "gray.900", dark: "gray.100" };
   const [emailAddress, setEmailAddress] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -107,9 +112,11 @@ const MyProfile: NextPage = () => {
         <Box
           minWidth={["full", "full", "full", "400px"]}
           p={8}
-          bg="white"
           rounded="md"
           borderWidth={1}
+          bg={bgColor[colorMode]}
+          borderColor={borderColor[colorMode]}
+          color={color[colorMode]}
         >
           <Box as="form" onSubmit={(e) => handleSubmit}>
             <Stack spacing={8}>
@@ -173,7 +180,7 @@ const MyProfile: NextPage = () => {
                 <Stack isInline spacing={4} align="center">
                   <Button
                     type="submit"
-                    variantColor="purple"
+                    variantColor="cyan"
                     loadingText="Saving..."
                     onClick={handleSubmit}
                     isLoading={mutationLoading}

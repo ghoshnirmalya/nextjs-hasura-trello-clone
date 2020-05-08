@@ -34,7 +34,7 @@ const Navbar: NextComponentType = () => {
             <Stack isInline spacing={4} align="center">
               <_Link href="/sign-in">Sign In</_Link>
               <Link href="/sign-up">
-                <Button variantColor="purple">Sign Up</Button>
+                <Button variantColor="cyan">Sign Up</Button>
               </Link>
             </Stack>
           </Box>

@@ -1,9 +1,14 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import Link from "next/link";
-import { PseudoBox, Box, Heading, Stack } from "@chakra-ui/core";
+import { PseudoBox, useColorMode, Box, Heading, Stack } from "@chakra-ui/core";
 
 const _Card = ({ cards }: { cards: any }) => {
+  const { colorMode } = useColorMode();
+  const bgColor = { light: "white", dark: "gray.900" };
+  const borderColor = { light: "gray.300", dark: "gray.700" };
+  const color = { light: "gray.900", dark: "gray.100" };
+
   return (
     <Stack spacing={4}>
       {cards.map((card: any, index: number) => {
@@ -25,11 +30,13 @@ const _Card = ({ cards }: { cards: any }) => {
                       color={snapshot.isDragging ? "grey.400" : "black"}
                     >
                       <PseudoBox
-                        borderWidth="1px"
                         rounded="md"
-                        bg="white"
                         p={4}
                         _hover={{ shadow: "md" }}
+                        borderWidth={1}
+                        bg={bgColor[colorMode]}
+                        borderColor={borderColor[colorMode]}
+                        color={color[colorMode]}
                       >
                         <Heading as="h4" size="xs">
                           {card.description}

@@ -22,6 +22,7 @@ import {
   Input,
   Alert,
   AlertIcon,
+  useColorMode,
 } from "@chakra-ui/core";
 import Card from "components/pages/boards/show/card";
 import gql from "graphql-tag";
@@ -72,6 +73,10 @@ const List = ({
   lists: any;
   boardId: string | string[];
 }) => {
+  const { colorMode } = useColorMode();
+  const bgColor = { light: "white", dark: "gray.800" };
+  const borderColor = { light: "gray.300", dark: "gray.700" };
+  const color = { light: "gray.900", dark: "gray.100" };
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [description, setDescription] = useState("");
   const [name, setName] = useState("");
@@ -145,9 +150,9 @@ const List = ({
     return (
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xl">
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent bg={bgColor[colorMode]} color={color[colorMode]}>
           <DrawerCloseButton />
-          <DrawerHeader>Create Board</DrawerHeader>
+          <DrawerHeader>Create card</DrawerHeader>
           <DrawerBody>
             {createCardMutationError ? (
               <Alert status="error" variant="left-accent">
@@ -173,7 +178,7 @@ const List = ({
             <Box w="full">
               <Button
                 type="submit"
-                variantColor="purple"
+                variantColor="cyan"
                 mr={4}
                 loadingText="Saving..."
                 onClick={handleSubmit}
@@ -197,7 +202,7 @@ const List = ({
       {lists.map((list: any, index: number) => (
         <Box key={index} w="300px">
           <Draggable key={list.id} draggableId={list.id} index={index}>
-            {(provided, snapshot) => (
+            {(provided) => (
               <Box
                 ref={provided.innerRef}
                 {...provided.draggableProps}
@@ -207,8 +212,9 @@ const List = ({
                   py={4}
                   borderBottomWidth={1}
                   borderTopWidth={4}
-                  borderTopColor="purple"
-                  bg="gray.100"
+                  borderColor={borderColor[colorMode]}
+                  bg={bgColor[colorMode]}
+                  color={color[colorMode]}
                 >
                   <Stack
                     spacing={8}
@@ -228,7 +234,11 @@ const List = ({
                     <Box
                       ref={provided.innerRef}
                       bg={
-                        snapshot.isDraggingOver ? "purple.100" : "transparent"
+                        snapshot.isDraggingOver
+                          ? colorMode === "light"
+                            ? "cyan.100"
+                            : "gray.700"
+                          : "transparent"
                       }
                       {...provided.droppableProps}
                     >
@@ -237,7 +247,11 @@ const List = ({
                           minHeight: "calc(100vh - 300px)",
                         }}
                       >
-                        <Box p={4} bg="gray.100">
+                        <Box
+                          p={4}
+                          bg={bgColor[colorMode]}
+                          color={color[colorMode]}
+                        >
                           <Stack spacing={4}>
                             <Box>
                               <Card cards={list.cards} />
@@ -269,7 +283,12 @@ const List = ({
       ))}
       {drawerNode()}
       <Box w="300px">
-        <Box bg="gray.100" p={4} rounded="md">
+        <Box
+          bg={bgColor[colorMode]}
+          color={color[colorMode]}
+          p={4}
+          rounded="md"
+        >
           <Input
             placeholder="Add a new List"
             value={name}

@@ -6,7 +6,7 @@ const Loader: FC = () => {
     <Box w="full" textAlign="center" maxH="200px">
       <CircularProgress
         isIndeterminate
-        color="purple"
+        color="cyan"
         size="50px"
         thickness={0.15}
       />

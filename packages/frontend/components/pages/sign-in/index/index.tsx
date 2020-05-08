@@ -88,7 +88,7 @@ const SignIn: NextPage = () => {
               <Stack isInline spacing={4} align="center">
                 <Button
                   type="submit"
-                  variantColor="purple"
+                  variantColor="cyan"
                   size="lg"
                   loadingText="Signing in..."
                   onClick={handleSubmit}

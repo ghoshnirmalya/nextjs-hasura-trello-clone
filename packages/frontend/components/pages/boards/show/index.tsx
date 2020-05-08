@@ -1,5 +1,12 @@
 import React from "react";
-import { Box, Heading, Grid, Stack, Link as _Link } from "@chakra-ui/core";
+import {
+  Box,
+  Heading,
+  Grid,
+  Stack,
+  Link as _Link,
+  useColorMode,
+} from "@chakra-ui/core";
 import { NextPage } from "next";
 import gql from "graphql-tag";
 import { useSubscription, useMutation } from "react-apollo";
@@ -9,6 +16,7 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import find from "lodash/find";
 import Scrollbar from "react-scrollbars-custom";
 import List from "components/pages/boards/show/list";
+import InviteUsers from "components/pages/boards/show/invite-users";
 
 const FETCH_BOARD_SUBSCRIPTION = gql`
   subscription fetchBoard($id: uuid!) {
@@ -72,6 +80,8 @@ const UPDATE_LIST_MUTATION = gql`
 `;
 
 const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
+  const { colorMode } = useColorMode();
+  const color = { light: "gray.900", dark: "gray.100" };
   const router = useRouter();
   const currentBoardId = boardId || router.query.boardId;
   const { data, loading, error } = useSubscription(FETCH_BOARD_SUBSCRIPTION, {
@@ -95,9 +105,12 @@ const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
 
   const headingNode = () => {
     return (
-      <Heading as="h2" size="lg">
-        {name}
-      </Heading>
+      <Stack spacing={8} isInline align="center" justifyContent="space-between">
+        <Heading as="h2" size="lg" fontWeight="bold" color={color[colorMode]}>
+          {name}
+        </Heading>
+        <InviteUsers />
+      </Stack>
     );
   };
 

@@ -20,6 +20,7 @@ import {
   Input,
   Alert,
   AlertIcon,
+  useColorMode,
 } from "@chakra-ui/core";
 import { NextPage } from "next";
 import gql from "graphql-tag";
@@ -38,8 +39,8 @@ const FETCH_BOARDS_SUBSCRIPTION = gql`
 `;
 
 const CREATE_BOARD_MUTATION = gql`
-  mutation createBoard($name: bpchar!, $admin_id: uuid!) {
-    insert_board(objects: { name: $name, admin_id: $admin_id }) {
+  mutation createBoard($name: bpchar!, $user_id: uuid!) {
+    insert_board(objects: { name: $name, user_id: $user_id }) {
       returning {
         id
         name
@@ -49,6 +50,10 @@ const CREATE_BOARD_MUTATION = gql`
 `;
 
 const Boards: NextPage = () => {
+  const { colorMode } = useColorMode();
+  const bgColor = { light: "white", dark: "gray.800" };
+  const borderColor = { light: "gray.300", dark: "gray.700" };
+  const color = { light: "gray.900", dark: "gray.100" };
   const { data, loading, error } = useSubscription(FETCH_BOARDS_SUBSCRIPTION);
   const [
     updateUserMutation,
@@ -71,7 +76,7 @@ const Boards: NextPage = () => {
 
     await updateUserMutation({
       variables: {
-        admin_id: currentUserId,
+        user_id: currentUserId,
         name,
       },
     });
@@ -86,7 +91,7 @@ const Boards: NextPage = () => {
     return (
       <Box d="flex" justifyContent="space-between" alignItems="center">
         <Box>
-          <Heading as="h2" size="lg" fontWeight="bold">
+          <Heading as="h2" size="lg" fontWeight="bold" color={color[colorMode]}>
             Boards
           </Heading>
         </Box>
@@ -104,7 +109,7 @@ const Boards: NextPage = () => {
             />
           </Box>
           <Box>
-            <Button variantColor="purple" onClick={onOpen}>
+            <Button variantColor="cyan" onClick={onOpen}>
               Add new board
             </Button>
           </Box>
@@ -117,7 +122,7 @@ const Boards: NextPage = () => {
     return (
       <Drawer isOpen={isOpen} placement="right" onClose={onClose} size="xl">
         <DrawerOverlay />
-        <DrawerContent>
+        <DrawerContent bg={bgColor[colorMode]} color={color[colorMode]}>
           <DrawerCloseButton />
           <DrawerHeader>Create Board</DrawerHeader>
           <DrawerBody>
@@ -145,7 +150,7 @@ const Boards: NextPage = () => {
             <Box w="full">
               <Button
                 type="submit"
-                variantColor="purple"
+                variantColor="cyan"
                 mr={4}
                 loadingText="Saving..."
                 onClick={handleSubmit}
@@ -171,26 +176,25 @@ const Boards: NextPage = () => {
       <Stack spacing={8}>
         {data.board.map((board: { id: number; name: string }) => {
           return (
-            <Box>
+            <Box key={board.id}>
               <Link
-                key={board.id}
                 href={`/boards/[boardId]?boardId=${board.id}`}
                 as={`/boards/${board.id}`}
               >
                 <a>
                   <PseudoBox
                     p={8}
-                    bg="white"
                     rounded="md"
-                    borderWidth={1}
                     _hover={{ shadow: "md" }}
+                    borderWidth={1}
+                    bg={bgColor[colorMode]}
+                    borderColor={borderColor[colorMode]}
+                    color={color[colorMode]}
                   >
                     <Heading as="h4" size="md">
                       {board.name}
                     </Heading>
-                    <Text fontSize="sm" color="gray.700">
-                      {board.id}
-                    </Text>
+                    <Text fontSize="sm">{board.id}</Text>
                   </PseudoBox>
                 </a>
               </Link>

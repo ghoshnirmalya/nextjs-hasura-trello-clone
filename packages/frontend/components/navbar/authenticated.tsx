@@ -1,5 +1,11 @@
 import React from "react";
-import { Box, Link as _Link, Button, Stack } from "@chakra-ui/core";
+import {
+  Box,
+  Link as _Link,
+  Button,
+  Stack,
+  useColorMode,
+} from "@chakra-ui/core";
 import { NextComponentType } from "next";
 import Link from "next/link";
 import { cookieRemover } from "lib/cookie";
@@ -24,6 +30,10 @@ const FETCH_USER_QUERY = gql`
 
 const Navbar: NextComponentType = () => {
   const currentUserId = cookieParser("user-id");
+  const { colorMode, toggleColorMode } = useColorMode();
+  const bgColor = { light: "white", dark: "gray.800" };
+  const borderColor = { light: "gray.300", dark: "gray.700" };
+  const color = { light: "gray.800", dark: "gray.100" };
 
   const { data, loading, error } = useQuery(FETCH_USER_QUERY, {
     variables: { id: currentUserId },
@@ -48,14 +58,16 @@ const Navbar: NextComponentType = () => {
   };
 
   return (
-    <Box borderBottomWidth={1} bg="white">
+    <Box bg={bgColor[colorMode]}>
       <Box
         w="full"
         mx="auto"
         d="flex"
         justifyContent="space-between"
         p={4}
-        color="gray.700"
+        color={color[colorMode]}
+        borderWidth={1}
+        borderColor={borderColor[colorMode]}
       >
         <Stack
           isInline
@@ -93,8 +105,13 @@ const Navbar: NextComponentType = () => {
                 </Link>
               </Box>
               <Box>
-                <Button variantColor="purple" onClick={handleSignOut}>
+                <Button variantColor="cyan" onClick={handleSignOut}>
                   Sign out
+                </Button>
+              </Box>
+              <Box>
+                <Button onClick={toggleColorMode}>
+                  Toggle {colorMode === "light" ? "Dark" : "Light"}
                 </Button>
               </Box>
             </Stack>
