@@ -178,15 +178,17 @@ const MyProfile: NextPage = () => {
               </FormControl>
               <FormControl>
                 <Stack isInline spacing={4} align="center">
-                  <Button
-                    type="submit"
-                    variantColor="cyan"
-                    loadingText="Saving..."
-                    onClick={handleSubmit}
-                    isLoading={mutationLoading}
-                  >
-                    Save
-                  </Button>
+                  <Box>
+                    <Button
+                      type="submit"
+                      variantColor="cyan"
+                      loadingText="Saving..."
+                      onClick={handleSubmit}
+                      isLoading={mutationLoading}
+                    >
+                      Save
+                    </Button>
+                  </Box>
                   <Box>
                     <Link href="/">
                       <_Link>Cancel</_Link>

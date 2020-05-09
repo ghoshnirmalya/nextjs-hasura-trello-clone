@@ -20,6 +20,14 @@ export default (ComposedComponent: NextPage) => {
     )})`;
 
     static async getInitialProps(ctx: Context) {
+      const allowedRoutesForUnauthenticatedUsers: string[] = [
+        "/sign-up",
+        "/sign-in",
+        "/admin/sign-up",
+        "/",
+      ];
+      const redirectRouteForUnauthenticatedUsers: string = "/sign-up";
+      const redirectRouteForAuthenticatedUsers: string = "/boards";
       const isAuthenticated = !!cookieParser("token", ctx);
 
       // Evaluate the composed component's getInitialProps()
@@ -33,28 +41,28 @@ export default (ComposedComponent: NextPage) => {
       // sign-in and sign-up routes
       if (
         isAuthenticated &&
-        ["/sign-up", "/sign-in", "/admin/sign-up"].indexOf(ctx.asPath) > -1
+        allowedRoutesForUnauthenticatedUsers.indexOf(ctx.asPath) > -1
       ) {
         if (typeof window !== "undefined") {
-          Router.push("/");
+          Router.push(redirectRouteForAuthenticatedUsers);
         } else {
           if (ctx.res) {
             ctx.res.writeHead(301, {
-              Location: "/",
+              Location: redirectRouteForAuthenticatedUsers,
             });
             ctx.res.end();
           }
         }
       } else if (
         !isAuthenticated &&
-        ["/sign-up", "/sign-in", "/admin/sign-up"].indexOf(ctx.asPath) === -1
+        allowedRoutesForUnauthenticatedUsers.indexOf(ctx.asPath) === -1
       ) {
         if (typeof window !== "undefined") {
-          Router.push("/sign-up");
+          Router.push(redirectRouteForUnauthenticatedUsers);
         } else {
           if (ctx.res) {
             ctx.res.writeHead(301, {
-              Location: "/sign-up",
+              Location: redirectRouteForUnauthenticatedUsers,
             });
             ctx.res.end();
           }

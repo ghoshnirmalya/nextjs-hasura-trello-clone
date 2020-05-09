@@ -9,6 +9,7 @@ import {
   AlertIcon,
   Stack,
   Link as _Link,
+  useColorMode,
 } from "@chakra-ui/core";
 import useFetch from "use-http";
 import { useRouter } from "next/router";
@@ -17,6 +18,10 @@ import { cookieSetter } from "lib/cookie";
 import Link from "next/link";
 
 const SignIn: NextPage = () => {
+  const { colorMode } = useColorMode();
+  const bgColor = { light: "white", dark: "gray.800" };
+  const borderColor = { light: "gray.300", dark: "gray.700" };
+  const color = { light: "gray.900", dark: "gray.100" };
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [request, response] = useFetch(`${process.env.AUTH_URL}`);
@@ -55,7 +60,15 @@ const SignIn: NextPage = () => {
           There was an error processing your request. Please try again!
         </Alert>
       ) : null}
-      <Box p={8} bg="white" rounded="md" borderWidth={1} w="full">
+      <Box
+        minWidth={["full", "full", "full", "400px"]}
+        p={8}
+        rounded="md"
+        borderWidth={1}
+        bg={bgColor[colorMode]}
+        borderColor={borderColor[colorMode]}
+        color={color[colorMode]}
+      >
         <Box as="form" onSubmit={handleSubmit}>
           <Stack spacing={8}>
             <FormControl isRequired>
@@ -86,19 +99,23 @@ const SignIn: NextPage = () => {
             </FormControl>
             <FormControl>
               <Stack isInline spacing={4} align="center">
-                <Button
-                  type="submit"
-                  variantColor="cyan"
-                  size="lg"
-                  loadingText="Signing in..."
-                  onClick={handleSubmit}
-                  isLoading={request.loading}
-                >
-                  Sign In
-                </Button>
-                <Link href="/sign-up">
-                  <_Link>Sign Up</_Link>
-                </Link>
+                <Box>
+                  <Button
+                    type="submit"
+                    variantColor="cyan"
+                    size="lg"
+                    loadingText="Signing in..."
+                    onClick={handleSubmit}
+                    isLoading={request.loading}
+                  >
+                    Sign In
+                  </Button>
+                </Box>
+                <Box>
+                  <Link href="/sign-up">
+                    <_Link>Sign Up</_Link>
+                  </Link>
+                </Box>
               </Stack>
             </FormControl>
           </Stack>
