@@ -17,6 +17,7 @@ import {
   DrawerContent,
   DrawerCloseButton,
   useColorMode,
+  Textarea,
 } from "@chakra-ui/core";
 import { NextPage } from "next";
 import gql from "graphql-tag";
@@ -29,6 +30,7 @@ const FETCH_CARD_QUERY = gql`
   query fetchCard($id: uuid!) {
     card_by_pk(id: $id) {
       id
+      title
       description
       board_id
     }
@@ -36,13 +38,14 @@ const FETCH_CARD_QUERY = gql`
 `;
 
 const UPDATE_CARD_MUTATION = gql`
-  mutation updateCard($id: uuid!, $description: String) {
+  mutation updateCard($id: uuid!, $description: String, $title: String) {
     update_card(
       where: { id: { _eq: $id } }
-      _set: { description: $description }
+      _set: { description: $description, title: $title }
     ) {
       returning {
         id
+        title
         description
       }
     }
@@ -54,14 +57,16 @@ const MyProfile: NextPage = () => {
   const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "gray.900", dark: "gray.100" };
   const router = useRouter();
+  const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const currentCardId = router.query.cardId;
 
   const { data, loading, error } = useQuery(FETCH_CARD_QUERY, {
     variables: { id: currentCardId },
     onCompleted: (data) => {
-      const { description } = data.card_by_pk;
+      const { title, description } = data.card_by_pk;
 
+      setTitle(title || "");
       setDescription(description || "");
     },
   });
@@ -85,6 +90,7 @@ const MyProfile: NextPage = () => {
     await updateCard({
       variables: {
         id: currentCardId,
+        title,
         description,
       },
     });
@@ -122,21 +128,32 @@ const MyProfile: NextPage = () => {
               </Alert>
             ) : null}
             <Stack spacing={8}>
-              <Box w="full">
-                <FormControl isRequired>
-                  <FormLabel htmlFor="description">Description</FormLabel>
-                  <Input
-                    type="description"
-                    id="description"
-                    aria-describedby="Description"
-                    placeholder="Create a card for my work"
-                    value={description}
-                    onChange={(e: FormEvent<HTMLInputElement>) =>
-                      setDescription(e.currentTarget.value)
-                    }
-                  />
-                </FormControl>
-              </Box>
+              <FormControl isRequired>
+                <FormLabel htmlFor="title">Title</FormLabel>
+                <Input
+                  type="title"
+                  id="title"
+                  aria-describedby="title"
+                  placeholder="Create a card for my work"
+                  value={title}
+                  onChange={(e: FormEvent<HTMLInputElement>) =>
+                    setTitle(e.currentTarget.value)
+                  }
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel htmlFor="description">Description</FormLabel>
+                <Textarea
+                  type="description"
+                  id="description"
+                  aria-describedby="Description"
+                  placeholder="Create a card for my work"
+                  value={description}
+                  onChange={(e: FormEvent<HTMLInputElement>) =>
+                    setDescription(e.currentTarget.value)
+                  }
+                />
+              </FormControl>
             </Stack>
           </DrawerBody>
           <DrawerFooter>

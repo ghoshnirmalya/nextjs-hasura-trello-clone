@@ -141,12 +141,14 @@ tables:
       - position
       - created_at
       - updated_at
+      - title
   select_permissions:
   - role: user
     permission:
       columns:
       - position
       - description
+      - title
       - due_date
       - created_at
       - updated_at
@@ -160,6 +162,7 @@ tables:
       columns:
       - position
       - description
+      - title
       - due_date
       - created_at
       - updated_at

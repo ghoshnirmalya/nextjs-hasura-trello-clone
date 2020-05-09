@@ -32,6 +32,7 @@ const FETCH_BOARD_SUBSCRIPTION = gql`
         board_id
         cards(order_by: { position: asc }) {
           id
+          title
           description
           position
         }

@@ -39,7 +39,7 @@ const _Card = ({ cards }: { cards: any }) => {
                         color={color[colorMode]}
                       >
                         <Heading as="h4" size="xs">
-                          {card.description}
+                          {card.title}
                         </Heading>
                       </PseudoBox>
                     </Box>

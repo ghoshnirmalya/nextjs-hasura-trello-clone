@@ -23,6 +23,7 @@ import {
   Alert,
   AlertIcon,
   useColorMode,
+  Textarea,
 } from "@chakra-ui/core";
 import Card from "components/pages/boards/show/card";
 import gql from "graphql-tag";
@@ -32,6 +33,7 @@ const CREATE_CARD_MUTATION = gql`
   mutation createCard(
     $listId: uuid!
     $position: numeric
+    $title: String
     $description: String
     $boardId: uuid!
   ) {
@@ -39,12 +41,14 @@ const CREATE_CARD_MUTATION = gql`
       objects: {
         list_id: $listId
         position: $position
+        title: $title
         description: $description
         board_id: $boardId
       }
     ) {
       returning {
         id
+        title
         description
         position
       }
@@ -79,6 +83,7 @@ const List = ({
   const color = { light: "gray.900", dark: "gray.100" };
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [description, setDescription] = useState("");
+  const [title, setTitle] = useState("");
   const [name, setName] = useState("");
   const [listId, setListId] = useState("");
   const [
@@ -107,6 +112,7 @@ const List = ({
       variables: {
         listId,
         position: getPositionOfNewCard(),
+        title,
         description,
         boardId,
       },
@@ -114,6 +120,7 @@ const List = ({
 
     if (!createCardMutationError) {
       onClose();
+      setTitle("");
       setDescription("");
       setListId("");
     }
@@ -160,19 +167,34 @@ const List = ({
                 There was an error processing your request. Please try again!
               </Alert>
             ) : null}
-            <FormControl isRequired>
-              <FormLabel htmlFor="description">Description</FormLabel>
-              <Input
-                type="description"
-                id="description"
-                aria-describedby="description"
-                placeholder="Card One"
-                value={description}
-                onChange={(e: FormEvent<HTMLInputElement>) =>
-                  setDescription(e.currentTarget.value)
-                }
-              />
-            </FormControl>
+            <Stack spacing={8}>
+              <FormControl isRequired>
+                <FormLabel htmlFor="title">Title</FormLabel>
+                <Input
+                  type="title"
+                  id="title"
+                  aria-describedby="title"
+                  placeholder="Card One"
+                  value={title}
+                  onChange={(e: FormEvent<HTMLInputElement>) =>
+                    setTitle(e.currentTarget.value)
+                  }
+                />
+              </FormControl>
+              <FormControl isRequired>
+                <FormLabel htmlFor="description">Description</FormLabel>
+                <Textarea
+                  type="description"
+                  id="description"
+                  aria-describedby="description"
+                  placeholder="Card One"
+                  value={description}
+                  onChange={(e: FormEvent<HTMLInputElement>) =>
+                    setDescription(e.currentTarget.value)
+                  }
+                />
+              </FormControl>
+            </Stack>
           </DrawerBody>
           <DrawerFooter>
             <Box w="full">
