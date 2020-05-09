@@ -1,32 +1,32 @@
-import React, { FC, useState, MouseEvent, FormEvent } from "react";
+import React, { FC } from "react";
 import {
-  Box,
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
   Button,
   useDisclosure,
-  Select,
   FormControl,
-  FormLabel,
   Alert,
   AlertIcon,
   useColorMode,
+  CheckboxGroup,
+  Checkbox,
+  DrawerFooter,
+  Box,
 } from "@chakra-ui/core";
 import gql from "graphql-tag";
-import { useQuery, useMutation } from "react-apollo";
+import { useMutation, useSubscription } from "react-apollo";
 
 interface user {
   id: number;
   email: string;
 }
 
-const FETCH_USERS_QUERY = gql`
-  query fetchUsers {
+const FETCH_USERS_SUBSCRIPTION = gql`
+  subscription fetchUsers {
     user {
       id
       email
@@ -37,42 +37,46 @@ const FETCH_USERS_QUERY = gql`
 `;
 
 const ADD_USER_MUTATION = gql`
-  mutation addUser($name: bpchar!, $user_id: uuid!) {
-    insert_board(objects: { name: $name, user_id: $user_id }) {
+  mutation addUser($board_id: uuid!, $user_id: uuid!) {
+    insert_board_user(objects: { user_id: $user_id, board_id: $board_id }) {
       returning {
-        id
-        name
+        board_id
+        user_id
       }
     }
   }
 `;
 
-const InviteUsersButton: FC = () => {
+interface Props {
+  boardId: string | string[];
+  users: string[];
+}
+
+const InviteUsersButton: FC<Props> = ({ boardId, users }) => {
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "gray.900", dark: "gray.100" };
-  const [userId, setUserId] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { data, loading } = useQuery(FETCH_USERS_QUERY, {
+  const { data, loading } = useSubscription(FETCH_USERS_SUBSCRIPTION, {
     fetchPolicy: "network-only",
   });
   const [
     addUserMutation,
-    { loading: mutationLoading, error: mutationError },
+    { error: mutationError, loading: mutationLoading },
   ] = useMutation(ADD_USER_MUTATION);
 
-  const handleSubmit = async (e: FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-
-    await addUserMutation({
-      variables: {
-        user_id: userId,
-      },
+  const handleSubmit = async (users: any) => {
+    users.map(async (id: number) => {
+      await addUserMutation({
+        variables: {
+          user_id: id,
+          board_id: boardId,
+        },
+      });
     });
 
     if (!mutationError) {
       onClose();
-      setUserId("");
     }
   };
 
@@ -83,6 +87,8 @@ const InviteUsersButton: FC = () => {
       </Button>
     );
   }
+
+  const selectedUserIds = users.map((user: any) => user.user_id);
 
   return (
     <>
@@ -103,25 +109,22 @@ const InviteUsersButton: FC = () => {
               </Alert>
             ) : null}
             <FormControl isRequired>
-              <FormLabel htmlFor="name">User</FormLabel>
-              <Select
-                placeholder="Select option"
-                isDisabled={loading}
-                onClick={(e: MouseEvent<HTMLSelectElement>) =>
-                  setUserId(e.currentTarget.value)
-                }
+              <CheckboxGroup
+                spacing={4}
+                variantColor="teal"
+                onChange={(values) => handleSubmit(values)}
+                defaultValue={selectedUserIds}
               >
                 {data.user.map((user: user) => {
                   return (
-                    <option key={user.id} value={user.id}>
+                    <Checkbox key={user.id} value={user.id}>
                       {user.email}
-                    </option>
+                    </Checkbox>
                   );
                 })}
-              </Select>
+              </CheckboxGroup>
             </FormControl>
           </DrawerBody>
-
           <DrawerFooter>
             <Box w="full">
               <Button

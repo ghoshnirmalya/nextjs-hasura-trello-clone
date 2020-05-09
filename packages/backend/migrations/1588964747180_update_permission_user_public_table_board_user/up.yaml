@@ -1,0 +1,13 @@
+- args:
+    permission:
+      backend_only: false
+      columns:
+      - board_id
+      - user_id
+      filter: {}
+      set: {}
+    role: user
+    table:
+      name: board_user
+      schema: public
+  type: create_update_permission

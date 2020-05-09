@@ -1,0 +1,15 @@
+- args:
+    permission:
+      allow_aggregations: false
+      backend_only: false
+      columns:
+      - board_id
+      - user_id
+      computed_fields: []
+      filter: {}
+      limit: null
+    role: user
+    table:
+      name: board_user
+      schema: public
+  type: create_select_permission

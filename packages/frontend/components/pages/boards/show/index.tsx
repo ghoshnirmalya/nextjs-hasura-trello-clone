@@ -6,6 +6,8 @@ import {
   Stack,
   Link as _Link,
   useColorMode,
+  Avatar,
+  AvatarGroup,
 } from "@chakra-ui/core";
 import { NextPage } from "next";
 import gql from "graphql-tag";
@@ -32,6 +34,12 @@ const FETCH_BOARD_SUBSCRIPTION = gql`
           id
           description
           position
+        }
+      }
+      users {
+        user_id
+        user {
+          email
         }
       }
     }
@@ -101,15 +109,31 @@ const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
     return <p>Error: {error.message}</p>;
   }
 
-  const { name, lists } = data.board_by_pk;
+  const { name, lists, users } = data.board_by_pk;
 
+  const usersListNode = () => {
+    return (
+      <AvatarGroup size="sm" max={2}>
+        {users.map((user: any) => {
+          return <Avatar name={user.user.email} key={user.user_id} />;
+        })}
+      </AvatarGroup>
+    );
+  };
   const headingNode = () => {
     return (
       <Stack spacing={8} isInline align="center" justifyContent="space-between">
         <Heading as="h2" size="lg" fontWeight="bold" color={color[colorMode]}>
           {name}
         </Heading>
-        <InviteUsers />
+        <Box>
+          <Stack spacing={8} isInline align="center">
+            <Box>{usersListNode()}</Box>
+            <Box>
+              <InviteUsers boardId={currentBoardId} users={users} />
+            </Box>
+          </Stack>
+        </Box>
       </Stack>
     );
   };

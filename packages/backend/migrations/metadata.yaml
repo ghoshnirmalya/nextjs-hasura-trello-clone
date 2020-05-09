@@ -1,0 +1,390 @@
+version: 2
+tables:
+- table:
+    schema: public
+    name: board
+  array_relationships:
+  - name: cards
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: card
+        column_mapping:
+          id: board_id
+  - name: lists
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: list
+        column_mapping:
+          id: board_id
+  - name: users
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: board_user
+        column_mapping:
+          id: board_id
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - id
+      - name
+      - user_id
+      - created_at
+      - updated_at
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - name
+      - created_at
+      - updated_at
+      - user_id
+      - id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - name
+      - created_at
+      - updated_at
+      - user_id
+      - id
+      filter: {}
+      check: null
+- table:
+    schema: public
+    name: board_user
+  object_relationships:
+  - name: board
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: board
+        column_mapping:
+          board_id: id
+  - name: user
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: user
+        column_mapping:
+          user_id: id
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - board_id
+      - user_id
+      backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - board_id
+      - user_id
+      filter: {}
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - board_id
+      - user_id
+      filter: {}
+      check: null
+  delete_permissions:
+  - role: user
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: card
+  object_relationships:
+  - name: board
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: board
+        column_mapping:
+          board_id: id
+  - name: list
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: list
+        column_mapping:
+          list_id: id
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - id
+      - description
+      - list_id
+      - board_id
+      - due_date
+      - position
+      - created_at
+      - updated_at
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - position
+      - description
+      - due_date
+      - created_at
+      - updated_at
+      - board_id
+      - id
+      - list_id
+      filter: {}
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - position
+      - description
+      - due_date
+      - created_at
+      - updated_at
+      - board_id
+      - id
+      - list_id
+      filter: {}
+      check: null
+- table:
+    schema: public
+    name: list
+  object_relationships:
+  - name: board
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: board
+        column_mapping:
+          board_id: id
+  array_relationships:
+  - name: cards
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: card
+        column_mapping:
+          id: list_id
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - id
+      - name
+      - board_id
+      - position
+      - created_at
+      - updated_at
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - position
+      - name
+      - created_at
+      - updated_at
+      - board_id
+      - id
+      filter: {}
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - position
+      - name
+      - created_at
+      - updated_at
+      - board_id
+      - id
+      filter: {}
+      check: null
+- table:
+    schema: public
+    name: role
+  array_relationships:
+  - name: user_roles
+    using:
+      foreign_key_constraint_on:
+        column: role_id
+        table:
+          schema: public
+          name: user_role
+  insert_permissions:
+  - role: user
+    permission:
+      check:
+        user_roles:
+          user_id:
+            _eq: X-Hasura-User-Id
+      columns:
+      - id
+      - name
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - id
+      - name
+      filter:
+        user_roles:
+          user_id:
+            _eq: X-Hasura-User-Id
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - id
+      - name
+      filter:
+        user_roles:
+          user_id:
+            _eq: X-Hasura-User-Id
+      check: null
+  delete_permissions:
+  - role: user
+    permission:
+      filter:
+        user_roles:
+          user_id:
+            _eq: X-Hasura-User-Id
+- table:
+    schema: public
+    name: user
+  array_relationships:
+  - name: boards
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: board_user
+        column_mapping:
+          id: user_id
+  - name: user_roles
+    using:
+      foreign_key_constraint_on:
+        column: user_id
+        table:
+          schema: public
+          name: user_role
+  insert_permissions:
+  - role: user
+    permission:
+      check:
+        id:
+          _eq: X-Hasura-User-Id
+      columns:
+      - id
+      - password
+      - created_at
+      - active
+      - email
+      - updated_at
+      - first_name
+      - last_name
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - active
+      - email
+      - first_name
+      - last_name
+      - password
+      - created_at
+      - updated_at
+      - id
+      filter: {}
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - active
+      - email
+      - first_name
+      - last_name
+      - password
+      - created_at
+      - updated_at
+      - id
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      check: null
+  delete_permissions:
+  - role: user
+    permission:
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+- table:
+    schema: public
+    name: user_role
+  object_relationships:
+  - name: role
+    using:
+      foreign_key_constraint_on: role_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  insert_permissions:
+  - role: user
+    permission:
+      check:
+        user_id:
+          _eq: X-Hasura-User-Id
+      columns:
+      - id
+      - role_id
+      - user_id
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - id
+      - role_id
+      - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - id
+      - role_id
+      - user_id
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
+      check: null
+  delete_permissions:
+  - role: user
+    permission:
+      filter:
+        user_id:
+          _eq: X-Hasura-User-Id
