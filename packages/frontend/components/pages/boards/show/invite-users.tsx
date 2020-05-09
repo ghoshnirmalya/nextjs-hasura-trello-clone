@@ -1,25 +1,18 @@
-import React, { FC } from "react";
+import React from "react";
 import {
-  Drawer,
-  DrawerBody,
-  DrawerHeader,
-  DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
   Button,
-  useDisclosure,
-  FormControl,
   Alert,
   AlertIcon,
   useColorMode,
-  CheckboxGroup,
-  Checkbox,
-  DrawerFooter,
-  Box,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuOptionGroup,
+  MenuItemOption,
 } from "@chakra-ui/core";
 import gql from "graphql-tag";
 import { useMutation, useSubscription } from "react-apollo";
-
+import xor from "lodash/xor";
 interface user {
   id: number;
   email: string;
@@ -47,16 +40,16 @@ const ADD_USER_MUTATION = gql`
   }
 `;
 
-interface Props {
+const InviteUsersButton = ({
+  boardId,
+  users,
+}: {
   boardId: string | string[];
   users: string[];
-}
-
-const InviteUsersButton: FC<Props> = ({ boardId, users }) => {
+}) => {
   const { colorMode } = useColorMode();
-  const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "gray.900", dark: "gray.100" };
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const borderColor = { light: "gray.300", dark: "gray.700" };
   const { data, loading } = useSubscription(FETCH_USERS_SUBSCRIPTION, {
     fetchPolicy: "network-only",
   });
@@ -65,8 +58,10 @@ const InviteUsersButton: FC<Props> = ({ boardId, users }) => {
     { error: mutationError, loading: mutationLoading },
   ] = useMutation(ADD_USER_MUTATION);
 
-  const handleSubmit = async (users: any) => {
-    users.map(async (id: number) => {
+  const handleSubmit = (values: any) => {
+    const usersToBeInvited: any[] = xor(values, selectedUserIds);
+
+    usersToBeInvited.map(async (id: number) => {
       await addUserMutation({
         variables: {
           user_id: id,
@@ -74,10 +69,6 @@ const InviteUsersButton: FC<Props> = ({ boardId, users }) => {
         },
       });
     });
-
-    if (!mutationError) {
-      onClose();
-    }
   };
 
   if (loading) {
@@ -92,58 +83,46 @@ const InviteUsersButton: FC<Props> = ({ boardId, users }) => {
 
   return (
     <>
-      <Button variantColor="cyan" onClick={onOpen}>
-        Invite
-      </Button>
-      <Drawer isOpen={isOpen} placement="right" onClose={onClose}>
-        <DrawerOverlay />
-        <DrawerContent bg={bgColor[colorMode]} color={color[colorMode]}>
-          <DrawerCloseButton />
-          <DrawerHeader>Invite new user</DrawerHeader>
-
-          <DrawerBody>
-            {mutationError ? (
-              <Alert status="error" variant="left-accent">
-                <AlertIcon />
-                There was an error processing your request. Please try again!
-              </Alert>
-            ) : null}
-            <FormControl isRequired>
-              <CheckboxGroup
-                spacing={4}
-                variantColor="teal"
-                onChange={(values) => handleSubmit(values)}
-                defaultValue={selectedUserIds}
-              >
-                {data.user.map((user: user) => {
-                  return (
-                    <Checkbox key={user.id} value={user.id}>
-                      {user.email}
-                    </Checkbox>
-                  );
-                })}
-              </CheckboxGroup>
-            </FormControl>
-          </DrawerBody>
-          <DrawerFooter>
-            <Box w="full">
-              <Button
-                type="submit"
-                variantColor="cyan"
-                mr={4}
-                loadingText="Saving..."
-                onClick={handleSubmit}
-                isLoading={mutationLoading}
-              >
-                Save
-              </Button>
-              <Button variant="outline" onClick={onClose}>
-                Cancel
-              </Button>
-            </Box>
-          </DrawerFooter>
-        </DrawerContent>
-      </Drawer>
+      {mutationError ? (
+        <Alert status="error" variant="left-accent">
+          <AlertIcon />
+          There was an error processing your request. Please try again!
+        </Alert>
+      ) : null}
+      <Menu closeOnSelect={false}>
+        <MenuButton
+          as={Button}
+          color={color[colorMode]}
+          borderColor={borderColor[colorMode]}
+        >
+          Invite
+        </MenuButton>
+        <MenuList
+          minWidth="240px"
+          color={color[colorMode]}
+          borderColor={borderColor[colorMode]}
+        >
+          <MenuOptionGroup
+            type="checkbox"
+            defaultValue={selectedUserIds}
+            onChange={(value: any) => {
+              handleSubmit(value);
+            }}
+          >
+            {data.user.map((user: user) => {
+              return (
+                <MenuItemOption
+                  key={user.id}
+                  value={user.id}
+                  isDisabled={mutationLoading}
+                >
+                  {user.email}
+                </MenuItemOption>
+              );
+            })}
+          </MenuOptionGroup>
+        </MenuList>
+      </Menu>
     </>
   );
 };
