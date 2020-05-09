@@ -5,6 +5,14 @@ import {
   Button,
   Stack,
   useColorMode,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuGroup,
+  MenuDivider,
+  Switch,
+  Icon,
 } from "@chakra-ui/core";
 import { NextComponentType } from "next";
 import Link from "next/link";
@@ -57,6 +65,53 @@ const Navbar: NextComponentType = () => {
     Router.push("/sign-up");
   };
 
+  const profileDropDown = () => {
+    return (
+      <Menu closeOnSelect={false}>
+        <MenuButton
+          as={Button}
+          color={color[colorMode]}
+          borderColor={borderColor[colorMode]}
+        >
+          Profile <Icon name="chevron-down" />
+        </MenuButton>
+        <MenuList
+          color={color[colorMode]}
+          borderColor={borderColor[colorMode]}
+          placement="bottom-end"
+        >
+          <MenuGroup title="Profile">
+            <MenuItem>
+              <Link href="/my-profile">
+                <_Link>My Account</_Link>
+              </Link>
+            </MenuItem>
+            <MenuItem>
+              <Stack justify="center" align="center" spacing={4} isInline>
+                <Box>Dark Theme</Box>
+                <Box>
+                  <Switch
+                    isChecked={colorMode === "dark"}
+                    onChange={toggleColorMode}
+                  />
+                </Box>
+              </Stack>
+            </MenuItem>
+          </MenuGroup>
+          <MenuDivider />
+          <MenuGroup title="Help">
+            <MenuItem>Docs</MenuItem>
+            <MenuItem>FAQ</MenuItem>
+          </MenuGroup>
+          <MenuDivider />
+          <MenuGroup>
+            <MenuItem onClick={handleSignOut}>Sign out</MenuItem>
+          </MenuGroup>
+        </MenuList>
+      </Menu>
+    );
+  };
+
   return (
     <Box bg={bgColor[colorMode]}>
       <Box
@@ -97,25 +152,7 @@ const Navbar: NextComponentType = () => {
               </Box>
             </Stack>
           </Box>
-          <Box>
-            <Stack isInline spacing={4} align="center">
-              <Box>
-                <Link href="/my-profile">
-                  <_Link>My Profile</_Link>
-                </Link>
-              </Box>
-              <Box>
-                <Button variantColor="cyan" onClick={handleSignOut}>
-                  Sign out
-                </Button>
-              </Box>
-              <Box>
-                <Button onClick={toggleColorMode}>
-                  Toggle {colorMode === "light" ? "Dark" : "Light"}
-                </Button>
-              </Box>
-            </Stack>
-          </Box>
+          <Box>{profileDropDown()}</Box>
         </Stack>
       </Box>
     </Box>

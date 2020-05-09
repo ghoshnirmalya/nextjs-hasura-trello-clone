@@ -1,8 +1,6 @@
 import React from "react";
 import {
   Button,
-  Alert,
-  AlertIcon,
   useColorMode,
   Menu,
   MenuButton,
@@ -53,10 +51,9 @@ const InviteUsersButton = ({
   const { data, loading } = useSubscription(FETCH_USERS_SUBSCRIPTION, {
     fetchPolicy: "network-only",
   });
-  const [
-    addUserMutation,
-    { error: mutationError, loading: mutationLoading },
-  ] = useMutation(ADD_USER_MUTATION);
+  const [addUserMutation, { loading: mutationLoading }] = useMutation(
+    ADD_USER_MUTATION
+  );
 
   const handleSubmit = (values: any) => {
     const usersToBeInvited: any[] = xor(values, selectedUserIds);
@@ -83,12 +80,6 @@ const InviteUsersButton = ({
 
   return (
     <>
-      {mutationError ? (
-        <Alert status="error" variant="left-accent">
-          <AlertIcon />
-          There was an error processing your request. Please try again!
-        </Alert>
-      ) : null}
       <Menu closeOnSelect={false}>
         <MenuButton
           as={Button}
