@@ -5,7 +5,7 @@ import { PseudoBox, useColorMode, Box, Heading, Stack } from "@chakra-ui/core";
 
 const _Card = ({ cards }: { cards: any }) => {
   const { colorMode } = useColorMode();
-  const bgColor = { light: "white", dark: "gray.900" };
+  const bgColor = { light: "gray.100", dark: "gray.900" };
   const borderColor = { light: "gray.300", dark: "gray.700" };
   const color = { light: "gray.900", dark: "gray.100" };
 

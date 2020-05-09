@@ -210,8 +210,8 @@ const List = ({
               >
                 <Box
                   py={4}
-                  borderBottomWidth={1}
-                  borderTopWidth={4}
+                  borderWidth={1}
+                  borderBottomWidth={0}
                   borderColor={borderColor[colorMode]}
                   bg={bgColor[colorMode]}
                   color={color[colorMode]}
@@ -251,6 +251,8 @@ const List = ({
                           p={4}
                           bg={bgColor[colorMode]}
                           color={color[colorMode]}
+                          borderWidth={1}
+                          borderColor={borderColor[colorMode]}
                         >
                           <Stack spacing={4}>
                             <Box>

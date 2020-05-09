@@ -92,6 +92,7 @@ const InviteUsersButton = ({
           minWidth="240px"
           color={color[colorMode]}
           borderColor={borderColor[colorMode]}
+          placement="bottom-end"
         >
           <MenuOptionGroup
             type="checkbox"
