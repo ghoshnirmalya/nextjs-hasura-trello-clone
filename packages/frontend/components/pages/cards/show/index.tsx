@@ -22,6 +22,11 @@ import {
   Avatar,
   Text,
   Icon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItemOption,
+  MenuOptionGroup,
 } from "@chakra-ui/core";
 import { NextPage } from "next";
 import gql from "graphql-tag";
@@ -30,6 +35,7 @@ import Loader from "components/loader";
 import { useRouter } from "next/router";
 import Board from "components/pages/boards/show";
 import { cookieParser } from "lib/cookie";
+import dayjs from "dayjs";
 
 const FETCH_CARD_QUERY = gql`
   query fetchCard($id: uuid!) {
@@ -85,9 +91,23 @@ const INSERT_COMMENT_MUTATION = gql`
   }
 `;
 
+const FETCH_LABELS_QUERY = gql`
+  query fetchLabels($boardId: uuid!) {
+    board_by_pk(id: $boardId) {
+      id
+      labels {
+        id
+        name
+        color
+      }
+    }
+  }
+`;
+
 const MyProfile: NextPage = () => {
   const currentUserId = cookieParser("user-id");
   const { colorMode } = useColorMode();
+  const borderColor = { light: "gray.300", dark: "gray.700" };
   const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "gray.900", dark: "gray.100" };
   const router = useRouter();
@@ -108,6 +128,14 @@ const MyProfile: NextPage = () => {
       setTitle(title || "");
       setDescription(description || "");
     },
+  });
+
+  const {
+    data: fetchLabelsData,
+    loading: fetchLabelsLoading,
+    error: fetchLabelsError,
+  } = useQuery(FETCH_LABELS_QUERY, {
+    variables: { boardId: "392df648-8d5a-41d9-ba6c-16a6a2a95992" },
   });
 
   const {
@@ -258,14 +286,9 @@ const MyProfile: NextPage = () => {
                 </Text>
               </Box>
               <Box>
-                <Stack isInline spacing={2} alignItems="center">
-                  <Box>
-                    <Icon name="time" size="12px" />
-                  </Box>
-                  <Box>
-                    <Text fontSize="sm">{comment.updated_at}</Text>
-                  </Box>
-                </Stack>
+                <Text fontSize="sm" m={0}>
+                  {dayjs(comment.updated_at).format("HH:mm, DD MMM, YYYY")}
+                </Text>
               </Box>
             </Stack>
           </Box>
@@ -374,6 +397,19 @@ const MyProfile: NextPage = () => {
   };
 
   const settingsNode = () => {
+    if (fetchLabelsLoading) {
+      return <Loader />;
+    }
+
+    if (fetchLabelsError) {
+      return (
+        <Alert status="error" variant="left-accent">
+          <AlertIcon />
+          There was an error processing your request. Please try again!
+        </Alert>
+      );
+    }
+
     return (
       <Box>
         <Stack spacing={4}>
@@ -393,14 +429,43 @@ const MyProfile: NextPage = () => {
             </Button>
           </Box>
           <Box>
-            <Button
-              variant="solid"
-              w="full"
-              leftIcon="email"
-              justifyContent="flex-start"
-            >
-              Labels
-            </Button>
+            <Menu closeOnSelect={false}>
+              <MenuButton
+                as={Button}
+                w="full"
+                justifyContent="flex-start"
+                color={color[colorMode]}
+                borderColor={borderColor[colorMode]}
+              >
+                <Stack alignItems="center" isInline spacing={2}>
+                  <Box>
+                    <Icon name="star" ml={-1} />
+                  </Box>
+                  <Box>Labels</Box>
+                </Stack>
+              </MenuButton>
+              <MenuList
+                placement="bottom-end"
+                color={color[colorMode]}
+                borderColor={borderColor[colorMode]}
+              >
+                <MenuOptionGroup title="Existing" type="checkbox">
+                  {fetchLabelsData.board_by_pk.labels.map((label: any) => {
+                    return (
+                      <MenuItemOption key={label.id} value={label.id}>
+                        <Stack alignItems="center" isInline spacing={4}>
+                          <Box bg={label.color} w={4} h={4} rounded="md" />
+                          <span>{label.name}</span>
+                        </Stack>
+                      </MenuItemOption>
+                    );
+                  })}
+                </MenuOptionGroup>
+                <MenuOptionGroup title="Create" type="checkbox">
+                  <MenuItemOption value="new">Add new</MenuItemOption>
+                </MenuOptionGroup>
+              </MenuList>
+            </Menu>
           </Box>
           <Box>
             <Button
@@ -425,26 +490,6 @@ const MyProfile: NextPage = () => {
             <Heading as="h5" size="sm">
               Actions
             </Heading>
-          </Box>
-          <Box>
-            <Button
-              variant="solid"
-              w="full"
-              leftIcon="email"
-              justifyContent="flex-start"
-            >
-              Move card
-            </Button>
-          </Box>
-          <Box>
-            <Button
-              variant="solid"
-              w="full"
-              leftIcon="email"
-              justifyContent="flex-start"
-            >
-              Copy card
-            </Button>
           </Box>
           <Box>
             <Button

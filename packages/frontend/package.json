@@ -22,6 +22,7 @@
     "apollo-link": "^1.2.13",
     "apollo-link-ws": "^1.0.19",
     "apollo-utilities": "^1.3.3",
+    "dayjs": "^1.8.26",
     "dotenv-webpack": "^1.7.0",
     "emotion-theming": "^10.0.27",
     "graphql": "^14.6.0",

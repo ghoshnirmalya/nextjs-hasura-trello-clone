@@ -1,0 +1,13 @@
+- args:
+    name: labels
+    table:
+      name: board
+      schema: public
+    using:
+      manual_configuration:
+        column_mapping:
+          id: board_id
+        remote_table:
+          name: label
+          schema: public
+  type: create_array_relationship
