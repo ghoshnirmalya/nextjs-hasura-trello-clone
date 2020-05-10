@@ -1,0 +1,16 @@
+- args:
+    permission:
+      backend_only: false
+      columns:
+      - body
+      - updated_at
+      filter:
+        author:
+          id:
+            _eq: X-Hasura-User-Id
+      set: {}
+    role: user
+    table:
+      name: comment
+      schema: public
+  type: create_update_permission

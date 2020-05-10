@@ -128,6 +128,15 @@ tables:
           name: list
         column_mapping:
           list_id: id
+  array_relationships:
+  - name: comments
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: comment
+        column_mapping:
+          id: card_id
   insert_permissions:
   - role: user
     permission:
@@ -171,6 +180,67 @@ tables:
       - list_id
       filter: {}
       check: null
+- table:
+    schema: public
+    name: comment
+  object_relationships:
+  - name: author
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: user
+        column_mapping:
+          author_id: id
+  - name: card
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: card
+        column_mapping:
+          card_id: id
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - id
+      - created_at
+      - updated_at
+      - body
+      - card_id
+      - author_id
+      backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - body
+      - created_at
+      - updated_at
+      - author_id
+      - card_id
+      - id
+      filter: {}
+  update_permissions:
+  - role: user
+    permission:
+      columns:
+      - body
+      - updated_at
+      filter:
+        author:
+          id:
+            _eq: X-Hasura-User-Id
+      check: null
+  delete_permissions:
+  - role: user
+    permission:
+      filter:
+        author:
+          id:
+            _eq: X-Hasura-User-Id
 - table:
     schema: public
     name: list
@@ -287,6 +357,14 @@ tables:
           name: board_user
         column_mapping:
           id: user_id
+  - name: comments
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: comment
+        column_mapping:
+          id: author_id
   - name: user_roles
     using:
       foreign_key_constraint_on:

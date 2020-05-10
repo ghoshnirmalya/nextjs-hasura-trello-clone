@@ -7,6 +7,7 @@ import {
   MenuList,
   MenuOptionGroup,
   MenuItemOption,
+  Icon,
 } from "@chakra-ui/core";
 import gql from "graphql-tag";
 import { useMutation, useSubscription } from "react-apollo";
@@ -86,10 +87,13 @@ const InviteUsersButton = ({
           color={color[colorMode]}
           borderColor={borderColor[colorMode]}
         >
-          Invite
+          Invite <Icon name="chevron-down" />
         </MenuButton>
         <MenuList
-          minWidth="240px"
+          maxW="200px"
+          maxH="200px"
+          overflowY="scroll"
+          overflowX="hidden"
           color={color[colorMode]}
           borderColor={borderColor[colorMode]}
           placement="bottom-end"

@@ -1,0 +1,12 @@
+- args:
+    permission:
+      backend_only: false
+      filter:
+        author:
+          id:
+            _eq: X-Hasura-User-Id
+    role: user
+    table:
+      name: comment
+      schema: public
+  type: create_delete_permission

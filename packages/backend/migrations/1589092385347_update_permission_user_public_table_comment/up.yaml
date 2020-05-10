@@ -1,0 +1,18 @@
+- args:
+    permission:
+      allow_upsert: true
+      backend_only: false
+      check: {}
+      columns:
+      - id
+      - created_at
+      - updated_at
+      - body
+      - card_id
+      - author_id
+      set: {}
+    role: user
+    table:
+      name: comment
+      schema: public
+  type: create_insert_permission
