@@ -145,6 +145,14 @@ tables:
           name: comment
         column_mapping:
           id: card_id
+  - name: labels
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: label
+        column_mapping:
+          id: card_id
   insert_permissions:
   - role: user
     permission:
@@ -261,6 +269,14 @@ tables:
           name: board
         column_mapping:
           board_id: id
+  - name: card
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: card
+        column_mapping:
+          card_id: id
   insert_permissions:
   - role: user
     permission:
@@ -272,6 +288,7 @@ tables:
       - name
       - color
       - board_id
+      - card_id
       backend_only: false
   select_permissions:
   - role: user
@@ -282,6 +299,7 @@ tables:
       - created_at
       - updated_at
       - board_id
+      - card_id
       - id
       filter: {}
   update_permissions:
@@ -293,6 +311,7 @@ tables:
       - created_at
       - updated_at
       - board_id
+      - card_id
       - id
       filter: {}
       check: null

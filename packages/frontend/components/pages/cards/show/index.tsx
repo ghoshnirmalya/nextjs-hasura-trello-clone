@@ -19,7 +19,6 @@ import {
   Textarea,
   Grid,
   Heading,
-  Avatar,
   Text,
   Icon,
   Menu,
@@ -27,6 +26,8 @@ import {
   MenuList,
   MenuItemOption,
   MenuOptionGroup,
+  AvatarGroup,
+  Avatar,
 } from "@chakra-ui/core";
 import { NextPage } from "next";
 import gql from "graphql-tag";
@@ -36,6 +37,8 @@ import { useRouter } from "next/router";
 import Board from "components/pages/boards/show";
 import { cookieParser } from "lib/cookie";
 import dayjs from "dayjs";
+import xor from "lodash/xor";
+import find from "lodash/find";
 
 const FETCH_CARD_QUERY = gql`
   query fetchCard($id: uuid!) {
@@ -44,6 +47,11 @@ const FETCH_CARD_QUERY = gql`
       title
       description
       board_id
+      labels {
+        id
+        name
+        color
+      }
     }
   }
 `;
@@ -91,14 +99,36 @@ const INSERT_COMMENT_MUTATION = gql`
   }
 `;
 
-const FETCH_LABELS_QUERY = gql`
-  query fetchLabels($boardId: uuid!) {
+const FETCH_LABELS_SUBSCRIPTION = gql`
+  subscription fetchLabels($boardId: uuid!) {
     board_by_pk(id: $boardId) {
       id
       labels {
         id
         name
         color
+      }
+    }
+  }
+`;
+
+const INSERT_LABEL_MUTATION = gql`
+  mutation insertLabel(
+    $boardId: uuid!
+    $cardId: uuid!
+    $name: String
+    $color: String
+  ) {
+    insert_label(
+      objects: {
+        card_id: $cardId
+        name: $name
+        color: $color
+        board_id: $boardId
+      }
+    ) {
+      returning {
+        id
       }
     }
   }
@@ -134,7 +164,7 @@ const MyProfile: NextPage = () => {
     data: fetchLabelsData,
     loading: fetchLabelsLoading,
     error: fetchLabelsError,
-  } = useQuery(FETCH_LABELS_QUERY, {
+  } = useSubscription(FETCH_LABELS_SUBSCRIPTION, {
     variables: { boardId: "392df648-8d5a-41d9-ba6c-16a6a2a95992" },
   });
 
@@ -156,6 +186,8 @@ const MyProfile: NextPage = () => {
     { loading: commentMutationLoading, error: commentMutationError },
   ] = useMutation(INSERT_COMMENT_MUTATION);
 
+  const [insertLabel] = useMutation(INSERT_LABEL_MUTATION);
+
   if (fetchCardLoading) {
     return <Loader />;
   }
@@ -164,7 +196,7 @@ const MyProfile: NextPage = () => {
     return <p>Error: {fetchCardError.message}</p>;
   }
 
-  const { board_id } = fetchCardData.card_by_pk;
+  const { board_id, labels } = fetchCardData.card_by_pk;
 
   const handleCardDetailsSubmit = async () => {
     await updateCard({
@@ -195,6 +227,16 @@ const MyProfile: NextPage = () => {
     if (!cardMutationError) {
       setComment("");
     }
+  };
+
+  const labelsNode = () => {
+    return (
+      <AvatarGroup size="md" max={5}>
+        {fetchCardData.card_by_pk.labels.map((label: any) => {
+          return <Avatar key={label.id} bg={label.color} name={label.name} />;
+        })}
+      </AvatarGroup>
+    );
   };
 
   const formNode = () => {
@@ -449,7 +491,38 @@ const MyProfile: NextPage = () => {
                 color={color[colorMode]}
                 borderColor={borderColor[colorMode]}
               >
-                <MenuOptionGroup title="Existing" type="checkbox">
+                <MenuOptionGroup
+                  title="Existing"
+                  type="checkbox"
+                  defaultValue={labels.map((label: any) => label.id)}
+                  onChange={(values: any) => {
+                    const defaultSelectedLabels = labels.map(
+                      (label: any) => label.id
+                    );
+                    const labelsToBeInserted: any[] = xor(
+                      values,
+                      defaultSelectedLabels
+                    );
+
+                    labelsToBeInserted.map(async (label: any) => {
+                      const selectedLabel = find(
+                        fetchLabelsData.board_by_pk.labels,
+                        {
+                          id: label,
+                        }
+                      );
+
+                      await insertLabel({
+                        variables: {
+                          boardId: board_id,
+                          cardId: currentCardId,
+                          name: selectedLabel.name,
+                          color: selectedLabel.color,
+                        },
+                      });
+                    });
+                  }}
+                >
                   {fetchLabelsData.board_by_pk.labels.map((label: any) => {
                     return (
                       <MenuItemOption key={label.id} value={label.id}>
@@ -536,6 +609,7 @@ const MyProfile: NextPage = () => {
             ) : null}
             <Grid templateColumns="3fr 1fr" gap={8}>
               <Stack spacing={16}>
+                {labelsNode()}
                 {formNode()}
                 {activitiesNode()}
               </Stack>
