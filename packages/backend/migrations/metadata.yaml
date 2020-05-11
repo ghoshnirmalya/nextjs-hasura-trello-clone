@@ -150,7 +150,7 @@ tables:
       manual_configuration:
         remote_table:
           schema: public
-          name: label
+          name: card_label
         column_mapping:
           id: card_id
   insert_permissions:
@@ -196,6 +196,47 @@ tables:
       - list_id
       filter: {}
       check: null
+- table:
+    schema: public
+    name: card_label
+  object_relationships:
+  - name: card
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: card
+        column_mapping:
+          card_id: id
+  - name: label
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: label
+        column_mapping:
+          label_id: id
+  insert_permissions:
+  - role: user
+    permission:
+      check: {}
+      columns:
+      - card_id
+      - id
+      - label_id
+      backend_only: false
+  select_permissions:
+  - role: user
+    permission:
+      columns:
+      - card_id
+      - id
+      - label_id
+      filter: {}
+  delete_permissions:
+  - role: user
+    permission:
+      filter: {}
 - table:
     schema: public
     name: comment
@@ -269,50 +310,48 @@ tables:
           name: board
         column_mapping:
           board_id: id
+  array_relationships:
   - name: card
     using:
       manual_configuration:
         remote_table:
           schema: public
-          name: card
+          name: card_label
         column_mapping:
-          card_id: id
+          id: label_id
   insert_permissions:
   - role: user
     permission:
       check: {}
       columns:
-      - id
-      - created_at
-      - updated_at
-      - name
-      - color
       - board_id
-      - card_id
+      - color
+      - created_at
+      - id
+      - name
+      - updated_at
       backend_only: false
   select_permissions:
   - role: user
     permission:
       columns:
-      - color
-      - name
-      - created_at
-      - updated_at
       - board_id
-      - card_id
+      - color
+      - created_at
       - id
+      - name
+      - updated_at
       filter: {}
   update_permissions:
   - role: user
     permission:
       columns:
-      - color
-      - name
-      - created_at
-      - updated_at
       - board_id
-      - card_id
+      - color
+      - created_at
       - id
+      - name
+      - updated_at
       filter: {}
       check: null
 - table:

@@ -1,0 +1,11 @@
+- args:
+    permission:
+      backend_only: false
+      columns: []
+      filter: {}
+      set: {}
+    role: user
+    table:
+      name: card_label
+      schema: public
+  type: create_update_permission

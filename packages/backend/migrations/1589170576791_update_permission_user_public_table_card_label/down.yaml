@@ -1,0 +1,17 @@
+- args:
+    role: user
+    table:
+      name: card_label
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      backend_only: false
+      check: {}
+      columns: []
+      set: {}
+    role: user
+    table:
+      name: card_label
+      schema: public
+  type: create_insert_permission

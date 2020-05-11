@@ -13,7 +13,7 @@ import {
   Grid,
 } from "@chakra-ui/core";
 import gql from "graphql-tag";
-import { useQuery } from "react-apollo";
+import { useSubscription } from "react-apollo";
 import Loader from "components/loader";
 import { useRouter } from "next/router";
 import Board from "components/pages/boards/show";
@@ -23,8 +23,8 @@ import Actions from "components/pages/cards/show/actions";
 import Settings from "components/pages/cards/show/settings";
 import Labels from "components/pages/cards/show/labels";
 
-const FETCH_CARD_QUERY = gql`
-  query fetchCard($id: uuid!) {
+const FETCH_CARD_SUBSCRIPTION = gql`
+  subscription fetchCard($id: uuid!) {
     card_by_pk(id: $id) {
       id
       title
@@ -32,8 +32,11 @@ const FETCH_CARD_QUERY = gql`
       board_id
       labels {
         id
-        name
-        color
+        label {
+          id
+          name
+          color
+        }
       }
     }
   }
@@ -50,7 +53,7 @@ const Card: FC = () => {
     data: fetchCardData,
     loading: fetchCardLoading,
     error: fetchCardError,
-  } = useQuery(FETCH_CARD_QUERY, {
+  } = useSubscription(FETCH_CARD_SUBSCRIPTION, {
     variables: { id: currentCardId },
   });
 
@@ -102,7 +105,7 @@ const Card: FC = () => {
                 <Stack spacing={16}>
                   }
                   <Box>
-                    <Settings labels={labels} boardId={board_id} />
+                    <Settings selectedLabels={labels} boardId={board_id} />
                   </Box>
                   <Box>
                     <Actions />

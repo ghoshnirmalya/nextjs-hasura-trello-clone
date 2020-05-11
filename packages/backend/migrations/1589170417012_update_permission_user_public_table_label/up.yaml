@@ -1,0 +1,23 @@
+- args:
+    role: user
+    table:
+      name: label
+      schema: public
+  type: drop_insert_permission
+- args:
+    permission:
+      backend_only: false
+      check: {}
+      columns:
+      - board_id
+      - color
+      - created_at
+      - id
+      - name
+      - updated_at
+      set: {}
+    role: user
+    table:
+      name: label
+      schema: public
+  type: create_insert_permission

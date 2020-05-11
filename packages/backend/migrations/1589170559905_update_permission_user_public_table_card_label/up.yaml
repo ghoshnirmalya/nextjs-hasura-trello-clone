@@ -1,0 +1,12 @@
+- args:
+    permission:
+      allow_upsert: true
+      backend_only: false
+      check: {}
+      columns: []
+      set: {}
+    role: user
+    table:
+      name: card_label
+      schema: public
+  type: create_insert_permission
