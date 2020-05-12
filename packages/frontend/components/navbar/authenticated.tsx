@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ChangeEvent } from "react";
 import {
   Box,
   Link as _Link,
@@ -18,7 +18,7 @@ import { NextComponentType } from "next";
 import Link from "next/link";
 import Router from "next/router";
 import gql from "graphql-tag";
-import { useQuery } from "react-apollo";
+import { useQuery, useMutation } from "react-apollo";
 import withApollo from "lib/with-apollo";
 import { cookieParser, cookieRemover } from "lib/cookie";
 
@@ -30,6 +30,17 @@ const FETCH_USER_QUERY = gql`
         role {
           name
         }
+      }
+    }
+  }
+`;
+
+const UPDATE_USER_MUTATION = gql`
+  mutation updateUser($id: uuid!, $theme: String) {
+    update_user(where: { id: { _eq: $id } }, _set: { theme: $theme }) {
+      returning {
+        id
+        theme
       }
     }
   }
@@ -47,6 +58,10 @@ const Navbar: NextComponentType = () => {
     fetchPolicy: "network-only",
   });
 
+  const [updateUserMutation, { loading: userMutationLoading }] = useMutation(
+    UPDATE_USER_MUTATION
+  );
+
   if (loading) {
     return <Box />;
   }
@@ -56,6 +71,19 @@ const Navbar: NextComponentType = () => {
   }
 
   const { user_roles } = data.user_by_pk;
+
+  const handleToggleTheme = async (e: ChangeEvent<HTMLInputElement>) => {
+    const theme: string = !!e.target.checked ? "dark" : "light";
+
+    await updateUserMutation({
+      variables: {
+        id: currentUserId,
+        theme,
+      },
+    });
+
+    toggleColorMode();
+  };
 
   const handleSignOut = () => {
     cookieRemover("token");
@@ -91,7 +119,8 @@ const Navbar: NextComponentType = () => {
                 <Box>
                   <Switch
                     isChecked={colorMode === "dark"}
-                    onChange={toggleColorMode}
+                    onChange={handleToggleTheme}
+                    isDisabled={userMutationLoading}
                   />
                 </Box>
               </Stack>

@@ -1,12 +1,7 @@
 import React from "react";
 import NextApp from "next/app";
-import {
-  ThemeProvider,
-  CSSReset,
-  Box,
-  Grid,
-  ColorModeProvider,
-} from "@chakra-ui/core";
+import Head from "next/head";
+import { ThemeProvider, CSSReset, Box, Grid } from "@chakra-ui/core";
 import { cookieParser } from "lib/cookie";
 import AuthenticatedNavbar from "components/navbar/authenticated";
 import UnauthenticatedNavbar from "components/navbar/unauthenticated";
@@ -18,9 +13,12 @@ class App extends NextApp {
     const isAuthenticated = !!cookieParser("token");
 
     return (
-      <ThemeProvider>
-        <CSSReset />
-        <ColorModeProvider>
+      <>
+        <Head>
+          <link rel="shortcut icon" href="/images/favicon.ico" />
+        </Head>
+        <ThemeProvider>
+          <CSSReset />
           <Layout {...this.props}>
             {!!isAuthenticated ? (
               <AuthenticatedNavbar {...this.props} />
@@ -40,8 +38,8 @@ class App extends NextApp {
               </Box>
             </Grid>
           </Layout>
-        </ColorModeProvider>
-      </ThemeProvider>
+        </ThemeProvider>
+      </>
     );
   }
 }

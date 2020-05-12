@@ -1,10 +1,12 @@
 import React, { FC } from "react";
-import { Box, useColorMode } from "@chakra-ui/core";
+import { ColorModeProvider, Box } from "@chakra-ui/core";
 import { useQuery } from "react-apollo";
 import withApollo from "lib/with-apollo";
 import gql from "graphql-tag";
 import { cookieParser } from "lib/cookie";
 import { setItem } from "lib/local-storage";
+import Container from "components/layout/container";
+import Loader from "components/loader";
 
 const FETCH_USER_QUERY = gql`
   query fetchUser($id: uuid!) {
@@ -17,8 +19,6 @@ const FETCH_USER_QUERY = gql`
 
 const Layout: FC = ({ children }) => {
   const currentUserId = cookieParser("user-id");
-  const { colorMode } = useColorMode();
-  const bgColor = { light: "gray.100", dark: "gray.900" };
 
   const {
     data: userData,
@@ -30,7 +30,17 @@ const Layout: FC = ({ children }) => {
   });
 
   if (userDataloading) {
-    return <Box />;
+    return (
+      <Box
+        h="100vh"
+        w="100vw"
+        d="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Loader size="100px" />
+      </Box>
+    );
   }
 
   if (userDataError) {
@@ -42,9 +52,9 @@ const Layout: FC = ({ children }) => {
   setItem("darkMode", theme === "dark" ? "true" : "false");
 
   return (
-    <Box fontSize="sm" bg={bgColor[colorMode]}>
-      {children}
-    </Box>
+    <ColorModeProvider>
+      <Container>{children}</Container>
+    </ColorModeProvider>
   );
 };
 
