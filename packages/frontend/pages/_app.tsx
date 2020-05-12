@@ -21,7 +21,7 @@ class App extends NextApp {
       <ThemeProvider>
         <CSSReset />
         <ColorModeProvider>
-          <Layout>
+          <Layout {...this.props}>
             {!!isAuthenticated ? (
               <AuthenticatedNavbar {...this.props} />
             ) : (

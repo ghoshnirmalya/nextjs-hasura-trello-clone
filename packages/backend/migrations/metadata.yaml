@@ -505,26 +505,28 @@ tables:
     permission:
       columns:
       - active
+      - created_at
       - email
       - first_name
+      - id
       - last_name
       - password
-      - created_at
+      - theme
       - updated_at
-      - id
       filter: {}
   update_permissions:
   - role: user
     permission:
       columns:
       - active
+      - created_at
       - email
       - first_name
+      - id
       - last_name
       - password
-      - created_at
+      - theme
       - updated_at
-      - id
       filter:
         id:
           _eq: X-Hasura-User-Id

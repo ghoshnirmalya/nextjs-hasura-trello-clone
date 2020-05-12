@@ -1,0 +1,26 @@
+- args:
+    role: user
+    table:
+      name: user
+      schema: public
+  type: drop_select_permission
+- args:
+    permission:
+      allow_aggregations: false
+      columns:
+      - active
+      - created_at
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
+      - theme
+      - updated_at
+      computed_fields: []
+      filter: {}
+    role: user
+    table:
+      name: user
+      schema: public
+  type: create_select_permission

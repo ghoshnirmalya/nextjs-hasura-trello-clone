@@ -1,0 +1,27 @@
+- args:
+    role: user
+    table:
+      name: user
+      schema: public
+  type: drop_update_permission
+- args:
+    permission:
+      columns:
+      - active
+      - created_at
+      - email
+      - first_name
+      - id
+      - last_name
+      - password
+      - theme
+      - updated_at
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      set: {}
+    role: user
+    table:
+      name: user
+      schema: public
+  type: create_update_permission

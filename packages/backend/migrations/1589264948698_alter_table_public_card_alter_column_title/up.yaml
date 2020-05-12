@@ -1,0 +1,5 @@
+- args:
+    cascade: false
+    read_only: false
+    sql: ALTER TABLE "public"."card" ALTER COLUMN "title" SET NOT NULL;
+  type: run_sql

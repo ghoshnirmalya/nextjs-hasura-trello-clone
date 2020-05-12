@@ -16,12 +16,11 @@ import {
 } from "@chakra-ui/core";
 import { NextComponentType } from "next";
 import Link from "next/link";
-import { cookieRemover } from "lib/cookie";
 import Router from "next/router";
 import gql from "graphql-tag";
 import { useQuery } from "react-apollo";
 import withApollo from "lib/with-apollo";
-import { cookieParser } from "lib/cookie";
+import { cookieParser, cookieRemover } from "lib/cookie";
 
 const FETCH_USER_QUERY = gql`
   query fetchUser($id: uuid!) {
