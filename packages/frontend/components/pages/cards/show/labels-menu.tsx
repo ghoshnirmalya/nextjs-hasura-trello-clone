@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useState, FormEvent } from "react";
 import {
   Box,
   Button,
@@ -13,6 +13,20 @@ import {
   MenuItemOption,
   MenuOptionGroup,
   useColorMode,
+  Input,
+  MenuItem,
+  MenuDivider,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  FormControl,
+  FormLabel,
+  Text,
 } from "@chakra-ui/core";
 import gql from "graphql-tag";
 import { useSubscription, useMutation } from "react-apollo";
@@ -35,20 +49,8 @@ const FETCH_LABELS_SUBSCRIPTION = gql`
 `;
 
 const INSERT_LABEL_MUTATION = gql`
-  mutation insertLabel(
-    $boardId: uuid!
-    $cardId: uuid!
-    $name: String
-    $color: String
-  ) {
-    insert_label(
-      objects: {
-        card_id: $cardId
-        name: $name
-        color: $color
-        board_id: $boardId
-      }
-    ) {
+  mutation insertLabel($boardId: uuid!, $name: String, $color: String) {
+    insert_label(objects: { name: $name, color: $color, board_id: $boardId }) {
       returning {
         id
       }
@@ -74,9 +76,12 @@ interface Props {
 const LabelsMenu: FC<Props> = ({ selectedLabels, boardId }) => {
   const { colorMode } = useColorMode();
   const borderColor = { light: "gray.300", dark: "gray.700" };
+  const bgColor = { light: "white", dark: "gray.800" };
   const color = { light: "gray.900", dark: "gray.100" };
   const router = useRouter();
   const currentCardId = router.query.cardId;
+  const [labelName, setLabelName] = useState("");
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   const {
     data: fetchLabelsData,
@@ -86,10 +91,11 @@ const LabelsMenu: FC<Props> = ({ selectedLabels, boardId }) => {
     variables: { boardId },
   });
 
-  const [insertLabel] = useMutation(INSERT_LABEL_MUTATION);
+  const [
+    insertLabel,
+    { loading: createLabelMutationLoading, error: createLabelMutationError },
+  ] = useMutation(INSERT_LABEL_MUTATION);
   const [insertCardLabel] = useMutation(INSERT_CARD_LABEL_MUTATION);
-
-  console.log(insertLabel);
 
   if (fetchLabelsLoading) {
     return <Loader />;
@@ -103,6 +109,21 @@ const LabelsMenu: FC<Props> = ({ selectedLabels, boardId }) => {
       </Alert>
     );
   }
+
+  const handleAddNewLabel = async () => {
+    await insertLabel({
+      variables: {
+        boardId,
+        name: labelName || "Label",
+        color: "#666",
+      },
+    });
+
+    if (!createLabelMutationError) {
+      setLabelName("");
+      onClose();
+    }
+  };
 
   const handleAddLabelToCard = (labels: any) => {
     const defaultSelectedLabels = selectedLabels.map(
@@ -123,49 +144,93 @@ const LabelsMenu: FC<Props> = ({ selectedLabels, boardId }) => {
       });
     });
   };
+
+  const addNewLabelModal = () => {
+    return (
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent bg={bgColor[colorMode]} color={color[colorMode]}>
+          <ModalHeader>Create your account</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <FormControl isRequired>
+              <FormLabel>First name</FormLabel>
+              <Input
+                placeholder="Add a new label"
+                value={labelName}
+                onChange={(e: FormEvent<HTMLInputElement>) => {
+                  setLabelName(e.currentTarget.value);
+                }}
+                isDisabled={createLabelMutationLoading}
+              />
+            </FormControl>
+          </ModalBody>
+          <ModalFooter>
+            <Stack isInline spacing={4} alignItems="center">
+              <Box>
+                <Button
+                  variantColor="cyan"
+                  onClick={handleAddNewLabel}
+                  isLoading={createLabelMutationLoading}
+                >
+                  Add
+                </Button>
+              </Box>
+              <Box>
+                <Button onClick={onClose}>Cancel</Button>
+              </Box>
+            </Stack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    );
+  };
+
   return (
-    <Menu closeOnSelect={false}>
-      <MenuButton
-        as={Button}
-        w="full"
-        justifyContent="flex-start"
-        color={color[colorMode]}
-        borderColor={borderColor[colorMode]}
-      >
-        <Stack alignItems="center" isInline spacing={2}>
-          <Box>
-            <Icon name="star" ml={-1} />
-          </Box>
-          <Box>Labels</Box>
-        </Stack>
-      </MenuButton>
-      <MenuList
-        placement="bottom-end"
-        color={color[colorMode]}
-        borderColor={borderColor[colorMode]}
-      >
-        <MenuOptionGroup
-          title="Existing"
-          type="checkbox"
-          defaultValue={selectedLabels.map((label: any) => label.label.id)}
-          onChange={(values: any) => handleAddLabelToCard(values)}
+    <>
+      <Menu closeOnSelect={false}>
+        <MenuButton
+          as={Button}
+          w="full"
+          justifyContent="flex-start"
+          color={color[colorMode]}
+          borderColor={borderColor[colorMode]}
         >
-          {fetchLabelsData.board_by_pk.labels.map((label: any) => {
-            return (
-              <MenuItemOption key={label.id} value={label.id}>
-                <Stack alignItems="center" isInline spacing={4}>
-                  <Box bg={label.color} w={4} h={4} rounded="md" />
-                  <span>{label.name}</span>
-                </Stack>
-              </MenuItemOption>
-            );
-          })}
-        </MenuOptionGroup>
-        <MenuOptionGroup title="Create" type="checkbox">
-          <MenuItemOption value="new">Add new</MenuItemOption>
-        </MenuOptionGroup>
-      </MenuList>
-    </Menu>
+          <Stack alignItems="center" isInline spacing={2}>
+            <Box>
+              <Icon name="star" ml={-1} />
+            </Box>
+            <Box>Labels</Box>
+          </Stack>
+        </MenuButton>
+        <MenuList
+          placement="bottom-end"
+          color={color[colorMode]}
+          borderColor={borderColor[colorMode]}
+        >
+          <MenuOptionGroup
+            title="Existing"
+            type="checkbox"
+            value={selectedLabels.map((label: any) => label.label.id)}
+            onChange={(values: any) => handleAddLabelToCard(values)}
+          >
+            {fetchLabelsData.board_by_pk.labels.map((label: any) => {
+              return (
+                <MenuItemOption key={label.id} value={label.id}>
+                  <Stack alignItems="center" isInline spacing={4}>
+                    <Box bg={label.color} w={4} h={4} rounded="md" />
+                    <Text isTruncated>{label.name}</Text>
+                  </Stack>
+                </MenuItemOption>
+              );
+            })}
+          </MenuOptionGroup>
+          <MenuDivider />
+          <MenuItem onClick={onOpen}>Add new label</MenuItem>
+        </MenuList>
+      </Menu>
+      {addNewLabelModal()}
+    </>
   );
 };
 
