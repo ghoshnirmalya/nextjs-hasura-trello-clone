@@ -35,6 +35,12 @@ const FETCH_BOARD_SUBSCRIPTION = gql`
           title
           description
           position
+          labels {
+            id
+            label {
+              color
+            }
+          }
         }
       }
       users {

@@ -3,11 +3,41 @@ import { Draggable } from "react-beautiful-dnd";
 import Link from "next/link";
 import { PseudoBox, useColorMode, Box, Heading, Stack } from "@chakra-ui/core";
 
+interface Label {
+  id: number;
+  label: {
+    id: number;
+    color: string;
+  };
+}
+
 const _Card = ({ cards }: { cards: any }) => {
   const { colorMode } = useColorMode();
   const bgColor = { light: "gray.100", dark: "gray.900" };
   const borderColor = { light: "gray.300", dark: "gray.700" };
   const color = { light: "gray.900", dark: "gray.100" };
+
+  const labelsNode = (labels: Label[]) => {
+    if (!labels.length) {
+      return false;
+    }
+
+    return (
+      <Stack isInline>
+        {labels.map((label) => {
+          return (
+            <Box
+              key={label.id}
+              bg={label.label.color}
+              h={2}
+              w={2}
+              rounded="full"
+            />
+          );
+        })}
+      </Stack>
+    );
+  };
 
   return (
     <Stack spacing={4}>
@@ -38,9 +68,14 @@ const _Card = ({ cards }: { cards: any }) => {
                         borderColor={borderColor[colorMode]}
                         color={color[colorMode]}
                       >
-                        <Heading as="h4" size="xs">
-                          {card.title}
-                        </Heading>
+                        <Stack spacing={2}>
+                          <Box>
+                            <Heading as="h4" size="xs">
+                              {card.title}
+                            </Heading>
+                          </Box>
+                          <Box>{labelsNode(card.labels)}</Box>
+                        </Stack>
                       </PseudoBox>
                     </Box>
                   )}
