@@ -167,10 +167,12 @@ tables:
       - created_at
       - updated_at
       - title
+      - archived
   select_permissions:
   - role: user
     permission:
       columns:
+      - archived
       - position
       - description
       - title
@@ -185,6 +187,7 @@ tables:
   - role: user
     permission:
       columns:
+      - archived
       - position
       - description
       - title

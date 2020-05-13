@@ -30,6 +30,7 @@ const FETCH_CARD_SUBSCRIPTION = gql`
       title
       description
       board_id
+      archived
       labels {
         id
         label {
@@ -65,7 +66,7 @@ const Card: FC = () => {
     return <p>Error: {fetchCardError.message}</p>;
   }
 
-  const { board_id, labels } = fetchCardData.card_by_pk;
+  const { board_id, labels, archived } = fetchCardData.card_by_pk;
 
   return (
     <>
@@ -103,12 +104,11 @@ const Card: FC = () => {
               </Stack>
               <Box position="sticky" top={0} alignSelf="flex-start">
                 <Stack spacing={16}>
-                  }
                   <Box>
                     <Settings selectedLabels={labels} boardId={board_id} />
                   </Box>
                   <Box>
-                    <Actions />
+                    <Actions archived={archived} />
                   </Box>
                 </Stack>
               </Box>

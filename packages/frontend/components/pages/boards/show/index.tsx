@@ -30,7 +30,10 @@ const FETCH_BOARD_SUBSCRIPTION = gql`
         name
         position
         board_id
-        cards(order_by: { position: asc }) {
+        cards(
+          where: { archived: { _eq: false } }
+          order_by: { position: asc }
+        ) {
           id
           title
           description
@@ -38,6 +41,7 @@ const FETCH_BOARD_SUBSCRIPTION = gql`
           labels {
             id
             label {
+              id
               color
             }
           }
