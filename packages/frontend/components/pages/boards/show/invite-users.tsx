@@ -43,7 +43,7 @@ const InviteUsersButton = ({
   boardId,
   users,
 }: {
-  boardId: string | string[];
+  boardId: string | string[] | undefined;
   users: string[];
 }) => {
   const { colorMode } = useColorMode();

@@ -68,9 +68,13 @@ export default (ComposedComponent: NextPage) => {
     constructor(props) {
       super(props);
 
-      this.apollo = initApollo({
-        ...this.props.pageProps.serverState.apollo.data,
-      });
+      if (!!this.props.pageProps.serverState) {
+        this.apollo = initApollo({
+          ...this.props.pageProps.serverState.apollo.data,
+        });
+      } else {
+        this.apollo = initApollo();
+      }
     }
 
     render() {

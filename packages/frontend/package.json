@@ -7,7 +7,8 @@
     "start": "next",
     "build:analyze": "ANALYZE=true next build && tsc --project tsconfig.server.json",
     "build": "next build",
-    "start:prod": "NODE_ENV=production node dist/server.js",
+    "export": "next export",
+    "start:prod": "NODE_ENV=production next start",
     "type-check": "tsc"
   },
   "dependencies": {

@@ -46,7 +46,7 @@ export default (ComposedComponent: NextPage) => {
         if (typeof window !== "undefined") {
           Router.push(redirectRouteForAuthenticatedUsers);
         } else {
-          if (ctx.res) {
+          if (ctx.res && typeof ctx.res.writeHead === "function") {
             ctx.res.writeHead(301, {
               Location: redirectRouteForAuthenticatedUsers,
             });
@@ -60,7 +60,7 @@ export default (ComposedComponent: NextPage) => {
         if (typeof window !== "undefined") {
           Router.push(redirectRouteForUnauthenticatedUsers);
         } else {
-          if (ctx.res) {
+          if (ctx.res && typeof ctx.res.writeHead === "function") {
             ctx.res.writeHead(301, {
               Location: redirectRouteForUnauthenticatedUsers,
             });

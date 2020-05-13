@@ -75,7 +75,7 @@ const List = ({
   boardId,
 }: {
   lists: any;
-  boardId: string | string[];
+  boardId: string | string[] | undefined;
 }) => {
   const { colorMode } = useColorMode();
   const bgColor = { light: "white", dark: "gray.800" };

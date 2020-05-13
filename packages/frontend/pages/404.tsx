@@ -32,7 +32,7 @@ const ErrorPage = () => {
           fontWeight="bold"
           textAlign="center"
         >
-          Something went wrong!
+          The page that you're looking for doesn't exist
         </Heading>
         <Box mx="auto">
           <Link href="/">
