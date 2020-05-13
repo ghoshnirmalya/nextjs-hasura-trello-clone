@@ -10,7 +10,7 @@ import {
 import ErrorImage from "public/images/bug_fixed.svg";
 import Link from "next/link";
 
-const Index = () => {
+const ErrorPage = () => {
   const { colorMode } = useColorMode();
   const color = { light: "gray.900", dark: "gray.100" };
 
@@ -44,4 +44,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default ErrorPage;
