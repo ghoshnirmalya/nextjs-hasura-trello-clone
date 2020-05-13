@@ -6,6 +6,7 @@ services:
     image: trello-backend
     build:
       context: .
+      dockerfile: Dockerfile.development
     depends_on:
       - db
     env_file: ./.env
