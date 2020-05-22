@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 const rasha = require("rasha");
-
-const jwtConfig = require("../../config/jwt");
+const jwtConfig = require("authentication/config/jwt");
 
 export default (req: Request, res: Response, next: NextFunction) => {
   if (req.method === "POST") {

@@ -1,4 +1,3 @@
-const { promisify } = require("util");
 const Knex = require("knex");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -111,4 +110,4 @@ class User extends Model {
   }
 }
 
-module.exports = { User, Role, UserRole };
+export { User, Role, UserRole };

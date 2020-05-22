@@ -2304,7 +2304,32 @@
   resolved "https://registry.yarnpkg.com/@types/parse-json/-/parse-json-4.0.0.tgz#2f8bb441434d163b35fb8ffdccd7138927ffb8c0"
   integrity sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==
 
-"@types/passport@^1.0.3":
+"@types/passport-http-bearer@^1.0.35":
+  version "1.0.35"
+  resolved "https://registry.yarnpkg.com/@types/passport-http-bearer/-/passport-http-bearer-1.0.35.tgz#8f3dc9d460bb898db25a1d6bedee0fe3804483bf"
+  integrity sha512-zAwDt99tmFquIQi0VNnKSim4+zW2D5nXCyuoefchy9q9puWT2GGNRbWII1rgKrbchGqaktI4Fw7o4fQmllL01A==
+  dependencies:
+    "@types/express" "*"
+    "@types/passport" "*"
+
+"@types/passport-local@^1.0.33":
+  version "1.0.33"
+  resolved "https://registry.yarnpkg.com/@types/passport-local/-/passport-local-1.0.33.tgz#d245b60c5b801cb3aeca1ffab557d5fe1534260d"
+  integrity sha512-+rn6ZIxje0jZ2+DAiWFI8vGG7ZFKB0hXx2cUdMmudSWsigSq6ES7Emso46r4HJk0qCgrZVfI8sJiM7HIYf4SbA==
+  dependencies:
+    "@types/express" "*"
+    "@types/passport" "*"
+    "@types/passport-strategy" "*"
+
+"@types/passport-strategy@*":
+  version "0.2.35"
+  resolved "https://registry.yarnpkg.com/@types/passport-strategy/-/passport-strategy-0.2.35.tgz#e52f5212279ea73f02d9b06af67efe9cefce2d0c"
+  integrity sha512-o5D19Jy2XPFoX2rKApykY15et3Apgax00RRLf0RUotPDUsYrQa7x4howLYr9El2mlUApHmCMv5CZ1IXqKFQ2+g==
+  dependencies:
+    "@types/express" "*"
+    "@types/passport" "*"
+
+"@types/passport@*", "@types/passport@^1.0.3":
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/@types/passport/-/passport-1.0.3.tgz#e459ed6c262bf0686684d1b05901be0d0b192a9c"
   integrity sha512-nyztuxtDPQv9utCzU0qW7Gl8BY2Dn8BKlYAFFyxKipFxjaVd96celbkLCV/tRqqBUZ+JB8If3UfgV8347DTo3Q==

@@ -1,9 +1,7 @@
 import passport from "passport";
-
-const { Strategy: LocalStrategy } = require("passport-local");
-const { Strategy: BearerStrategy } = require("passport-http-bearer");
-
-const { User } = require("../db/schema");
+import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as BearerStrategy } from "passport-http-bearer";
+const { User } = require("authentication/db/schema");
 
 passport.use(
   new LocalStrategy(
@@ -64,4 +62,4 @@ passport.use(
   })
 );
 
-module.exports = passport;
+export { passport };
