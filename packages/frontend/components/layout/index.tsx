@@ -17,7 +17,7 @@ const FETCH_USER_QUERY = gql`
   }
 `;
 
-const Layout: FC = ({ children }) => {
+const AuthenticatedLayout: FC = ({ children }) => {
   const currentUserId = cookieParser("user-id");
 
   const {
@@ -58,4 +58,4 @@ const Layout: FC = ({ children }) => {
   );
 };
 
-export default withApollo(Layout);
+export default withApollo(AuthenticatedLayout);

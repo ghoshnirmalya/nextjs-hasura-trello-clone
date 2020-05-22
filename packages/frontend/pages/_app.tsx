@@ -12,6 +12,46 @@ class App extends NextApp {
     const { Component } = this.props;
     const isAuthenticated = !!cookieParser("token");
 
+    const unauthenticatedLayout = () => {
+      return (
+        <>
+          <UnauthenticatedNavbar />
+          <Grid
+            templateColumns="repeat(1, 1fr)"
+            minH="calc(100vh - 73px)"
+            w="full"
+            mx="auto"
+            py={8}
+            px={4}
+          >
+            <Box>
+              <Component {...this.props} />
+            </Box>
+          </Grid>
+        </>
+      );
+    };
+
+    const authenticatedLayout = () => {
+      return (
+        <Layout {...this.props}>
+          <AuthenticatedNavbar {...this.props} />
+          <Grid
+            templateColumns="repeat(1, 1fr)"
+            minH="calc(100vh - 73px)"
+            w="full"
+            mx="auto"
+            py={8}
+            px={4}
+          >
+            <Box>
+              <Component {...this.props} />
+            </Box>
+          </Grid>
+        </Layout>
+      );
+    };
+
     return (
       <>
         <Head>
@@ -19,25 +59,7 @@ class App extends NextApp {
         </Head>
         <ThemeProvider>
           <CSSReset />
-          <Layout {...this.props}>
-            {!!isAuthenticated ? (
-              <AuthenticatedNavbar {...this.props} />
-            ) : (
-              <UnauthenticatedNavbar />
-            )}
-            <Grid
-              templateColumns="repeat(1, 1fr)"
-              minH="calc(100vh - 73px)"
-              w="full"
-              mx="auto"
-              py={8}
-              px={4}
-            >
-              <Box>
-                <Component {...this.props} />
-              </Box>
-            </Grid>
-          </Layout>
+          {!!isAuthenticated ? authenticatedLayout() : unauthenticatedLayout()}
         </ThemeProvider>
       </>
     );
