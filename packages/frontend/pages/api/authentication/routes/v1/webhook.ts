@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-const passport = require("authentication/config/passport");
+const { passport } = require("authentication/config/passport");
 
 export default (req: Request, res: Response, next: NextFunction) => {
   if (req.method === "POST") {

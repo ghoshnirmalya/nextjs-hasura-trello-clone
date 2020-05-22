@@ -1,15 +1,20 @@
-const Knex = require("knex");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const { Model } = require("objection");
+const Knex = require("knex");
+const jwtConfig = require("authentication/config/jwt");
 
-const connection = require("../knexfile");
-const jwtConfig = require("../config/jwt");
+// Knex configuration
+const knexConfig = {
+  client: "pg",
+  connection: process.env.DATABASE_URL,
+};
 
-const knexConnection = Knex(connection);
+const knexConnection = Knex(knexConfig);
 
 Model.knex(knexConnection);
 
+// Model definitions
 class Role extends Model {
   static get tableName() {
     return "role";

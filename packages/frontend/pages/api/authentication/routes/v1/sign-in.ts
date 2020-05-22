@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 const { check, validationResult } = require("express-validator");
 const { Role, UserRole } = require("authentication/db/schema");
-const passport = require("authentication/config/passport");
+const { passport } = require("authentication/config/passport");
 
 export default (req: Request, res: Response, next: NextFunction) => {
   if (req.method === "POST") {
