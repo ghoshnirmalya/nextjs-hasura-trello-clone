@@ -24,6 +24,8 @@ export default (req: Request, res: Response, next: NextFunction) => {
       }
 
       passport.authenticate("local", async (err: Error, user: any) => {
+        console.log(err);
+
         if (err) {
           return handleResponse(res, 400, { error: err });
         }
