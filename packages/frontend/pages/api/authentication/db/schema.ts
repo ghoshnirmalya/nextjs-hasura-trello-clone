@@ -1,8 +1,11 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+// @ts-nocheck
+
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import Knex from "knex";
+import { key } from "authentication/config/jwt";
+
 const { Model } = require("objection");
-const Knex = require("knex");
-const jwtConfig = require("authentication/config/jwt");
 
 // Knex configuration
 const knexConfig = {
@@ -91,7 +94,7 @@ class User extends Model {
       name: this.email,
       "https://hasura.io/jwt/claims": this.getHasuraClaims(role),
     };
-    return jwt.sign(claim, jwtConfig.key, signOptions);
+    return jwt.sign(claim, key, signOptions);
   }
 
   async $beforeInsert() {

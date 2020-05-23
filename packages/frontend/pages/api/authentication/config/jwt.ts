@@ -1,5 +1,5 @@
-var fs = require("fs");
-var fnv = require("fnv-plus");
+import fs from "fs";
+import fnv from "fnv-plus";
 
 // TODO: why does rsaPemToJwk work with a file but not with a variable?
 const key = (

@@ -1,13 +1,13 @@
-const { ValidationError, NotFoundError } = require("objection");
-const {
+import { ValidationError, NotFoundError } from "objection";
+import {
   DBError,
   UniqueViolationError,
   NotNullViolationError,
   ForeignKeyViolationError,
   CheckViolationError,
   DataError,
-} = require("objection-db-errors");
-import * as Express from "express";
+} from "objection-db-errors";
+import Express from "express";
 
 interface Error {
   type?: string;
