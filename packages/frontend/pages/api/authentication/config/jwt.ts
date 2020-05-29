@@ -1,9 +1,10 @@
-var fs = require("fs");
-var fnv = require("fnv-plus");
+import fs from "fs";
+import fnv from "fnv-plus";
 
 // TODO: why does rsaPemToJwk work with a file but not with a variable?
 const key = (
-  process.env.AUTH_PRIVATE_KEY || fs.readFileSync("private.pem").toString()
+  process.env.AUTH_PRIVATE_KEY ||
+  fs.readFileSync("packages/private.pem").toString()
 ).replace(/\\n/g, "\n");
 
 const publicKey = (

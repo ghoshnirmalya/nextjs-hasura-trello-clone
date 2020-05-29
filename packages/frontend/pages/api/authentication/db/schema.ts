@@ -1,16 +1,23 @@
-const { promisify } = require("util");
-const Knex = require("knex");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+// @ts-nocheck
+
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import Knex from "knex";
+import { key } from "authentication/config/jwt";
+
 const { Model } = require("objection");
 
-const connection = require("../knexfile");
-const jwtConfig = require("../config/jwt");
+// Knex configuration
+const knexConfig = {
+  client: "pg",
+  connection: process.env.DATABASE_URL,
+};
 
-const knexConnection = Knex(connection);
+const knexConnection = Knex(knexConfig);
 
 Model.knex(knexConnection);
 
+// Model definitions
 class Role extends Model {
   static get tableName() {
     return "role";
@@ -87,7 +94,7 @@ class User extends Model {
       name: this.email,
       "https://hasura.io/jwt/claims": this.getHasuraClaims(role),
     };
-    return jwt.sign(claim, jwtConfig.key, signOptions);
+    return jwt.sign(claim, key, signOptions);
   }
 
   async $beforeInsert() {
@@ -111,4 +118,4 @@ class User extends Model {
   }
 }
 
-module.exports = { User, Role, UserRole };
+export { User, Role, UserRole };

@@ -1,15 +1,13 @@
-import * as passport from "passport";
-
-const { Strategy: LocalStrategy } = require("passport-local");
-const { Strategy: BearerStrategy } = require("passport-http-bearer");
-
-const { User } = require("../db/schema");
+import passport from "passport";
+import { Strategy as LocalStrategy } from "passport-local";
+import { Strategy as BearerStrategy } from "passport-http-bearer";
+import { User } from "authentication/db/schema";
 
 passport.use(
   new LocalStrategy(
     {
       usernameField: "email",
-      passwordField: "password"
+      passwordField: "password",
     },
     function (email: string, password: string, done: any) {
       User.query()
@@ -64,4 +62,4 @@ passport.use(
   })
 );
 
-module.exports = passport;
+export { passport };

@@ -17,7 +17,8 @@
       "*": ["/*"],
       "components/*": ["components/*"],
       "lib/*": ["lib/*"],
-      "pages/*": ["pages/*"]
+      "pages/*": ["pages/*"],
+      "authentication/*": ["pages/api/authentication/*"]
     }
   },
   "exclude": ["node_modules"],
