@@ -1,4 +1,6 @@
-<h1 align="center">Hasura Next.js Boilerplate</h1>
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/6391763/83290593-7a153300-a204-11ea-8285-e2af1b7bc9ed.png" alt="Logo"/>
+</p>
 
 <p align="center">
   <a href="https://twitter.com/nirmalyaghosh23">
@@ -6,24 +8,19 @@
   </a>
 </p>
 
-This is a boilerplate for building applications using Hasura and Next.js. This mon-orepo consists of the following packages:
+This is a clone of Trello application built using Hasura and Next.js. This application has been bootstrapped using [Hasura Next.js Boilerplate](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate) This mono-repo consists of the following packages:
 
-1. [**frontend**](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/tree/master/packages/frontend): Next.js application
-2. [**backend**](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/tree/master/packages/backend): Dockerized Hasura application
-3. [**authentication**](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/tree/master/packages/authentication): Node.js application for handling authentication
-4. [**components**](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/tree/master/packages/components): Sample React.js application for creating a Design System
+1. [**frontend**](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/tree/master/packages/frontend): Next.js application
+2. [**backend**](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/tree/master/packages/backend): Dockerized Hasura application
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
-
 
 - [Overview](#overview)
 - [Requirements](#requirements)
 - [Packages](#packages)
   - [1. **Frontend**: Next.js application](#1-frontend-nextjs-application)
   - [2. **Backend**: Dockerized Hasura application](#2-backend-dockerized-hasura-application)
-  - [3. **Authentication**: Node.js application for handling authentication](#3-authentication-nodejs-application-for-handling-authentication)
-  - [4. **Components**: Sample React.js application for creating a Design System](#4-components-sample-reactjs-application-for-creating-a-design-system)
 - [Installation](#installation)
   - [1. **Clone the application**](#1-clone-the-application)
   - [2. **Install Lerna globally**](#2-install-lerna-globally)
@@ -31,7 +28,7 @@ This is a boilerplate for building applications using Hasura and Next.js. This m
   - [4. **Start the packages**](#4-start-the-packages)
   - [5. **Start the backend package**](#5-start-the-backend-package)
 - [Deployment](#deployment)
-- [Inspiration](#inspiration)
+- [Other interesting repositories](#other-interesting-repositories)
 - [License](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -49,11 +46,11 @@ This boilerplate is built using [Lerna](https://lerna.js.org/) for managing all 
 
 ## Packages
 
-### 1. [**Frontend**](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/tree/master/packages/frontend): Next.js application
+### 1. [**Frontend**](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/tree/master/packages/frontend): Next.js application
 
 This application is the primary user-facing application. Once it’s up and running (see Development section), it’s available on http://localhost:3000/.
 
-If we’re already signed into the application, we should be able to view [that page](http://localhost:3000/). Otherwise, we be redirected to the [Sign Up page](http://localhost:3000/sign-up). If we want to redirect our users to a different route (eg: [the Sign In page](http://localhost:3000/sign-in)), we can modify [this line](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/blob/master/packages/frontend/lib/with-authentication.tsx#L53):
+If we’re already signed into the application, we should be able to view [that page](http://localhost:3000/). Otherwise, we be redirected to the [Sign Up page](http://localhost:3000/sign-up). If we want to redirect our users to a different route (eg: [the Sign In page](http://localhost:3000/sign-in)), we can modify [this line](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/blob/master/packages/frontend/lib/with-authentication.tsx#L53):
 
 ```js
 ...
@@ -82,38 +79,18 @@ To create an admin, we’ll need to visit the http://localhost:3000/admin/sign-u
 
 ![Response for fetching user role of a admin](https://paper-attachments.dropbox.com/s_CF4CC31F06B2FF9025475AC4D29182F2980CED36D7900B42B134426EAC3576E8_1586689215270_carbon+2.png)
 
-An admin can visit the [users page](http://localhost:3000/users) which is useful for fetching all the users who signed up in our application. This page and its components could be useful for managing the users. The user link [will be hidden in the Navbar if the current user isn’t an](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/blob/master/packages/frontend/components/navbar/authenticated.tsx#L76-L82) [**admin**](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/blob/master/packages/frontend/components/navbar/authenticated.tsx#L76-L82).
+An admin can visit the [users page](http://localhost:3000/users) which is useful for fetching all the users who signed up in our application. This page and its components could be useful for managing the users. The user link [will be hidden in the Navbar if the current user isn’t an](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/blob/master/packages/frontend/components/navbar/authenticated.tsx#L76-L82) [**admin**](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/blob/master/packages/frontend/components/navbar/authenticated.tsx#L76-L82).
 
-### 2. [**Backend**](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/tree/master/packages/backend): Dockerized Hasura application
+### 2. [**Backend**](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/tree/master/packages/backend): Dockerized Hasura application
 
-[Hasura](https://hasura.io/) is an open source engine that connects to our databases & micro-services and auto-generates a production-ready GraphQL backend. It’s very easy to get Hasura up and running on our local system. All the migrations are set up in the [migrations](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/tree/master/packages/backend/migrations) directory.
-
-### 3. [**Authentication**](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/tree/master/packages/authentication): Node.js application for handling authentication
-
-This application is responsible for authenticating new and existing users. For more information regarding this application, we can follow [this readme file](https://github.com/hasura/graphql-engine/tree/master/community/boilerplates/auth-servers/passportjs-jwt-roles#authentication-with-jwt-hasura-claims-and-multiple-roles).
-
-### 4. [**Components**](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/tree/master/packages/components): Sample React.js application for creating a Design System
-
-This application is responsible for helping we creating a Design System. We can set up [Storybook](https://storybook.js.org/) for demoing components. There is an example [Button component](https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate/tree/master/packages/components/src/Button). We can simply import the Button component like the following:
-
-```sh
-import { Button } from "@hasura-next/components";
-```
-
-Then, it can be used like the following:
-
-```js
-<Button onClick={(e) => console.log(e)}>Click</Button>
-```
-
-In our frontend package, we’re using components from [Chakra UI](https://chakra-ui.com/). However, in actual applications, we might need to use custom-designed components or override the default design of the components provided by a Components Library.
+[Hasura](https://hasura.io/) is an open source engine that connects to our databases & micro-services and auto-generates a production-ready GraphQL backend. It’s very easy to get Hasura up and running on our local system. All the migrations are set up in the [migrations](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/tree/master/packages/backend/migrations) directory.
 
 ## Installation
 
 ### 1. **Clone the application**
 
 ```sh
-git clone https://github.com/ghoshnirmalya/nextjs-hasura-boilerplate
+git clone https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone
 ```
 
 ### 2. **Install Lerna globally**
@@ -141,9 +118,8 @@ yarn start
 The above command will do the following:
 
     a. Start the frontend package on [http://localhost:3000/](http://localhost:3000).
-    b. Start the authentication package on [http://localhost:3030/](http://localhost:3030/).
 
-The components and backend packages don’t do anything after we execute the above command. There is no need to run the components package separately. However, if we need, we can [add additional commands using Lerna](https://lerna.js.org/#command-run).
+The backend package doesn’t do anything after we execute the above command.
 
 ### 5. **Start the backend package**
 
@@ -157,10 +133,11 @@ We need to start Docker and then run the above command which will change the cur
 
 We’re still working on this feature. The documentation will be updated soon.
 
-## Inspiration
+## Other interesting repositories
 
-1. [Monorepo starter project for Kotlin, Python, TypeScript x React](https://github.com/palmerhq/monorepo-starter)
-2. [Passport JWT roles for Hasura](https://github.com/hasura/graphql-engine/tree/master/community/boilerplates/auth-servers/passportjs-jwt-roles)
+1. [Hasura Next.js Boilerplate](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone)
+2. [React Search Box](https://github.com/ghoshnirmalya/react-search-box)
+3. [LinkedIn Clone using Create React App](https://github.com/ghoshnirmalya/linkedin-clone-react-frontend)
 
 ## License
 
