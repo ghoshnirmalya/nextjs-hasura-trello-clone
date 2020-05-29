@@ -81,6 +81,18 @@ To create an admin, we’ll need to visit the http://localhost:3000/admin/sign-u
 
 An admin can visit the [users page](http://localhost:3000/users) which is useful for fetching all the users who signed up in our application. This page and its components could be useful for managing the users. The user link [will be hidden in the Navbar if the current user isn’t an](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/blob/master/packages/frontend/components/navbar/authenticated.tsx#L76-L82) [**admin**](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/blob/master/packages/frontend/components/navbar/authenticated.tsx#L76-L82).
 
+A user should be redirected to the [boards page](http://localhost:3000/boards) after signing in or signing up:
+
+![Boards page](https://user-images.githubusercontent.com/6391763/83292088-222bfb80-a207-11ea-9c7d-c9720b959bb0.png)
+
+Any authenticated user should be able to visit a board page and view all the cards which have been added to that board:
+
+![Board page](https://user-images.githubusercontent.com/6391763/83292633-0ffe8d00-a208-11ea-9ca7-7f9bf98311ee.png)
+
+Any authenticated should also be able to view all the details in a card:
+
+![Card details](https://user-images.githubusercontent.com/6391763/83292992-b054b180-a208-11ea-84a7-93cfa2f5a424.png)
+
 ### 2. [**Backend**](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/tree/master/packages/backend): Dockerized Hasura application
 
 [Hasura](https://hasura.io/) is an open source engine that connects to our databases & micro-services and auto-generates a production-ready GraphQL backend. It’s very easy to get Hasura up and running on our local system. All the migrations are set up in the [migrations](https://github.com/ghoshnirmalya/nextjs-hasura-trello-clone/tree/master/packages/backend/migrations) directory.
