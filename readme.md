@@ -37,12 +37,18 @@ This is a clone of Trello application built using Hasura and Next.js. This appli
 
 This boilerplate is built using [Lerna](https://lerna.js.org/) for managing all the packages in a simple manner. Because of Lerna, it becomes very easy to install, develop and maintain a mono-repo structure.
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/6391763/83325828-f81d1c80-a28c-11ea-8601-8410a11a2937.png" alt="Screenshot"/>
+</p>
+
 ## Requirements
 
 1. [Node.js](https://nodejs.org/)
 2. [npm](https://www.npmjs.com/)
 3. [Lerna](https://lerna.js.org/)
 4. [Docker](https://www.docker.com/)
+
+## Screencast demo
 
 ## Packages
 
