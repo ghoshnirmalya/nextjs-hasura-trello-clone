@@ -12,7 +12,6 @@ import {
   useColorMode,
 } from "@chakra-ui/core";
 import useFetch from "use-http";
-import { useRouter } from "next/router";
 import { NextPage } from "next";
 import { cookieSetter } from "lib/cookie";
 import Link from "next/link";
@@ -25,7 +24,6 @@ const SignIn: NextPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [request, response] = useFetch(`${process.env.AUTH_URL}`);
-  const router = useRouter();
 
   const handleSubmit = async (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -39,7 +37,7 @@ const SignIn: NextPage = () => {
       cookieSetter("token", res.token);
       cookieSetter("user-id", res.id);
 
-      await router.push("/");
+      window.location.href = "/";
     }
   };
 

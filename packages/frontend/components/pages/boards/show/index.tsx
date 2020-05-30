@@ -131,6 +131,7 @@ const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
       </AvatarGroup>
     );
   };
+
   const headingNode = () => {
     return (
       <Stack spacing={8} isInline align="center" justifyContent="space-between">

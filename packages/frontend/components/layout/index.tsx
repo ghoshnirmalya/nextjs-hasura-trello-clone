@@ -6,7 +6,6 @@ import gql from "graphql-tag";
 import { cookieParser } from "lib/cookie";
 import { setItem } from "lib/local-storage";
 import Container from "components/layout/container";
-import Loader from "components/loader";
 
 const FETCH_USER_QUERY = gql`
   query fetchUser($id: uuid!) {
@@ -37,9 +36,7 @@ const AuthenticatedLayout: FC = ({ children }) => {
         d="flex"
         justifyContent="center"
         alignItems="center"
-      >
-        <Loader size="100px" />
-      </Box>
+      />
     );
   }
 
