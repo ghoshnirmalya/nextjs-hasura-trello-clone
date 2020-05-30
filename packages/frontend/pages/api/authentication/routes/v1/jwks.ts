@@ -3,6 +3,8 @@ const rasha = require("rasha");
 const jwtConfig = require("authentication/config/jwt");
 
 export default (req: Request, res: Response, next: NextFunction) => {
+  console.log(req);
+
   if (req.method === "POST") {
     res.statusCode = 401;
     res.setHeader("Content-Type", "application/json");
