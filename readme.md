@@ -16,6 +16,7 @@ This is a clone of Trello application built using Hasura and Next.js. This appli
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
+
 - [Overview](#overview)
 - [Requirements](#requirements)
 - [Packages](#packages)
@@ -26,7 +27,12 @@ This is a clone of Trello application built using Hasura and Next.js. This appli
   - [2. **Install Lerna globally**](#2-install-lerna-globally)
   - [3. **Bootstrap the packages**](#3-bootstrap-the-packages)
   - [4. **Start the packages**](#4-start-the-packages)
-  - [5. **Start the backend package**](#5-start-the-backend-package)
+  - [5. **Go inside the directory of the backend package**](#5-go-inside-the-directory-of-the-backend-package)
+  - [6. **Create a .env file and copy the contents from .env.example (present in packages/backend directory)**](#6-create-a-env-file-and-copy-the-contents-from-envexample-present-in-packagesbackend-directory)
+  - [7. **Generate the RSA keys**](#7-generate-the-rsa-keys)
+  - [8. **Print the keys in the escaped format**](#8-print-the-keys-in-the-escaped-format)
+  - [9. **Copy the value of the key into the `HASURA_GRAPHQL_JWT_SECRET` key (in the .env file)**](#9-copy-the-value-of-the-key-into-the-hasura_graphql_jwt_secret-key-in-the-env-file)
+  - [10. **Start docker-compose**](#10-start-docker-compose)
 - [Deployment](#deployment)
 - [Other interesting repositories](#other-interesting-repositories)
 - [License](#license)
@@ -47,8 +53,6 @@ This boilerplate is built using [Lerna](https://lerna.js.org/) for managing all 
 2. [npm](https://www.npmjs.com/)
 3. [Lerna](https://lerna.js.org/)
 4. [Docker](https://www.docker.com/)
-
-## Screencast demo
 
 ## Packages
 
@@ -133,16 +137,37 @@ From the project root, we can run the following command to start our Node.js pac
 yarn start
 ```
 
-The above command will do the following:
-
-    a. Start the frontend package on [http://localhost:3000/](http://localhost:3000).
+The above command will start the frontend package on [http://localhost:3000/](http://localhost:3000).
 
 The backend package doesn’t do anything after we execute the above command.
 
-### 5. **Start the backend package**
+### 5. **Go inside the directory of the backend package**
 
 ```sh
-cd packages/backend && docker-compose up
+cd packages/backend
+```
+
+### 6. **Create a .env file and copy the contents from .env.example (present in packages/backend directory)**
+
+### 7. **Generate the RSA keys**
+
+```sh
+openssl genrsa -out private.pem 2048
+openssl rsa -in private.pem -pubout > public.pem
+```
+
+### 8. **Print the keys in the escaped format**
+
+```sh
+awk -v ORS='\\n' '1' public.pem
+```
+
+### 9. **Copy the value of the key into the `HASURA_GRAPHQL_JWT_SECRET` key (in the .env file)**
+
+### 10. **Start docker-compose**
+
+```sh
+docker-compose up
 ```
 
 We need to start Docker and then run the above command which will change the current directory to the backend package’s directory and then start the backend package. If everything goes well, it’ll be up and running on http://localhost:8080/v1/graphql.
