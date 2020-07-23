@@ -24,14 +24,13 @@ import {
 } from "@chakra-ui/core";
 import { NextPage } from "next";
 import gql from "graphql-tag";
-import { useSubscription, useMutation } from "react-apollo";
-import Loader from "components/loader";
+import { useSubscription, useMutation } from "urql";
 import Link from "next/link";
-import { cookieParser } from "lib/cookie";
+import Loader from "components/loader";
 
 const FETCH_BOARDS_SUBSCRIPTION = gql`
   subscription fetchBoards {
-    board(order_by: { created_at: asc }) {
+    boards(order_by: { created_at: desc }) {
       id
       name
     }
@@ -39,8 +38,8 @@ const FETCH_BOARDS_SUBSCRIPTION = gql`
 `;
 
 const CREATE_BOARD_MUTATION = gql`
-  mutation createBoard($name: bpchar!, $user_id: uuid!) {
-    insert_board(objects: { name: $name, user_id: $user_id }) {
+  mutation createBoard($name: String!, $user_id: uuid!) {
+    insert_boards(objects: { name: $name, user_id: $user_id }) {
       returning {
         id
         name
@@ -54,31 +53,27 @@ const Boards: NextPage = () => {
   const bgColor = { light: "white", dark: "gray.800" };
   const borderColor = { light: "gray.300", dark: "gray.700" };
   const color = { light: "gray.900", dark: "gray.100" };
-  const { data, loading, error } = useSubscription(FETCH_BOARDS_SUBSCRIPTION);
-  const [
-    updateUserMutation,
-    { loading: mutationLoading, error: mutationError },
-  ] = useMutation(CREATE_BOARD_MUTATION);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [name, setName] = useState("");
-  const currentUserId = cookieParser("user-id");
+  const currentUserId = "40989e49-4857-4429-80ad-839633adbe55";
+  const [
+    { fetching: mutationFetching, error: mutationError },
+    createBoardMutation,
+  ] = useMutation(CREATE_BOARD_MUTATION);
+  const [{ data }] = useSubscription({
+    query: FETCH_BOARDS_SUBSCRIPTION,
+  });
 
-  if (loading) {
+  if (!data) {
     return <Loader />;
-  }
-
-  if (error) {
-    return <p>Error: {error.message}</p>;
   }
 
   const handleSubmit = async (e: FormEvent<HTMLInputElement>) => {
     e.preventDefault();
 
-    await updateUserMutation({
-      variables: {
-        user_id: currentUserId,
-        name,
-      },
+    await createBoardMutation({
+      user_id: currentUserId,
+      name,
     });
 
     if (!mutationError) {
@@ -154,7 +149,7 @@ const Boards: NextPage = () => {
                 mr={4}
                 loadingText="Saving..."
                 onClick={handleSubmit}
-                isLoading={mutationLoading}
+                isLoading={mutationFetching}
                 isDisabled={!name.trim()}
               >
                 Save
@@ -174,7 +169,7 @@ const Boards: NextPage = () => {
       {headingNode()}
       {drawerNode()}
       <Stack spacing={8}>
-        {data.board.map((board: { id: number; name: string }) => {
+        {data.boards.map((board: { id: number; name: string }) => {
           return (
             <Box key={board.id}>
               <Link

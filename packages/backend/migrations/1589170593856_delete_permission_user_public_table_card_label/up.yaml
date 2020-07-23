@@ -1,6 +1,0 @@
-- args:
-    role: user
-    table:
-      name: card_label
-      schema: public
-  type: drop_update_permission

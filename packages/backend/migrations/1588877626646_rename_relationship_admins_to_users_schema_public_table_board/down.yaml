@@ -1,7 +1,0 @@
-- args:
-    name: users
-    new_name: admins
-    table:
-      name: board
-      schema: public
-  type: rename_relationship

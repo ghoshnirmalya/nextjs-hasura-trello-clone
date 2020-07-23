@@ -1,6 +1,0 @@
-- args:
-    role: user
-    table:
-      name: board
-      schema: public
-  type: drop_insert_permission

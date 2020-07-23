@@ -1,5 +1,0 @@
-- args:
-    cascade: false
-    read_only: false
-    sql: ALTER TABLE "public"."label" DROP COLUMN "board_id";
-  type: run_sql

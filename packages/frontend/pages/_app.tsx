@@ -1,69 +1,28 @@
 import React from "react";
-import NextApp from "next/app";
+import { AppProps } from "next/app";
 import Head from "next/head";
-import { ThemeProvider, CSSReset, Box, Grid } from "@chakra-ui/core";
-import { cookieParser } from "lib/cookie";
-import AuthenticatedNavbar from "components/navbar/authenticated";
-import UnauthenticatedNavbar from "components/navbar/unauthenticated";
+import { Provider as NextAuthProvider } from "next-auth/client";
+import { ThemeProvider, CSSReset, theme } from "@chakra-ui/core";
 import Layout from "components/layout";
 
-class App extends NextApp {
-  render() {
-    const { Component } = this.props;
-    const isAuthenticated = !!cookieParser("token");
+const App = ({ Component, pageProps }: AppProps) => {
+  const { session } = pageProps;
 
-    const unauthenticatedLayout = () => {
-      return (
-        <>
-          <UnauthenticatedNavbar />
-          <Grid
-            templateColumns="repeat(1, 1fr)"
-            minH="calc(100vh - 73px)"
-            w="full"
-            mx="auto"
-            py={8}
-            px={4}
-          >
-            <Box>
-              <Component {...this.props} />
-            </Box>
-          </Grid>
-        </>
-      );
-    };
-
-    const authenticatedLayout = () => {
-      return (
-        <Layout {...this.props}>
-          <AuthenticatedNavbar {...this.props} />
-          <Grid
-            templateColumns="repeat(1, 1fr)"
-            minH="calc(100vh - 73px)"
-            w="full"
-            mx="auto"
-            py={8}
-            px={4}
-          >
-            <Box>
-              <Component {...this.props} />
-            </Box>
-          </Grid>
-        </Layout>
-      );
-    };
-
-    return (
-      <>
-        <Head>
-          <link rel="shortcut icon" href="/images/favicon.ico" />
-        </Head>
-        <ThemeProvider>
+  return (
+    <>
+      <Head>
+        <link rel="shortcut icon" href="/images/favicon.ico" />
+      </Head>
+      <NextAuthProvider session={session}>
+        <ThemeProvider theme={theme}>
           <CSSReset />
-          {!!isAuthenticated ? authenticatedLayout() : unauthenticatedLayout()}
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
         </ThemeProvider>
-      </>
-    );
-  }
-}
+      </NextAuthProvider>
+    </>
+  );
+};
 
 export default App;

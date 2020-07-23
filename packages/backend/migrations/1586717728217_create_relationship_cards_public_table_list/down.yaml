@@ -1,6 +1,0 @@
-- args:
-    relationship: cards
-    table:
-      name: list
-      schema: public
-  type: drop_relationship

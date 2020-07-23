@@ -1,5 +1,0 @@
-- args:
-    cascade: false
-    read_only: false
-    sql: alter table "public"."board" rename column "admin_id" to "user_id";
-  type: run_sql

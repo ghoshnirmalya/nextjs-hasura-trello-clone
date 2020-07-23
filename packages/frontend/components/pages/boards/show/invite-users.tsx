@@ -10,8 +10,10 @@ import {
   Icon,
 } from "@chakra-ui/core";
 import gql from "graphql-tag";
-import { useMutation, useSubscription } from "react-apollo";
+import { useSubscription, useMutation } from "urql";
 import xor from "lodash/xor";
+import Loader from "components/loader";
+
 interface user {
   id: number;
   email: string;
@@ -19,18 +21,17 @@ interface user {
 
 const FETCH_USERS_SUBSCRIPTION = gql`
   subscription fetchUsers {
-    user {
+    users {
       id
       email
-      first_name
-      last_name
+      name
     }
   }
 `;
 
 const ADD_USER_MUTATION = gql`
   mutation addUser($board_id: uuid!, $user_id: uuid!) {
-    insert_board_user(objects: { user_id: $user_id, board_id: $board_id }) {
+    insert_boards_users(objects: { user_id: $user_id, board_id: $board_id }) {
       returning {
         board_id
         user_id
@@ -49,27 +50,29 @@ const InviteUsersButton = ({
   const { colorMode } = useColorMode();
   const color = { light: "gray.900", dark: "gray.100" };
   const borderColor = { light: "gray.300", dark: "gray.700" };
-  const { data, loading } = useSubscription(FETCH_USERS_SUBSCRIPTION, {
-    fetchPolicy: "network-only",
+  const [{ data }] = useSubscription({
+    query: FETCH_USERS_SUBSCRIPTION,
   });
-  const [addUserMutation, { loading: mutationLoading }] = useMutation(
+  const [{ fetching: mutationFetching }, addUserMutation] = useMutation(
     ADD_USER_MUTATION
   );
+
+  if (!data) {
+    return <Loader />;
+  }
 
   const handleSubmit = (values: any) => {
     const usersToBeInvited: any[] = xor(values, selectedUserIds);
 
     usersToBeInvited.map(async (id: number) => {
       await addUserMutation({
-        variables: {
-          user_id: id,
-          board_id: boardId,
-        },
+        user_id: id,
+        board_id: boardId,
       });
     });
   };
 
-  if (loading) {
+  if (mutationFetching) {
     return (
       <Button variantColor="cyan" isDisabled>
         Invite
@@ -105,12 +108,12 @@ const InviteUsersButton = ({
               handleSubmit(value);
             }}
           >
-            {data.user.map((user: user) => {
+            {data.users.map((user: user) => {
               return (
                 <MenuItemOption
                   key={user.id}
                   value={user.id}
-                  isDisabled={mutationLoading}
+                  isDisabled={mutationFetching}
                 >
                   {user.email}
                 </MenuItemOption>

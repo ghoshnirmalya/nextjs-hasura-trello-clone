@@ -2,11 +2,10 @@ version: "3"
 
 services:
   backend:
-    container_name: trello-backend
-    image: trello-backend
+    container_name: nextjs-hasura-boilerplate-backend
+    image: nextjs-hasura-boilerplate-backend
     build:
       context: .
-      dockerfile: Dockerfile.development
     depends_on:
       - db
     env_file: ./.env
@@ -14,14 +13,16 @@ services:
       - "8080:8080"
     volumes:
       - .:/usr/src/app
+    restart: on-failure
 
   db:
-    container_name: trello-db
+    container_name: nextjs-hasura-boilerplate-db
     image: postgres:11.3-alpine
     ports:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
+    restart: unless-stopped
 
 volumes:
   db_data:
