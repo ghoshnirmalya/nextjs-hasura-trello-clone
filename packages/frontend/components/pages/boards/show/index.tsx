@@ -11,7 +11,7 @@ import {
 } from "@chakra-ui/core";
 import { NextPage } from "next";
 import gql from "graphql-tag";
-import { useSubscription, useMutation } from "react-apollo";
+import { useSubscription, useMutation } from "urql";
 import Loader from "components/loader";
 import { useRouter } from "next/router";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -22,7 +22,7 @@ import InviteUsers from "components/pages/boards/show/invite-users";
 
 const FETCH_BOARD_SUBSCRIPTION = gql`
   subscription fetchBoard($id: uuid!) {
-    board_by_pk(id: $id) {
+    boards_by_pk(id: $id) {
       id
       name
       lists(order_by: { position: asc }) {
@@ -30,21 +30,11 @@ const FETCH_BOARD_SUBSCRIPTION = gql`
         name
         position
         board_id
-        cards(
-          where: { archived: { _eq: false } }
-          order_by: { position: asc }
-        ) {
+        cards(order_by: { position: asc }) {
           id
           title
           description
           position
-          labels {
-            id
-            label {
-              id
-              color
-            }
-          }
         }
       }
       users {
@@ -59,7 +49,7 @@ const FETCH_BOARD_SUBSCRIPTION = gql`
 
 const UPDATE_CARD_MUTATION = gql`
   mutation updateCard($id: uuid!, $position: numeric) {
-    update_card(where: { id: { _eq: $id } }, _set: { position: $position }) {
+    update_cards(where: { id: { _eq: $id } }, _set: { position: $position }) {
       returning {
         id
         description
@@ -75,7 +65,7 @@ const UPDATE_CARD_FOR_DIFFERENT_LISTS_MUTATION = gql`
     $position: numeric
     $listId: uuid!
   ) {
-    update_card(
+    update_cards(
       where: { id: { _eq: $id } }
       _set: { list_id: $listId, position: $position }
     ) {
@@ -88,7 +78,7 @@ const UPDATE_CARD_FOR_DIFFERENT_LISTS_MUTATION = gql`
 
 const UPDATE_LIST_MUTATION = gql`
   mutation updateList($id: uuid!, $position: numeric) {
-    update_list(where: { id: { _eq: $id } }, _set: { position: $position }) {
+    update_lists(where: { id: { _eq: $id } }, _set: { position: $position }) {
       returning {
         id
         name
@@ -103,24 +93,21 @@ const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
   const color = { light: "gray.900", dark: "gray.100" };
   const router = useRouter();
   const currentBoardId = boardId || router.query.boardId;
-  const { data, loading, error } = useSubscription(FETCH_BOARD_SUBSCRIPTION, {
+  const [{ data }] = useSubscription({
+    query: FETCH_BOARD_SUBSCRIPTION,
     variables: { id: currentBoardId },
   });
-  const [updateCard] = useMutation(UPDATE_CARD_MUTATION);
-  const [updateCardForDifferentLists] = useMutation(
+  const [, updateCard] = useMutation(UPDATE_CARD_MUTATION);
+  const [, updateCardForDifferentLists] = useMutation(
     UPDATE_CARD_FOR_DIFFERENT_LISTS_MUTATION
   );
-  const [updateList] = useMutation(UPDATE_LIST_MUTATION);
+  const [, updateList] = useMutation(UPDATE_LIST_MUTATION);
 
-  if (loading) {
+  if (!data) {
     return <Loader />;
   }
 
-  if (error) {
-    return <p>Error: {error.message}</p>;
-  }
-
-  const { name, lists, users } = data.board_by_pk;
+  const { name, lists, users } = data.boards_by_pk;
 
   const usersListNode = () => {
     return (
@@ -191,10 +178,8 @@ const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
          * Update source list
          */
         updateList({
-          variables: {
-            id: lists[source.index].id,
-            position: updatedPositionOfSourceList,
-          },
+          id: lists[source.index].id,
+          position: updatedPositionOfSourceList,
         });
       } else {
         let updatedPositionOfSourceList;
@@ -210,10 +195,8 @@ const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
          * Update source list
          */
         updateCard({
-          variables: {
-            id: lists[source.index].id,
-            position: updatedPositionOfSourceList,
-          },
+          id: lists[source.index].id,
+          position: updatedPositionOfSourceList,
         });
       }
     }
@@ -252,10 +235,8 @@ const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
            * Update source card
            */
           updateCard({
-            variables: {
-              id: sourceCard.id,
-              position: updatedPositionOfSourceCard,
-            },
+            id: sourceCard.id,
+            position: updatedPositionOfSourceCard,
           });
         } else {
           let updatedPositionOfSourceCard;
@@ -272,10 +253,8 @@ const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
            * Update source card
            */
           updateCard({
-            variables: {
-              id: sourceCard.id,
-              position: updatedPositionOfSourceCard,
-            },
+            id: sourceCard.id,
+            position: updatedPositionOfSourceCard,
           });
         }
       } else {
@@ -321,11 +300,9 @@ const Board: NextPage<{ boardId?: string }> = ({ boardId }) => {
          * Update source card
          */
         updateCardForDifferentLists({
-          variables: {
-            id: sourceCard.id,
-            position: updatedPositionOfSourceCard,
-            listId: destinationList.id,
-          },
+          id: sourceCard.id,
+          position: updatedPositionOfSourceCard,
+          listId: destinationList.id,
         });
       }
     }

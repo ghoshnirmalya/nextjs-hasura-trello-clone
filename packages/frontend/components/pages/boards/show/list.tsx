@@ -27,7 +27,7 @@ import {
 } from "@chakra-ui/core";
 import Card from "components/pages/boards/show/card";
 import gql from "graphql-tag";
-import { useMutation } from "react-apollo";
+import { useMutation } from "urql";
 
 const CREATE_CARD_MUTATION = gql`
   mutation createCard(
@@ -37,7 +37,7 @@ const CREATE_CARD_MUTATION = gql`
     $description: String
     $boardId: uuid!
   ) {
-    insert_card(
+    insert_cards(
       objects: {
         list_id: $listId
         position: $position
@@ -58,7 +58,7 @@ const CREATE_CARD_MUTATION = gql`
 
 const CREATE_LIST_MUTATION = gql`
   mutation createList($boardId: uuid!, $position: numeric, $name: String) {
-    insert_list(
+    insert_lists(
       objects: { board_id: $boardId, position: $position, name: $name }
     ) {
       returning {
@@ -87,12 +87,12 @@ const List = ({
   const [name, setName] = useState("");
   const [listId, setListId] = useState("");
   const [
+    { fetching: createCardMutationFetching, error: createCardMutationError },
     createCard,
-    { loading: createCardMutationLoading, error: createCardMutationError },
   ] = useMutation(CREATE_CARD_MUTATION);
   const [
+    { fetching: createListMutationFetching, error: createListMutationError },
     createList,
-    { loading: createListMutationLoading, error: createListMutationError },
   ] = useMutation(CREATE_LIST_MUTATION);
 
   const getPositionOfNewCard = () => {
@@ -109,13 +109,11 @@ const List = ({
     e.preventDefault();
 
     await createCard({
-      variables: {
-        listId,
-        position: getPositionOfNewCard(),
-        title,
-        description,
-        boardId,
-      },
+      listId,
+      position: getPositionOfNewCard(),
+      title,
+      description,
+      boardId,
     });
 
     if (!createCardMutationError) {
@@ -140,11 +138,9 @@ const List = ({
       e.preventDefault();
 
       await createList({
-        variables: {
-          boardId,
-          position: getPositionOfNewList(),
-          name,
-        },
+        boardId,
+        position: getPositionOfNewList(),
+        name,
       });
 
       if (!createListMutationError) {
@@ -204,7 +200,7 @@ const List = ({
                 mr={4}
                 loadingText="Saving..."
                 onClick={handleSubmit}
-                isLoading={createCardMutationLoading}
+                isLoading={createCardMutationFetching}
                 isDisabled={!description.trim()}
               >
                 Save
@@ -320,7 +316,7 @@ const List = ({
               setName(e.currentTarget.value);
             }}
             onKeyDown={handleAddNewList}
-            isDisabled={createListMutationLoading}
+            isDisabled={createListMutationFetching}
           />
         </Box>
       </Box>

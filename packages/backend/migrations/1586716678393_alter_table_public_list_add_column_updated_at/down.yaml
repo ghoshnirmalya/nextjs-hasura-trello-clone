@@ -1,7 +1,0 @@
-- args:
-    cascade: false
-    read_only: false
-    sql: |-
-      DROP TRIGGER IF EXISTS "set_public_list_updated_at" ON "public"."list";
-      ALTER TABLE "public"."list" DROP COLUMN "updated_at";
-  type: run_sql

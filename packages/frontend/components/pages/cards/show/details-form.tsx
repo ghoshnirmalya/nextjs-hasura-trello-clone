@@ -1,4 +1,4 @@
-import React, { FC, FormEvent, useState } from "react";
+import React, { FC, FormEvent, useState, useEffect } from "react";
 import {
   Box,
   Button,
@@ -13,13 +13,13 @@ import {
   Alert,
 } from "@chakra-ui/core";
 import gql from "graphql-tag";
-import { useQuery, useMutation } from "react-apollo";
+import { useQuery, useMutation } from "urql";
 import { useRouter } from "next/router";
 import Loader from "components/loader";
 
 const FETCH_CARD_QUERY = gql`
   query fetchCard($id: uuid!) {
-    card_by_pk(id: $id) {
+    cards_by_pk(id: $id) {
       id
       title
       description
@@ -30,7 +30,7 @@ const FETCH_CARD_QUERY = gql`
 
 const UPDATE_CARD_MUTATION = gql`
   mutation updateCard($id: uuid!, $description: String, $title: String) {
-    update_card(
+    update_cards(
       where: { id: { _eq: $id } }
       _set: { description: $description, title: $title }
     ) {
@@ -49,26 +49,28 @@ const DetailsForm: FC = () => {
   const router = useRouter();
   const currentCardId = router.query.cardId;
 
-  const {
-    data: fetchCardData,
-    loading: fetchCardLoading,
-    error: fetchCardError,
-  } = useQuery(FETCH_CARD_QUERY, {
+  const [
+    { data: fetchCardData, fetching: fetchCardFetching, error: fetchCardError },
+  ] = useQuery({
+    query: FETCH_CARD_QUERY,
     variables: { id: currentCardId },
-    onCompleted: (data: any) => {
-      const { title, description } = data.card_by_pk;
+  });
+
+  useEffect(() => {
+    if (fetchCardData) {
+      const { title, description } = fetchCardData.cards_by_pk;
 
       setTitle(title || "");
       setDescription(description || "");
-    },
-  });
+    }
+  }, [fetchCardData]);
 
   const [
+    { fetching: cardMutationFetching, error: cardMutationError },
     updateCard,
-    { loading: cardMutationLoading, error: cardMutationError },
   ] = useMutation(UPDATE_CARD_MUTATION);
 
-  if (fetchCardLoading) {
+  if (fetchCardFetching) {
     return <Loader />;
   }
 
@@ -76,15 +78,13 @@ const DetailsForm: FC = () => {
     return <p>Error: {fetchCardError.message}</p>;
   }
 
-  const { board_id: boardId } = fetchCardData.card_by_pk;
+  const { board_id: boardId } = fetchCardData.cards_by_pk;
 
   const handleSubmit = async () => {
     await updateCard({
-      variables: {
-        id: currentCardId,
-        title,
-        description,
-      },
+      id: currentCardId,
+      title,
+      description,
     });
 
     if (!cardMutationError) {
@@ -159,7 +159,7 @@ const DetailsForm: FC = () => {
               variantColor="cyan"
               loadingText="Saving..."
               onClick={handleSubmit}
-              isLoading={cardMutationLoading}
+              isLoading={cardMutationFetching}
               size="sm"
             >
               Post

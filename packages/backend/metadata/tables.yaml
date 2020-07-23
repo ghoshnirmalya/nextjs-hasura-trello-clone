@@ -1,0 +1,110 @@
+- table:
+    schema: public
+    name: accounts
+- table:
+    schema: public
+    name: boards
+  array_relationships:
+  - name: card
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: cards
+        column_mapping:
+          id: board_id
+  - name: lists
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: lists
+        column_mapping:
+          id: board_id
+  - name: users
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: boards_users
+        column_mapping:
+          id: board_id
+- table:
+    schema: public
+    name: boards_users
+  object_relationships:
+  - name: board
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: boards
+        column_mapping:
+          board_id: id
+  - name: user
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: users
+        column_mapping:
+          user_id: id
+- table:
+    schema: public
+    name: cards
+  object_relationships:
+  - name: board
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: boards
+        column_mapping:
+          board_id: id
+  - name: list
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: lists
+        column_mapping:
+          list_id: id
+- table:
+    schema: public
+    name: lists
+  object_relationships:
+  - name: board
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: boards
+        column_mapping:
+          board_id: id
+  array_relationships:
+  - name: cards
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: cards
+        column_mapping:
+          id: list_id
+- table:
+    schema: public
+    name: sessions
+- table:
+    schema: public
+    name: users
+  array_relationships:
+  - name: boards
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: boards_users
+        column_mapping:
+          id: user_id
+- table:
+    schema: public
+    name: verification_requests

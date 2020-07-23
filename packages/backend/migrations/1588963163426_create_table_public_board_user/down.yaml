@@ -1,5 +1,0 @@
-- args:
-    cascade: false
-    read_only: false
-    sql: DROP TABLE "public"."board_user";
-  type: run_sql

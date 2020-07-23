@@ -1,13 +1,7 @@
 import React, { FC } from "react";
 import { Box, Button, Link as _Link, Stack, Heading } from "@chakra-ui/core";
-import LabelsMenu from "components/pages/cards/show/labels-menu";
 
-interface Props {
-  selectedLabels: any;
-  boardId: number;
-}
-
-const Settings: FC<Props> = ({ selectedLabels, boardId }) => {
+const Settings: FC = () => {
   return (
     <Stack spacing={4}>
       <Box>
@@ -24,9 +18,6 @@ const Settings: FC<Props> = ({ selectedLabels, boardId }) => {
         >
           Members
         </Button>
-      </Box>
-      <Box>
-        <LabelsMenu selectedLabels={selectedLabels} boardId={boardId} />
       </Box>
       <Box>
         <Button

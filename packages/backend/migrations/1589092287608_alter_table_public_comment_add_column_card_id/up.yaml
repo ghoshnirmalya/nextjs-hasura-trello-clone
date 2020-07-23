@@ -1,5 +1,0 @@
-- args:
-    cascade: false
-    read_only: false
-    sql: ALTER TABLE "public"."comment" ADD COLUMN "card_id" uuid NOT NULL;
-  type: run_sql

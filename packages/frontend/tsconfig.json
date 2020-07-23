@@ -18,7 +18,8 @@
       "components/*": ["components/*"],
       "lib/*": ["lib/*"],
       "pages/*": ["pages/*"],
-      "authentication/*": ["pages/api/authentication/*"]
+      "types/*": ["types/*"],
+      "configs/*": ["configs/*"],
     }
   },
   "exclude": ["node_modules"],

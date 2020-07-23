@@ -1,6 +1,0 @@
-- args:
-    relationship: board
-    table:
-      name: list
-      schema: public
-  type: drop_relationship
