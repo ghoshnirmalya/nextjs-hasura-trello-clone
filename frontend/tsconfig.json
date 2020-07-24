@@ -1,5 +1,4 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
     "target": "es5",
     "lib": ["dom", "dom.iterable", "esnext"],
@@ -19,7 +18,7 @@
       "lib/*": ["lib/*"],
       "pages/*": ["pages/*"],
       "types/*": ["types/*"],
-      "configs/*": ["configs/*"],
+      "configs/*": ["configs/*"]
     }
   },
   "exclude": ["node_modules"],
