@@ -4,9 +4,10 @@
     "clean": "lerna clean",
     "bootstrap": "lerna bootstrap",
     "test": "CI=true lerna run test --stream",
-    "start": "lerna run --parallel start",
-    "prepare": "rimraf components/build && lerna run prepare",
-    "build": "npm run prepare && lerna run --parallel build"
+    "start": "lerna run --parallel start --stream",
+    "start:prod": "lerna run --parallel start:prod --stream",
+    "export": "lerna run --parallel export --stream",
+    "build": "lerna run --parallel build --stream"
   },
   "devDependencies": {
     "@types/node": "^13.9.8",

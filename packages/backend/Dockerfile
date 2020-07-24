@@ -8,5 +8,4 @@ COPY . /usr/src/app
 
 CMD graphql-engine \
   --database-url $HASURA_GRAPHQL_DATABASE_URL \
-  serve \
-  --enable-console
+  serve

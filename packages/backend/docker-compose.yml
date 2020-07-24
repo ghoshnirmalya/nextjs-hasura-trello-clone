@@ -2,8 +2,8 @@ version: "3"
 
 services:
   backend:
-    container_name: nextjs-hasura-boilerplate-backend
-    image: nextjs-hasura-boilerplate-backend
+    container_name: nextjs-hasura-trello-clone-backend
+    image: nextjs-hasura-trello-clone-backend
     build:
       context: .
     depends_on:
@@ -16,7 +16,7 @@ services:
     restart: on-failure
 
   db:
-    container_name: nextjs-hasura-boilerplate-db
+    container_name: nextjs-hasura-trello-clone-db
     image: postgres:11.3-alpine
     ports:
       - "5432:5432"
