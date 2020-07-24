@@ -1,0 +1,21 @@
+{
+  "private": true,
+  "scripts": {
+    "clean": "lerna clean",
+    "bootstrap": "lerna bootstrap",
+    "test": "CI=true lerna run test --stream",
+    "start": "lerna run --parallel start --stream",
+    "start:prod": "lerna run --parallel start:prod --stream",
+    "export": "lerna run --parallel export --stream",
+    "build": "lerna run --parallel build --stream"
+  },
+  "devDependencies": {
+    "@types/node": "^14.0.25",
+    "lerna": "3.22.1",
+    "rimraf": "^3.0.2",
+    "typescript": "3.9.7"
+  },
+  "workspaces": [
+    "packages/*"
+  ]
+}
