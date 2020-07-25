@@ -19,7 +19,9 @@
       "pages/*": ["pages/*"],
       "types/*": ["types/*"],
       "configs/*": ["configs/*"]
-    }
+    },
+    "strict": false,
+    "forceConsistentCasingInFileNames": true
   },
   "exclude": ["node_modules"],
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]

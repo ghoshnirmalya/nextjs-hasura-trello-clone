@@ -1,8 +1,8 @@
 **/.DS_STORE
-node_modules
-.next
+**/node_modules
+**/.next
 **/.env
-out
+**/out
 
 **/*.pem
-.vercel
+**/.vercel
