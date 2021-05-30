@@ -32,7 +32,7 @@
     "react-scrollbars-custom": "^4.0.25",
     "subscriptions-transport-ws": "^0.9.17",
     "urql": "^1.9.8",
-    "ws": "^7.3.1"
+    "ws": "^7.4.6"
   },
   "devDependencies": {
     "@types/jsonwebtoken": "^8.5.0",
