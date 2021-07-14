@@ -11,11 +11,11 @@ import {
   Heading,
   AlertIcon,
   Alert,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "urql";
 import { useRouter } from "next/router";
-import Loader from "components/loader";
+import Loader from "components/Loader";
 
 const FETCH_CARD_QUERY = gql`
   query fetchCard($id: uuid!) {

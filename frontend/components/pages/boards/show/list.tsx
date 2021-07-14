@@ -24,8 +24,8 @@ import {
   AlertIcon,
   useColorMode,
   Textarea,
-} from "@chakra-ui/core";
-import Card from "components/pages/boards/show/card";
+} from "@chakra-ui/react";
+import Card from "components/Pages/Boards/Show/Card";
 import gql from "graphql-tag";
 import { useMutation } from "urql";
 

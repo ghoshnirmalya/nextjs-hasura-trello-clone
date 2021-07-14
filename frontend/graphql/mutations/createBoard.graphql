@@ -1,0 +1,8 @@
+mutation createBoard($name: String!, $user_id: uuid!) {
+  insert_boards(objects: { name: $name, user_id: $user_id }) {
+    returning {
+      id
+      name
+    }
+  }
+}

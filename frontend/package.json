@@ -1,63 +1,55 @@
 {
   "name": "nextjs-hasura-trello-clone-frontend",
-  "version": "0.0.1",
-  "author": "nirmalya.email@gmail.com",
   "license": "MIT",
+  "author": "nirmalya.email@gmail.com",
+  "version": "0.0.1",
   "scripts": {
-    "dev": "next dev",
-    "build:analyze": "ANALYZE=true next build && tsc --project tsconfig.server.json",
     "build": "next build",
+    "dev": "concurrently \"next dev\" \"yarn generate-graphql --watch\"",
     "export": "next export",
+    "generate-graphql": "graphql-codegen --config codegen.yml --require dotenv/config",
     "start": "next start",
     "type-check": "tsc"
   },
   "dependencies": {
-    "@chakra-ui/core": "^0.8.0",
-    "@emotion/core": "^10.0.28",
-    "@emotion/styled": "^10.0.27",
-    "emotion-theming": "^10.0.27",
-    "graphql": "^15.3.0",
-    "graphql-tag": "^2.10.4",
-    "isomorphic-unfetch": "^3.0.0",
+    "@apollo/client": "^3.3.21",
+    "@chakra-ui/icons": "^1.0.14",
+    "@chakra-ui/react": "^1.6.5",
+    "@emotion/react": "^11.4.0",
+    "@emotion/styled": "^11.3.0",
+    "dayjs": "^1.10.6",
+    "framer-motion": "^4.1.17",
+    "isomorphic-unfetch": "^3.1.0",
     "isomorphic-ws": "^4.0.1",
     "jsonwebtoken": "^8.5.1",
-    "next": "^9.4.4",
-    "next-auth": "^3.3.0",
-    "next-urql": "^1.0.2",
-    "pg": "^8.3.0",
-    "react": "^16.13.1",
+    "next": "^11.0.1",
+    "next-auth": "^3.27.3",
+    "pg": "^8.6.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "subscriptions-transport-ws": "^0.9.19",
+    "ws": "^7.5.3",
     "react-beautiful-dnd": "^13.0.0",
-    "react-dom": "^16.13.1",
-    "react-is": "^16.13.1",
-    "react-scrollbars-custom": "^4.0.25",
-    "subscriptions-transport-ws": "^0.9.17",
-    "urql": "^1.9.8",
-    "ws": "^7.4.6"
+    "react-scrollbars-custom": "^4.0.25"
   },
   "devDependencies": {
-    "@types/jsonwebtoken": "^8.5.0",
-    "@types/lodash": "^4.14.158",
+    "@babel/core": "^7.14.6",
+    "@graphql-codegen/cli": "^1.21.7",
+    "@graphql-codegen/introspection": "^1.18.2",
+    "@graphql-codegen/typescript": "^1.22.0",
+    "@graphql-codegen/typescript-operations": "^1.18.4",
+    "@graphql-codegen/typescript-react-apollo": "^2.3.1",
+    "@graphql-codegen/typescript-resolvers": "^1.20.0",
+    "@types/jsonwebtoken": "^8.5.4",
     "@types/next": "^9.0.0",
-    "@types/node": "^14.0.23",
-    "@types/pg": "^7.14.4",
-    "@types/react": "^16.9.43",
-    "@types/react-beautiful-dnd": "^13.0.0",
-    "@types/react-dom": "^16.9.8",
-    "husky": "^4.2.5",
-    "lint-staged": "^10.2.11",
-    "prettier": "^2.0.5",
-    "tslint": "^6.1.2",
-    "tslint-react": "^5.0.0",
-    "typescript": "^3.9.7"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
-  },
-  "lint-staged": {
-    "*.{js,json,css,md,tsx,ts}": [
-      "prettier --write"
-    ]
+    "@types/node": "^16.3.2",
+    "@types/pg": "^8.6.1",
+    "@types/react": "^17.0.14",
+    "@types/react-dom": "^17.0.9",
+    "concurrently": "^6.2.0",
+    "dotenv": "^10.0.0",
+    "graphql": "^15.5.1",
+    "prettier": "^2.3.2",
+    "typescript": "^4.3.5"
   }
 }

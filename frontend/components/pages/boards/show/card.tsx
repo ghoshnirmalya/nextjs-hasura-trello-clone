@@ -1,7 +1,7 @@
 import React from "react";
 import { Draggable } from "react-beautiful-dnd";
 import Link from "next/link";
-import { PseudoBox, useColorMode, Box, Heading, Stack } from "@chakra-ui/core";
+import { PseudoBox, useColorMode, Box, Heading, Stack } from "@chakra-ui/react";
 
 const _Card = ({ cards }: { cards: any }) => {
   const { colorMode } = useColorMode();

@@ -1,0 +1,6 @@
+subscription fetchBoards {
+  boards(order_by: { created_at: desc }) {
+    id
+    name
+  }
+}

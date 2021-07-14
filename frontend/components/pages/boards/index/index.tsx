@@ -1,52 +1,32 @@
-import React, { useState, FormEvent } from "react";
 import {
+  Alert,
+  AlertIcon,
   Box,
-  PseudoBox,
-  Link as _Link,
-  Heading,
-  Text,
-  Stack,
   Button,
-  useDisclosure,
   Drawer,
   DrawerBody,
+  DrawerCloseButton,
+  DrawerContent,
   DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
-  DrawerContent,
-  DrawerCloseButton,
   FormControl,
   FormLabel,
+  Heading,
   Input,
-  Alert,
-  AlertIcon,
+  Stack,
+  Text,
   useColorMode,
-} from "@chakra-ui/core";
+  useDisclosure,
+} from "@chakra-ui/react";
+import Loader from "components/Loader";
+import {
+  useCreateBoardMutation,
+  useFetchBoardsSubscription,
+} from "generated-graphql";
 import { NextPage } from "next";
-import gql from "graphql-tag";
-import { useSubscription, useMutation } from "urql";
 import Link from "next/link";
-import Loader from "components/loader";
-
-const FETCH_BOARDS_SUBSCRIPTION = gql`
-  subscription fetchBoards {
-    boards(order_by: { created_at: desc }) {
-      id
-      name
-    }
-  }
-`;
-
-const CREATE_BOARD_MUTATION = gql`
-  mutation createBoard($name: String!, $user_id: uuid!) {
-    insert_boards(objects: { name: $name, user_id: $user_id }) {
-      returning {
-        id
-        name
-      }
-    }
-  }
-`;
+import React, { FormEvent, useState } from "react";
 
 const Boards: NextPage = () => {
   const { colorMode } = useColorMode();
@@ -57,23 +37,21 @@ const Boards: NextPage = () => {
   const [name, setName] = useState("");
   const currentUserId = "40989e49-4857-4429-80ad-839633adbe55";
   const [
-    { fetching: mutationFetching, error: mutationError },
     createBoardMutation,
-  ] = useMutation(CREATE_BOARD_MUTATION);
-  const [{ data }] = useSubscription({
-    query: FETCH_BOARDS_SUBSCRIPTION,
-  });
+    { loading: mutationFetching, error: mutationError },
+  ] = useCreateBoardMutation();
+  const { data } = useFetchBoardsSubscription();
 
   if (!data) {
     return <Loader />;
   }
 
-  const handleSubmit = async (e: FormEvent<HTMLInputElement>) => {
-    e.preventDefault();
-
+  const handleSubmit = async () => {
     await createBoardMutation({
-      user_id: currentUserId,
-      name,
+      variables: {
+        user_id: currentUserId,
+        name,
+      },
     });
 
     if (!mutationError) {
@@ -177,7 +155,7 @@ const Boards: NextPage = () => {
                 as={`/boards/${board.id}`}
               >
                 <a>
-                  <PseudoBox
+                  <Box
                     p={8}
                     rounded="md"
                     _hover={{ shadow: "md" }}
@@ -190,7 +168,7 @@ const Boards: NextPage = () => {
                       {board.name}
                     </Heading>
                     <Text fontSize="sm">{board.id}</Text>
-                  </PseudoBox>
+                  </Box>
                 </a>
               </Link>
             </Box>

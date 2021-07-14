@@ -9,20 +9,20 @@ services:
     depends_on:
       - db
     env_file: ./.env
+    volumes:
+      - ./migrations:/hasura-migrations
+      - ./metadata:/hasura-metadata
     ports:
       - "8080:8080"
-    volumes:
-      - .:/usr/src/app
-    restart: on-failure
 
   db:
     container_name: nextjs-hasura-trello-clone-db
-    image: postgres:11.3-alpine
+    image: postgres
     ports:
       - "5432:5432"
     volumes:
       - db_data:/var/lib/postgresql/data
-    restart: unless-stopped
+    env_file: ./.env
 
 volumes:
   db_data:

@@ -1,34 +1,41 @@
-import React from "react";
+import { Box } from "@chakra-ui/react";
+import AccessDeniedIndicator from "components/AccessDeniedIndicator";
+import Page from "components/Pages/Boards/Index/index";
+import { GetServerSideProps, NextPage } from "next";
+import { getSession } from "next-auth/client";
 import Head from "next/head";
-import Page from "components/pages/boards/index";
-import { Box } from "@chakra-ui/core";
-import { NextPage } from "next";
-import Loader from "components/loader";
-import AccessDeniedIndicator from "components/access-denied-indicator";
-import { useSession } from "next-auth/client";
-import WithGraphQL from "lib/with-graphql";
+import React from "react";
+import ISession from "types/session";
 
-const BoardsIndexPage: NextPage = () => {
-  const [session, loading] = useSession();
+interface IProps {
+  session: ISession;
+}
 
-  if (loading) {
-    return <Loader />;
-  }
-
+const BoardsIndexPage: NextPage<IProps> = ({ session }) => {
   if (!session) {
     return <AccessDeniedIndicator />;
   }
 
   return (
-    <WithGraphQL>
+    <>
       <Head>
         <title>Boards Page</title>
       </Head>
       <Box mx="auto" maxW="4xl" w="full">
         <Page />
       </Box>
-    </WithGraphQL>
+    </>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+  const session = await getSession({ req });
+
+  return {
+    props: {
+      session,
+    },
+  };
 };
 
 export default BoardsIndexPage;

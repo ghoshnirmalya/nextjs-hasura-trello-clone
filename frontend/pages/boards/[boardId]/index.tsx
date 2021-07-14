@@ -1,11 +1,10 @@
 import React from "react";
 import Head from "next/head";
-import Page from "components/pages/boards/show";
+import Page from "components/Pages/Boards/Show";
 import { NextPage } from "next";
-import Loader from "components/loader";
-import AccessDeniedIndicator from "components/access-denied-indicator";
+import Loader from "components/Loader";
+import AccessDeniedIndicator from "components/AccessDeniedIndicator";
 import { useSession } from "next-auth/client";
-import WithGraphQL from "lib/with-graphql";
 
 const BoardsShowPage: NextPage = () => {
   const [session, loading] = useSession();
@@ -19,12 +18,12 @@ const BoardsShowPage: NextPage = () => {
   }
 
   return (
-    <WithGraphQL>
+    <>
       <Head>
         <title>Boards Page</title>
       </Head>
       <Page />
-    </WithGraphQL>
+    </>
   );
 };
 

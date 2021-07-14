@@ -1,86 +1,45 @@
-import React, { ChangeEvent } from "react";
-import { NextComponentType } from "next";
-import Link from "next/link";
-import { signIn, signOut, useSession } from "next-auth/client";
+import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import {
   Box,
-  Stack,
-  Link as _Link,
   Button,
+  IconButton,
+  Link as _Link,
+  Stack,
   useColorMode,
-  Menu,
-  MenuButton,
-  Icon,
-  MenuList,
-  MenuGroup,
-  MenuItem,
-  Switch,
-  MenuDivider,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
+import { NextComponentType } from "next";
+import { signIn, signOut, useSession } from "next-auth/client";
+import Link from "next/link";
+import React from "react";
 
 const Navbar: NextComponentType = () => {
   const [session] = useSession();
   const { colorMode, toggleColorMode } = useColorMode();
-  const bgColor = { light: "white", dark: "gray.800" };
-  const borderColor = { light: "gray.300", dark: "gray.700" };
-  const color = { light: "gray.800", dark: "gray.100" };
 
-  const handleToggleTheme = async (e: ChangeEvent<HTMLInputElement>) => {
-    const theme: string = !!e.target.checked ? "dark" : "light";
-
-    console.log(theme);
-
+  const handleToggleTheme = () => {
     toggleColorMode();
   };
 
-  const profileDropDown = () => {
-    if (!session) {
-      return false;
-    }
+  const linksForAllUsers = [
+    {
+      id: "home",
+      label: "Home",
+      href: "/",
+    },
+  ];
 
-    return (
-      <Box>
-        <Menu closeOnSelect={false}>
-          <MenuButton
-            as={Button}
-            color={color[colorMode]}
-            borderColor={borderColor[colorMode]}
-          >
-            Profile <Icon name="chevron-down" />
-          </MenuButton>
-          <MenuList
-            color={color[colorMode]}
-            borderColor={borderColor[colorMode]}
-            placement="bottom-end"
-          >
-            <MenuGroup title="Profile">
-              <MenuItem>
-                <Link href="/my-profile">
-                  <_Link>My Account</_Link>
-                </Link>
-              </MenuItem>
-              <MenuItem>
-                <Stack justify="center" align="center" spacing={4} isInline>
-                  <Box>Dark Theme</Box>
-                  <Box>
-                    <Switch
-                      isChecked={colorMode === "dark"}
-                      onChange={handleToggleTheme}
-                    />
-                  </Box>
-                </Stack>
-              </MenuItem>
-            </MenuGroup>
-            <MenuDivider />
-            <MenuGroup title="Help">
-              <MenuItem>Docs</MenuItem>
-              <MenuItem>FAQ</MenuItem>
-            </MenuGroup>
-          </MenuList>
-        </Menu>
-      </Box>
-    );
-  };
+  const linksForAuthenticatedUsers = [
+    {
+      id: "feeds",
+      label: "Feeds",
+      href: "/feeds",
+    },
+    {
+      id: "myAccount",
+      label: "My Account",
+      href: "/my-account",
+    },
+  ];
 
   const signInButtonNode = () => {
     if (session) {
@@ -91,7 +50,6 @@ const Navbar: NextComponentType = () => {
       <Box>
         <Link href="/api/auth/signin">
           <Button
-            variantColor="cyan"
             onClick={(e) => {
               e.preventDefault();
               signIn();
@@ -113,7 +71,6 @@ const Navbar: NextComponentType = () => {
       <Box>
         <Link href="/api/auth/signout">
           <Button
-            variantColor="cyan"
             onClick={(e) => {
               e.preventDefault();
               signOut();
@@ -126,47 +83,60 @@ const Navbar: NextComponentType = () => {
     );
   };
 
+  const themeToggleButtonNode = () => {
+    return (
+      <IconButton
+        aria-label="Toggle theme"
+        fontSize="20px"
+        icon={colorMode === "dark" ? <SunIcon /> : <MoonIcon />}
+        onClick={handleToggleTheme}
+      />
+    );
+  };
+
   return (
-    <Box bg={bgColor[colorMode]}>
-      <Box
-        w="full"
-        mx="auto"
-        d="flex"
-        justifyContent="space-between"
-        p={4}
-        color={color[colorMode]}
-        borderWidth={1}
-        borderColor={borderColor[colorMode]}
-      >
-        <Stack
-          isInline
-          spacing={4}
-          align="center"
-          justifyContent="space-between"
-          w="full"
-        >
-          <Box>
-            <Stack isInline spacing={4} align="center">
-              <Box>
-                <Link href="/">
-                  <_Link>Home</_Link>
-                </Link>
-              </Box>
-              <Box>
-                <Link href="/boards">
-                  <_Link>Boards</_Link>
-                </Link>
-              </Box>
-            </Stack>
-          </Box>
-          <Box>
-            <Stack isInline spacing={4} align="center">
-              {profileDropDown()}
-              {signInButtonNode()}
-              {signOutButtonNode()}
-            </Stack>
-          </Box>
-        </Stack>
+    <Box>
+      <Box p={4} shadow="lg" pos="relative">
+        <Box maxW="xl" mx="auto" w="full">
+          <Stack
+            isInline
+            spacing={4}
+            align="center"
+            justifyContent="space-between"
+            w="full"
+          >
+            <Box>
+              <Stack isInline spacing={4} align="center" fontWeight="semibold">
+                {linksForAllUsers.map((link) => {
+                  return (
+                    <Box key={link.id}>
+                      <Link href={link.href}>
+                        <_Link>{link.label}</_Link>
+                      </Link>
+                    </Box>
+                  );
+                })}
+                {session &&
+                  linksForAuthenticatedUsers.map((link) => {
+                    return (
+                      <Box key={link.id}>
+                        <Link href={link.href}>
+                          <_Link>{link.label}</_Link>
+                        </Link>
+                      </Box>
+                    );
+                  })}
+              </Stack>
+            </Box>
+            <Box>
+              <Stack isInline spacing={4} align="center">
+                {themeToggleButtonNode()}
+                {signInButtonNode()}
+                {signOutButtonNode()}
+              </Stack>
+            </Box>
+          </Stack>
+        </Box>
       </Box>
     </Box>
   );

@@ -8,17 +8,17 @@ import {
   useColorMode,
   Avatar,
   AvatarGroup,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import { NextPage } from "next";
 import gql from "graphql-tag";
 import { useSubscription, useMutation } from "urql";
-import Loader from "components/loader";
+import Loader from "components/Loader";
 import { useRouter } from "next/router";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import find from "lodash/find";
 import Scrollbar from "react-scrollbars-custom";
-import List from "components/pages/boards/show/list";
-import InviteUsers from "components/pages/boards/show/invite-users";
+import List from "components/Pages/Boards/Show/List";
+import InviteUsers from "components/Pages/Boards/Show/InviteUser";
 
 const FETCH_BOARD_SUBSCRIPTION = gql`
   subscription fetchBoard($id: uuid!) {

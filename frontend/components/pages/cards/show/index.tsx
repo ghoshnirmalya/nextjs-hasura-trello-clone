@@ -10,14 +10,14 @@ import {
   DrawerCloseButton,
   useColorMode,
   Grid,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import gql from "graphql-tag";
 import { useSubscription } from "urql";
-import Loader from "components/loader";
+import Loader from "components/Loader";
 import { useRouter } from "next/router";
-import Board from "components/pages/boards/show";
-import DetailsForm from "components/pages/cards/show/details-form";
-import Settings from "components/pages/cards/show/settings";
+import Board from "components/Pages/Boards/Show";
+import DetailsForm from "components/Pages/Cards/Show/DetailsForm";
+import Settings from "components/Pages/Cards/Show/Settings";
 
 const FETCH_CARD_SUBSCRIPTION = gql`
   subscription fetchCard($id: uuid!) {

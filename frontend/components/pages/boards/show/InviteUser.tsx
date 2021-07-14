@@ -8,11 +8,11 @@ import {
   MenuOptionGroup,
   MenuItemOption,
   Icon,
-} from "@chakra-ui/core";
+} from "@chakra-ui/react";
 import gql from "graphql-tag";
 import { useSubscription, useMutation } from "urql";
 import xor from "lodash/xor";
-import Loader from "components/loader";
+import Loader from "components/Loader";
 
 interface user {
   id: number;
@@ -53,9 +53,8 @@ const InviteUsersButton = ({
   const [{ data }] = useSubscription({
     query: FETCH_USERS_SUBSCRIPTION,
   });
-  const [{ fetching: mutationFetching }, addUserMutation] = useMutation(
-    ADD_USER_MUTATION
-  );
+  const [{ fetching: mutationFetching }, addUserMutation] =
+    useMutation(ADD_USER_MUTATION);
 
   if (!data) {
     return <Loader />;

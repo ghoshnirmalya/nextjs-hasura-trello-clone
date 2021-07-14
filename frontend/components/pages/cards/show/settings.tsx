@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { Box, Button, Link as _Link, Stack, Heading } from "@chakra-ui/core";
+import { Box, Button, Link as _Link, Stack, Heading } from "@chakra-ui/react";
 
 const Settings: FC = () => {
   return (
